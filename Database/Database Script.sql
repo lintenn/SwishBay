@@ -109,6 +109,7 @@ CREATE TABLE `USUARIO` (
   `FECHA_NACIMIENTO` date NOT NULL DEFAULT current_timestamp(),
   `SEXO` enum('masc','fem') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `CIUDAD` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `SALDO` double NOT NULL DEFAULT 0,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `CORREO_UNIQUE` (`CORREO`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -20,7 +20,7 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - ~~Un comprador debe poder comprar un producto en venta.~~ ❓
 - Un comprador debe poder pujar un producto en puja con la intención de comprarlo.
 - Un comprador debe poder marcar productos (estén en puja o no) como favoritos para hacer **seguimientos**. ❔
-- Un comprador debe poder añadir fondos a su cuenta. ❔ 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
+- Un comprador debe poder añadir fondos a su cuenta. ❔
 - Un comprador debe poder ver en un listado los productos que ha comprado _(y a quién)_.
 - Un comprador debe poder **buscar y aplicar filtrados** de búsqueda sobre los productos que ha comprado.
 - _Un comprador debe poder devolver sus productos comprados_. ❔
