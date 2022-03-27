@@ -162,7 +162,6 @@
 
             <p>By clicking
                 <em>Register</em> you agree to our
-                <a href="" target="_blank">terms of service</a> and
                 <a href="" target="_blank">terms of service</a>.
             </p>
             </div>

@@ -7,11 +7,16 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dao.UsuarioFacade;
+import swishbay.entity.Usuario;
 
 /**
  *
@@ -20,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
+    @EJB UsuarioFacade usuarioFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,7 +39,41 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        String correo, status = "OK", goTo = "UsuarioServlet", contrasena, contrasenaDelUsuario = "";
+        correo = request.getParameter("email");
+        contrasena = request.getParameter("password");
+        
+        Usuario user = null;
+        
+        try{
+            List<Usuario> users = usuarioFacade.findAll();
+            
+            for (Usuario u : users) {
+                if ((u.getCorreo()).equals(correo)) {
+                    user = u;
+                    contrasenaDelUsuario = new String(user.getPassword());
+                }
+            }
+        }
+        catch(EJBException ex){
+            user = null;
+        }
+        
+        if(user == null){
+           status = "El usuario no se encuentra en la base de datos";
+           request.setAttribute("status", status);
+           goTo = "login.jsp";
+        }else if(!contrasena.equals(contrasenaDelUsuario)){
+           status = "La clave es incorrecta";
+           request.setAttribute("status", status);
+           goTo = "login.jsp";
+        }else{
+            request.getSession().setAttribute("usuario", user);
+        }
+        
+        System.out.println(status);
+        
+        request.getRequestDispatcher(goTo).forward(request, response); 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
