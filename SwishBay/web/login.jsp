@@ -4,6 +4,11 @@
     Author     : Luis
 --%>
 
+<%
+    String status = (String) session.getAttribute("status");
+    session.removeAttribute("status");
+%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,14 +104,21 @@
       <main class="form-signin">
         <form action="LoginServlet">
             <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_black.png" alt="" width="120" height="50">
-            <h1 class="h3 mb-3 fw-normal">Please log in</h1>
+            <h1 class="h3 mb-3 fw-normal">Log in</h1>
+            
+            <%
+                if(status != null){
+            %>
+            <div class="alert alert-danger"><%=status%></div>
+            <% }
+            %>
             
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="Email address" name="email"/>
+                <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required="" autofocus=""/>
                 <label for="inputEmail" class="sr-only">Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password"/>
+                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required=""/>
                 <label for="inputPassword" class="sr-only">Password</label>
             </div>
 
