@@ -24,6 +24,7 @@
                 <th>DOMICILIO</th>
                 <th>NACIMIENTO</th>
                 <th>SEXO</th>
+                <th>SALDO</th>
             </tr>
         <%
             List<Usuario> usuarios = (List)request.getAttribute("usuarios");
@@ -37,6 +38,7 @@
             <td><%= usuario.getDomicilio()%></td>
             <td><%= usuario.getFechaNacimiento()%></td>
             <td><%= usuario.getSexo()%></td>
+            <td><%= usuario.getSaldo()%></td>
         </tr>
         
         <%
