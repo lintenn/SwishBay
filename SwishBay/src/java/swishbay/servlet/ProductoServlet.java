@@ -19,7 +19,7 @@ import swishbay.entity.Producto;
 
 /**
  *
- * @author migue
+ * @author Miguel
  */
 @WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
 public class ProductoServlet extends HttpServlet {

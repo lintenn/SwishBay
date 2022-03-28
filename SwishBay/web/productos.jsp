@@ -1,9 +1,11 @@
 <%-- 
     Document   : productos
     Created on : Mar 28, 2022, 11:03:29 AM
-    Author     : migue
+    Author     : Miguel
 --%>
 
+<%@page import="swishbay.entity.Producto"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,23 +68,33 @@
             </nav>
 
             <main class="row d-flex justify-content-center mt-4">
+                
+            <%
+                List<Producto> productos = (List)request.getAttribute("productos");
+                
+                for(Producto producto : productos){
+            %> 
 
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" >
                 <div class="row g-0">
-                  <h5 class="card-header bg-secondary">Ratón</h5>
+                    <h5 class="card-header bg-secondary"><%= producto.getTitulo() %></h5>
                   <div class="col-md-4">
-                    <img src="https://m.media-amazon.com/images/I/61UxfXTUyvL._AC_SY450_.jpg" class="rounded-start" style="max-width: 100%;" alt="...">
+                    <img src="<%= producto.getFoto() %>" class="rounded-start" style="max-width: 100%;" alt="...">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title text-dark">50€</h5>
-                      <p class="card-text text-dark text-left">Esta es la descripción del producto. Es un ratón Logitech</p>
-                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja en 3 horas</small></p>
+                      <h5 class="card-title text-dark"><%= producto.getPrecioSalida() %></h5>
+                      <p class="card-text text-dark text-left"><%= producto.getDescripcion() %></p>
+                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja: <%= producto.getFinPuja() %></small></p>
                       <a href="#" class="btn btn-primary mb-1 position-absolute bottom-0 start-60 translate-middle-x">Pujar</a>
                     </div>
                   </div>
                 </div>
               </div>
+            
+            <%
+                }
+            %>
 
             </main>
 
