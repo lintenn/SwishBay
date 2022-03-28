@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
+import swishbay.entity.Usuario;
 
 /**
  *
@@ -36,6 +37,11 @@ public class ProductoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Usuario user = (Usuario) request.getSession().getAttribute("usuario");
+        
+        if(user == null){
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
         
         List<Producto> productos = productoFacade.findAll();
         
