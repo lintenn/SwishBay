@@ -4,8 +4,27 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.entity.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
+<%
+    Usuario user = (Usuario) session.getAttribute("usuario");
+    String goTo = "RegisterServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
+    
+    String status = (String) session.getAttribute("status");
+    session.removeAttribute("status");
+    
+    if(user!=null){
+        goTo = "ModificarPerfil?Id="+user.getId()+"";
+        fechaNacimiento = user.getFechaNacimiento()+"";
+        nombre = user.getNombre();
+        email = user.getCorreo();
+        apellidos = user.getApellidos();       
+        sexo = user.getSexo();
+    }
+%>
+
 <html lang="en">
     <head>
     <meta charset="utf-8">
@@ -97,51 +116,55 @@
   </head>
   <body class="text-center">
       <main class="form-signin">
-        <form class="border border-light p-5" action="LoginServlet">
+        <form class="border border-light p-5" action="<%= goTo %>">
             <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_black.png" alt="" width="120" height="50">
-            <h1 class="h3 mb-3 fw-normal">Register</h1>
             
+            <% if (user == null) { %>
+            <h1 class="h3 mb-3 fw-normal">Register</h1>
+                <% if (status != null) {%>
+                    <div class="alert alert-danger"><%=status%></div>
+                <% } %>
             <div class="row g-3">
                 <div class="col-sm-6 form-floating">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="First name" value required/>
+                    <input type="text" maxlength="45" name="nombre" class="form-control" id="floatingInput" placeholder="First name" required="" autofocus=""/>
                     <label for="inputFirstName" class="sr-only">First name</label>
                 </div>
                 <div class="col-sm-6 form-floating">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Last name"/>
+                    <input type="text" maxlength="45" name="apellidos" class="form-control" id="floatingInput" placeholder="Last name" required=""/>
                     <label for="inputLastName" class="sr-only">Last name</label>
                 </div>
             </div>
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="Email address"/>
+                <input type="email" maxlength="45" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required=""/>
                 <label for="inputEmail" class="sr-only">Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock"/>
+                <input type="password" minlength="6" maxlength="45" name="password" class="form-control" id="floatingPassword" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" required=""/>
                 <label for="inputPassword" class="sr-only">Password</label>
             </div>
-            <small id="defaultPasswordFormPhoneHelpBlock" class="form-text text-muted mb-4">Minimal 8 characters lenght</small>
+            <small id="defaultPasswordFormPhoneHelpBlock" class="form-text text-muted mb-4">Minimal 6 characters lenght</small>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Adressline"/>
+                <input type="text" maxlength="100" name="domicilio" class="form-control" id="floatingInput" placeholder="Adressline"/>
                 <label for="inputAddressline" class="sr-only">Addressline</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="City"/>
+                <input type="text" maxlength="45" name="ciudad" class="form-control" id="floatingInput" placeholder="City"/>
                 <label for="inputCity" class="sr-only">City</label>
             </div>
             <label for="inputBirthdate" class="form-label">Birth date</label>
             <div class="form-floating">
-                <input type="date" class="form-control" id="floatingInput"/>
+                <input type="date" name="fechaNacimiento" class="form-control" id="floatingInput" required=""/>
                 <label for="inputBirthdate" class="sr-only">Birth date</label>
             </div>
             
             <label for="inputGender" class="form-label">Gender</label>
             <div class="d-flex align-center justify-content-center">
                 <div class="form-check mx-1">
-                  <input id="masc" name="gender" type="radio" class="form-check-input" checked="" required=""/>
+                  <input id="masc" name="sexo" value="masc" type="radio" class="form-check-input" checked="" required=""/>
                   <label class="form-check-label" for="masc">Masculine</label>
                 </div>
                 <div class="form-check mx-1">
-                  <input id="fem" name="gender" type="radio" class="form-check-input" required=""/>
+                  <input id="fem" name="sexo" value="fem" type="radio" class="form-check-input" required=""/>
                   <label class="form-check-label" for="fem">Femenine</label>
                 </div>
             </div>
@@ -165,6 +188,7 @@
                 <a href="" target="_blank">terms of service</a>.
             </p>
             </div>
+            <% } %>
             
             <p class="mt-5 mb-3 text-muted">© 2022, SwishBay</p>
         </form>

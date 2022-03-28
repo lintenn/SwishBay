@@ -15,8 +15,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import swishbay.dao.TipoUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
+import swishbay.entity.TipoUsuario;
 import swishbay.entity.Usuario;
+import swishbay.service.UsuarioService;
 
 /**
  *
@@ -26,6 +30,8 @@ import swishbay.entity.Usuario;
 public class LoginServlet extends HttpServlet {
 
     @EJB UsuarioFacade usuarioFacade;
+    @EJB TipoUsuarioFacade tipoUsuarioFacade;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,12 +44,14 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
-        String correo, status = "OK", goTo = "UsuarioServlet", contrasena, contrasenaDelUsuario = "";
-        correo = request.getParameter("email");
-        contrasena = request.getParameter("password");
+        response.setContentType("text/html;charset=UTF-8");
+        String correo, status = "OK", goTo = "prueba.jsp", password, contrasenaDelUsuario = "";
+        correo = request.getParameter("correo");
+        password = request.getParameter("password");
+        //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);
         
         Usuario user = null;
+        //TipoUsuario tipoUsuario = null;
         
         try{
             List<Usuario> users = usuarioFacade.findAll();
@@ -51,7 +59,8 @@ public class LoginServlet extends HttpServlet {
             for (Usuario u : users) {
                 if ((u.getCorreo()).equals(correo)) {
                     user = u;
-                    contrasenaDelUsuario = new String(user.getPassword());
+                    //tipoUsuario = tipoUsuarioFacade.find(u.getId());
+                    contrasenaDelUsuario = user.getPassword();
                 }
             }
         }
@@ -59,21 +68,25 @@ public class LoginServlet extends HttpServlet {
             user = null;
         }
         
+        HttpSession session = request.getSession();
         if(user == null){
-           status = "El usuario no se encuentra en la base de datos";
-           request.setAttribute("status", status);
+           status = "El correo es incorrecto.";
+           //request.setAttribute("status", status);
            goTo = "login.jsp";
-        }else if(!contrasena.equals(contrasenaDelUsuario)){
-           status = "La clave es incorrecta";
-           request.setAttribute("status", status);
+        }else if(!password.equals(contrasenaDelUsuario)){
+           status = "La contraseña es incorrecta";
+           //request.setAttribute("status", status);
            goTo = "login.jsp";
         }else{
-            request.getSession().setAttribute("usuario", user);
+            //request.getSession().setAttribute("usuario", user);
+            session.setAttribute("usuario", user);
+            //session.setAttribute("tipoUsuario", tipoUsuario);
         }
+        session.setAttribute("status", status);
+        //System.out.println(status);
         
-        System.out.println(status);
-        
-        request.getRequestDispatcher(goTo).forward(request, response); 
+        //request.getRequestDispatcher(goTo).forward(request, response); 
+        response.sendRedirect(request.getContextPath() + "/" + goTo);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
