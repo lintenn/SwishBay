@@ -1,11 +1,9 @@
 <%-- 
-    Document   : productos
-    Created on : Mar 28, 2022, 11:03:29 AM
-    Author     : Miguel
+    Document   : seller
+    Created on : 28 mar. 2022, 12:00:43
+    Author     : galop
 --%>
 
-<%@page import="swishbay.entity.Producto"%>
-<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +30,7 @@
 
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
-                <a class="navbar-brand" href="SellerServlet">Vender</a>
+                <a class="navbar-brand" href="ProductoServlet">Comprar</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -68,33 +66,23 @@
             </nav>
 
             <main class="row d-flex justify-content-center mt-4">
-                
-            <%
-                List<Producto> productos = (List)request.getAttribute("productos");
-                
-                for(Producto producto : productos){
-            %> 
 
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" >
                 <div class="row g-0">
-                    <h5 class="card-header bg-secondary"><%= producto.getTitulo() %></h5>
+                  <h5 class="card-header bg-secondary">Ratón</h5>
                   <div class="col-md-4">
-                    <img src="<%= producto.getFoto() %>" class="rounded-start" style="max-width: 100%;" alt="...">
+                    <img src="https://m.media-amazon.com/images/I/61UxfXTUyvL._AC_SY450_.jpg" class="rounded-start" style="max-width: 100%;" alt="...">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title text-dark"><%= producto.getPrecioSalida() %></h5>
-                      <p class="card-text text-dark text-left"><%= producto.getDescripcion() %></p>
-                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja: <%= producto.getFinPuja() %></small></p>
+                      <h5 class="card-title text-dark">50€</h5>
+                      <p class="card-text text-dark text-left">Esta es la descripción del producto. Es un ratón Logitech</p>
+                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja en 3 horas</small></p>
                       <a href="#" class="btn btn-primary mb-1 position-absolute bottom-0 start-60 translate-middle-x">Pujar</a>
                     </div>
                   </div>
                 </div>
               </div>
-            
-            <%
-                }
-            %>
 
             </main>
 
@@ -109,4 +97,5 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
 </html>
+
 
