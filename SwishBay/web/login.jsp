@@ -4,12 +4,20 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.entity.Usuario"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%
     String status = (String) session.getAttribute("status");
     session.removeAttribute("status");
+    Usuario user = (Usuario) session.getAttribute("usuario");
+    
+    if (user != null) {
+        response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+    }
+
 %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
