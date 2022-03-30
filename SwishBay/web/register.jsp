@@ -18,14 +18,18 @@
     String status = (String) session.getAttribute("status");
     session.removeAttribute("status");
     
-    if(user!=null){
+    if (user != null) {
+        response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+    }
+    
+    /*if(user!=null){
         goTo = "ModificarPerfil?Id="+user.getId()+"";
         fechaNacimiento = user.getFechaNacimiento()+"";
         nombre = user.getNombre();
         email = user.getCorreo();
         apellidos = user.getApellidos();       
         sexo = user.getSexo();
-    }
+    }*/
 %>
 
 <html lang="en">
@@ -204,6 +208,8 @@
                 <a href="" target="_blank">terms of service</a>.
             </p>
             </div>
+            <% } else { %>
+            <p> Ya has iniciado sesión. Cierra sesión primero. </p>
             <% } %>
             
             <p class="mt-5 mb-3 text-muted">© 2022, SwishBay</p>
