@@ -129,7 +129,7 @@
             </div>
             <nav class="botones" >
                 <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Log in"/>
-                <a href="register.jsp" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Register</a>
+                <a href="CargarRegisterServlet" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Register</a>
             </nav>
             
             <p class="mt-5 mb-3 text-muted">© 2022, SwishBay</p>

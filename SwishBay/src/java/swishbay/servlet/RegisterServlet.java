@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -19,8 +20,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import swishbay.dao.CategoriaFacade;
 import swishbay.dao.TipoUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
+import swishbay.entity.Categoria;
 import swishbay.entity.TipoUsuario;
 import swishbay.entity.Usuario;
 import swishbay.service.UsuarioService;
@@ -34,6 +37,7 @@ public class RegisterServlet extends HttpServlet {
 
     @EJB UsuarioFacade usuarioFacade;
     @EJB TipoUsuarioFacade tipoUsuarioFacade;
+    @EJB CategoriaFacade categoriaFacade;
     @EJB UsuarioService usuarioService;
     
     /**
@@ -106,6 +110,7 @@ public class RegisterServlet extends HttpServlet {
         domicilio = request.getParameter("domicilio");
         ciudad = request.getParameter("ciudad");
         sexo = request.getParameter("sexo");
+        String[] categorias = request.getParameterValues("categoria");
         
 
         HttpSession session = request.getSession();
@@ -133,9 +138,16 @@ public class RegisterServlet extends HttpServlet {
            newUser.setSaldo(saldo);
            // Faltarían las categorías...
            
-           
-           
-           
+           if (categorias.length > 0) {
+                List<Categoria> categoriaList = new ArrayList<>();
+                for (String categoriaId : categorias) {
+                    categoriaList.add(categoriaFacade.find(Integer.parseInt(categoriaId)));
+                }
+
+                newUser.setCategoriaList(categoriaList);
+
+           }
+                                 
            //newUser.setTipoUsuario(tipoUsuario); //????
            
            usuarioFacade.create(newUser); 

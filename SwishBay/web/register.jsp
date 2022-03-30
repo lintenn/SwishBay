@@ -4,12 +4,15 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.entity.Categoria"%>
+<%@page import="java.util.List"%>
 <%@page import="swishbay.entity.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
 <%
     Usuario user = (Usuario) session.getAttribute("usuario");
+    List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
     String goTo = "RegisterServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
     
     String status = (String) session.getAttribute("status");
@@ -169,10 +172,23 @@
                 </div>
             </div>
             
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
-                <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
-            </div>
+            <label for="inputCategory" class="form-label">Category</label>
+            <%
+                for (Categoria categoria : categorias) {
+            %>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="categoria<%=categoria.getId()%>" name="categoria" value="<%= categoria.getId() %>"/>
+                  <label class="custom-control-label" for="categoria<%=categoria.getId()%>"><%=categoria.getNombre()%></label>
+                </div>
+                
+            <% } %>
+            
+            <!--
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
+                    <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
+                </div>
+            -->
             
             <nav class="botones">
                 <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Register"/>
