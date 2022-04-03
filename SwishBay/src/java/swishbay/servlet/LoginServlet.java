@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String correo, status = null, goTo = "ProductoServlet", password, contrasenaDelUsuario = "";
+        String correo, status = null, goTo = "ProductoServlet", password;
         correo = request.getParameter("correo");
         password = request.getParameter("password");
         //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);
@@ -53,40 +53,32 @@ public class LoginServlet extends HttpServlet {
         Usuario user = null;
         //TipoUsuario tipoUsuario = null;
         
-        try{
-            List<Usuario> users = usuarioFacade.findAll();
-            
-            for (Usuario u : users) {
-                if ((u.getCorreo()).equals(correo)) {
-                    user = u;
-                    //tipoUsuario = tipoUsuarioFacade.find(u.getId());
-                    contrasenaDelUsuario = user.getPassword();
-                }
-            }
-        }
-        catch(EJBException ex){
+        try {
+            user = usuarioFacade.comprobarUsuario(correo, password);
+        } catch(EJBException ex){
             user = null;
         }
         
         HttpSession session = request.getSession();
-        if(user == null){
-           status = "El correo es incorrecto.";
-           //request.setAttribute("status", status);
-           goTo = "login.jsp";
-        }else if(!password.equals(contrasenaDelUsuario)){
-           status = "La contraseña es incorrecta";
-           //request.setAttribute("status", status);
-           goTo = "login.jsp";
-        }else{
-            //request.getSession().setAttribute("usuario", user);
+        if (user == null) {
+           status = "El correo o la clave son incorrectos";
+           request.setAttribute("status", status);
+           request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
             session.setAttribute("usuario", user);
             //session.setAttribute("tipoUsuario", tipoUsuario);
+            
+            if (user.getTipoUsuario().getTipo().equals("administrador")) {
+                goTo = "prueba.jsp";
+            } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+                goTo = "ProductoServlet";
+            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+                goTo = "prueba.jsp";
+            }
+            
+            response.sendRedirect(request.getContextPath() + "/" + goTo);
         }
-        session.setAttribute("status", status);
-        //System.out.println(status);
         
-        //request.getRequestDispatcher(goTo).forward(request, response); 
-        response.sendRedirect(request.getContextPath() + "/" + goTo);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

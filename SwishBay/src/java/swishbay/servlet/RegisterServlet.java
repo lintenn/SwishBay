@@ -55,7 +55,6 @@ public class RegisterServlet extends HttpServlet {
         String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "ProductoServlet";
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fechaNacimiento = null;
-        int mes, dia;
         double saldo = 0;
 
         try {
@@ -66,39 +65,23 @@ public class RegisterServlet extends HttpServlet {
 
         Date fechaSistema = new Date();
         int edad = fechaSistema.getYear() - fechaNacimiento.getYear();
-        //RequestDispatcher rd;
         Usuario newUser = null, posibleUser = null;
         //byte[] contrasenaCifrada;
         boolean esMenor = edad < 18;
-
+        int mes, dia;
         if (edad == 18) {
             mes = fechaSistema.getMonth() - fechaNacimiento.getMonth();
             if (mes == 0) {
                 dia = fechaSistema.getDay() - fechaNacimiento.getDay();
-                if (dia >= 0) {
-                    esMenor = false;
-                } else {
-                    esMenor = true;
-                    edad = 17;
-                }
-            } else if (mes < 0) {
-                esMenor = true;
-                edad = 17;
-            }else{
-                esMenor = false;
+                esMenor = dia < 0;
+            } else {
+                esMenor = mes < 0;
             }
         }
 
         correo = request.getParameter("correo");
         try {
-            List<Usuario> users = usuarioFacade.findAll();
-            
-            for (Usuario u : users) {
-                if ((u.getCorreo()).equals(correo)) {
-                    posibleUser = u;
-                }
-            }
-               
+            posibleUser = usuarioFacade.findByCorreo(correo);
         } catch (EJBException e) {
             posibleUser = null;
         }
@@ -112,20 +95,17 @@ public class RegisterServlet extends HttpServlet {
         sexo = request.getParameter("sexo");
         String[] categorias = request.getParameterValues("categoria");
         
-
         HttpSession session = request.getSession();
         
         if (posibleUser != null) {
            status = "El correo introducido ya existe en el sistema";
-           session.setAttribute("status", status);
-           goTo = "register.jsp";
+           request.setAttribute("status", status);
+           request.getRequestDispatcher("CargarRegisterServlet").forward(request, response);
         } else if (esMenor) {
            status = "Lo siento, eres menor de edad";
-           session.setAttribute("status", status);
-           goTo = "register.jsp";
-        } else {
-           status = "Todo correcto";
            request.setAttribute("status", status);
+           request.getRequestDispatcher("CargarRegisterServlet").forward(request, response);
+        } else {
            newUser = new Usuario();
            newUser.setNombre(nombre);
            newUser.setApellidos(apellidos);
@@ -136,7 +116,7 @@ public class RegisterServlet extends HttpServlet {
            newUser.setSexo(sexo);
            newUser.setFechaNacimiento(fechaNacimiento);
            newUser.setSaldo(saldo);
-           // Faltarían las categorías...
+           // Cargamos las categorías...
            
            if (categorias.length > 0) {
                 List<Categoria> categoriaList = new ArrayList<>();
@@ -148,7 +128,7 @@ public class RegisterServlet extends HttpServlet {
 
            }
                                  
-           //newUser.setTipoUsuario(tipoUsuario); //????
+           //newUser.setTipoUsuario(tipoUsuario); // no actualiza la bd
            
            usuarioFacade.create(newUser); 
            
@@ -157,15 +137,8 @@ public class RegisterServlet extends HttpServlet {
            
            session.setAttribute("usuario", newUser);
            
-           //Properties mailProperties = new Properties();
-           //mailProperties.setProperty("to", newUser.getCorreo());
-           //mailProperties.setProperty("subject", "Welcome to Efake");
-           //mailProperties.setProperty("userName", newUser.getNombre());
-           //mailProperties.setProperty("template", TemplatesEnum.REGISTER_USER.toString());
-           //emailService.sendEmail(mailProperties);
+           response.sendRedirect(request.getContextPath() + "/" + goTo);
         }
-
-        response.sendRedirect(request.getContextPath() + "/" + goTo);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
