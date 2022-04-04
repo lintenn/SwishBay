@@ -26,6 +26,7 @@
                   <a class="nav-link active" aria-current="page" href="/">Home</a>
                   <a class="nav-link" href="/">Features</a>
                   <a class="nav-link" href="/">Contact</a>
+                  <a class="nav-link" href="LogoutServlet">Cerrar sesión</a>
                 </nav>
               </div>
             </header>

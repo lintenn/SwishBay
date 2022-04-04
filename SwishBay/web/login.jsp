@@ -4,19 +4,35 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.entity.Usuario"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%
-    String status = (String) session.getAttribute("status");
-    session.removeAttribute("status");
+    String status = (String) request.getAttribute("status");
+    //session.removeAttribute("status");
+    Usuario user = (Usuario) session.getAttribute("usuario");
+    
+    if (user != null) {
+        String goTo = "ProductoServlet";
+        if (user.getTipoUsuario().getTipo().equals("administrador")) {
+            goTo = "prueba.jsp";
+        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+            goTo = "ProductoServlet";
+        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+            goTo = "prueba.jsp";
+        }
+        response.sendRedirect(request.getContextPath() + "/" + goTo);
+    }
+
 %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Log in</title>
+    <title>Iniciar sesión</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
 
@@ -102,9 +118,9 @@
   </head>
   <body class="text-center">
       <main class="form-signin">
-        <form action="LoginServlet">
+        <form method="POST" action="LoginServlet">
             <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_black.png" alt="" width="120" height="50">
-            <h1 class="h3 mb-3 fw-normal">Log in</h1>
+            <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
             
             <%
                 if(status != null){
@@ -115,21 +131,21 @@
             
             <div class="form-floating">
                 <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required="" autofocus=""/>
-                <label for="inputEmail" class="sr-only">Email address</label>
+                <label for="inputEmail" class="sr-only">Email</label>
             </div>
             <div class="form-floating">
                 <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required=""/>
-                <label for="inputPassword" class="sr-only">Password</label>
+                <label for="inputPassword" class="sr-only">Contraseña</label>
             </div>
 
             <div class="checkbox mb-3">
               <label>
-                <input type="checkbox" value="remember-me"/> Remember me
+                <input type="checkbox" value="remember-me"/> Recuérdame
               </label>
             </div>
             <nav class="botones" >
-                <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Log in"/>
-                <a href="register.jsp" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Register</a>
+                <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Entrar"/>
+                <a href="CargarRegisterServlet" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Registrarse</a>
             </nav>
             
             <p class="mt-5 mb-3 text-muted">© 2022, SwishBay</p>
