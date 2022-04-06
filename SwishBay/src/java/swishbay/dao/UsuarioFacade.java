@@ -8,7 +8,10 @@ package swishbay.dao;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import swishbay.entity.Usuario;
+import java.util.List;
+import javax.persistence.Query;
 
 /**
  *
@@ -29,4 +32,30 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
     
+    public Usuario findByCorreo (String correo) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.correo like :correo");
+        q.setParameter("correo", correo );
+        List<Usuario> lista = q.getResultList();
+        if (lista == null || lista.isEmpty()) {
+            return null;
+        } else {
+            return lista.get(0);
+        }    
+    }
+    
+    public Usuario comprobarUsuario (String strcorreo, String strclave) {
+        Query q;
+        
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.correo = :correo and"
+                + " u.password = :clave");
+        q.setParameter("correo", strcorreo);
+        q.setParameter("clave", strclave);
+        List<Usuario> lista = q.getResultList();
+        if (lista == null || lista.isEmpty()) {
+            return null;
+        } else {
+            return lista.get(0);
+        }        
+    }
 }
