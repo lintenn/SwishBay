@@ -4,6 +4,8 @@
     Author     : galop
 --%>
 
+<%@page import="swishbay.entity.Producto"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,25 +39,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Productos</a>
+                      <a class="nav-link active" aria-current="page" href=""> Mis productos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                      </a>
-                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
+                      <a class="nav-link" href="#">Mis pujas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link disabled">Disabled</a>
+                      <a class="nav-link" href="ProductoNuevoEditarServlet">Nuevo producto</a>
                     </li>
+                    
                   </ul>
                   <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -67,22 +59,32 @@
 
             <main class="row d-flex justify-content-center mt-4">
 
-              <div class="card mb-3 ms-2 me-2 col-4 position-relative" >
+              <%
+                List<Producto> productos = (List)request.getAttribute("productos");
+                
+                for(Producto producto : productos){
+            %> 
+
+              <div class="card mb-3 ms-2 me-2 col-5 position-relative" >
                 <div class="row g-0">
-                  <h5 class="card-header bg-secondary">Ratón</h5>
+                    <h5 class="card-header bg-secondary"><%= producto.getTitulo() %></h5>
                   <div class="col-md-4">
-                    <img src="https://m.media-amazon.com/images/I/61UxfXTUyvL._AC_SY450_.jpg" class="rounded-start" style="max-width: 100%;" alt="...">
+                    <img src="<%= producto.getFoto() %>" class="rounded-start" style="max-width: 100%;" alt="...">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title text-dark">50€</h5>
-                      <p class="card-text text-dark text-left">Esta es la descripción del producto. Es un ratón Logitech</p>
-                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja en 3 horas</small></p>
+                      <h5 class="card-title text-dark"><%= producto.getPrecioSalida() %></h5>
+                      <p class="card-text text-dark text-left"><%= producto.getDescripcion() %></p>
+                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja: <%= producto.getFinPuja() %></small></p>
                       <a href="#" class="btn btn-primary mb-1 position-absolute bottom-0 start-60 translate-middle-x">Pujar</a>
                     </div>
                   </div>
                 </div>
               </div>
+            
+            <%
+                }
+            %>
 
             </main>
 
