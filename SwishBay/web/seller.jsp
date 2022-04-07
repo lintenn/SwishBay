@@ -69,13 +69,12 @@
                 <div class="row g-0">
                     <h5 class="card-header bg-secondary"><%= producto.getTitulo() %></h5>
                   <div class="col-md-4">
-                    <img src="<%= producto.getFoto() %>" class="rounded-start" style="max-width: 100%;" alt="...">
+                    <img src="<%= producto.getFoto() %>" class="rounded-start mt-2" style="max-width: 100%;" alt="...">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
                       <h5 class="card-title text-dark"><%= producto.getPrecioSalida() %>€</h5>
                       <p class="card-text text-dark text-left"><%= producto.getDescripcion() %></p>
-                      <p class="card-text"><small class="text-muted mb-4 position-relative bottom-0 start-60 translate-middle-x">Fin de puja: <%= producto.getFinPuja() %></small></p>
                       <div class="row">
                       <a href="#" class="btn btn-primary col-5 mx-2">Crear puja</a>
                       <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Modificar</a>

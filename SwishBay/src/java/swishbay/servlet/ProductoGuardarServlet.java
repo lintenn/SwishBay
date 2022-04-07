@@ -6,6 +6,8 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -52,6 +54,8 @@ public class ProductoGuardarServlet extends HttpServlet {
 
             if(strId == null || strId.isEmpty()){
                 p = new Producto();
+                java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
+                p.setFinPuja(date);
             }else {
                 p = this.pf.find(Integer.parseInt(strId));
             }
@@ -81,9 +85,13 @@ public class ProductoGuardarServlet extends HttpServlet {
             p.setPrecioSalida(Double.parseDouble(str));
             
            
+            
             System.out.println(user.getNombre());
             short n=0;
             p.setEnPuja(n);
+            
+            p.setVendedor(user);
+            
 
             if(strId == null || strId.isEmpty()){
                 pf.create(p);
