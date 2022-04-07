@@ -39,7 +39,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href=""> Mis productos</a>
+                      <a class="nav-link active" aria-current="page" href="SellerServlet"> Mis productos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">Mis pujas</a>
@@ -65,7 +65,7 @@
                 for(Producto producto : productos){
             %> 
 
-              <div class="card mb-3 ms-2 me-2 col-5 position-relative" >
+              <div class="card mb-3 ms-2 me-2 col-4 position-relative" >
                 <div class="row g-0">
                     <h5 class="card-header bg-secondary"><%= producto.getTitulo() %></h5>
                   <div class="col-md-4">
@@ -73,11 +73,14 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title text-dark"><%= producto.getPrecioSalida() %></h5>
+                      <h5 class="card-title text-dark"><%= producto.getPrecioSalida() %>€</h5>
                       <p class="card-text text-dark text-left"><%= producto.getDescripcion() %></p>
-                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja: <%= producto.getFinPuja() %></small></p>
-                      <a href="#" class="btn btn-primary mb-1 position-absolute bottom-0 start-60 translate-middle-x">Pujar</a>
-                    </div>
+                      <p class="card-text"><small class="text-muted mb-4 position-relative bottom-0 start-60 translate-middle-x">Fin de puja: <%= producto.getFinPuja() %></small></p>
+                      <div class="row">
+                      <a href="#" class="btn btn-primary col-5 mx-2">Crear puja</a>
+                      <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Editar</a>
+                      </div>
+                     </div>
                   </div>
                 </div>
               </div>

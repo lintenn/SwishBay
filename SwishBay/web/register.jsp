@@ -180,7 +180,7 @@
                 </div>
                 <div class="form-check mx-1">
                   <input id="fem" name="sexo" value="fem" type="radio" class="form-check-input" required=""/>
-                  <label class="form-check-label" for="fem">Femenino</label>
+                  <label class="form-check-label" for="fem">Fe  menino</label>
                 </div>
             </div>
             
