@@ -78,7 +78,7 @@
                       <p class="card-text"><small class="text-muted mb-4 position-relative bottom-0 start-60 translate-middle-x">Fin de puja: <%= producto.getFinPuja() %></small></p>
                       <div class="row">
                       <a href="#" class="btn btn-primary col-5 mx-2">Crear puja</a>
-                      <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Editar</a>
+                      <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Modificar</a>
                       </div>
                      </div>
                   </div>
