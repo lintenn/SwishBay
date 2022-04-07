@@ -45,7 +45,7 @@ public class ProductoGuardarServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Usuario user = (Usuario) session.getAttribute("usuario");
 
-        if(user.getTipoUsuario().getTipo().equals("compradorvendedor")){
+        if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
             Producto p;
             String strId,str;
             strId= request.getParameter("id");
@@ -56,25 +56,34 @@ public class ProductoGuardarServlet extends HttpServlet {
                 p = this.pf.find(Integer.parseInt(strId));
             }
 
+         
             str = request.getParameter("nombre");
+            System.out.println(str);
             p.setTitulo(str);
 
             str = request.getParameter("descripcion");
+            System.out.println(str);
             p.setDescripcion(str);
 
             str = request.getParameter("foto");
+            System.out.println(str);
             p.setFoto(str);
 
             str = request.getParameter("categoria");
+            System.out.println(str);
             for(Categoria c : cf.findAll()){
                 if(c.getNombre().equals(str))
                     p.setCategoria(c);
             }
             
             str = request.getParameter("precio");
-            p.setPrecioSalida(15.0);
+            System.out.println(str);
+            p.setPrecioSalida(Double.parseDouble(str));
             
-            p.setVendedor(user);
+           
+            System.out.println(user.getNombre());
+            short n=0;
+            p.setEnPuja(n);
 
             if(strId == null || strId.isEmpty()){
                 pf.create(p);

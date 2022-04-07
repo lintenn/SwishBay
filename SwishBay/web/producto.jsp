@@ -49,7 +49,7 @@
                       <a class="nav-link" href="#">Mis pujas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="ProductoNuevoEditarServlet">Nuevo producto</a> 
+                      <a class="nav-link active" href="ProductoNuevoEditarServlet">Añadir/modificar producto</a> 
                     </li>
                   
                   </ul>
@@ -62,33 +62,38 @@
             </br>
             <form  method="POST" action="ProductoGuardarServlet">
                 <div class="form-group row justify-content-md-center mb-4">
+                  <div class="col-sm-4">
+                      <input type="text" class="form-control" id="inputId" name="id" hidden="true" value="<%= producto==null? "": producto.getId() %>" >
+                  </div>
+                </div>
+                <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-1 col-form-label">Nombre:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputNombre" value="<%= producto==null? "": producto.getTitulo() %>" >
+                    <input type="text" class="form-control" id="inputNombre" name="nombre" value="<%= producto==null? "": producto.getTitulo() %>" >
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputDescripcion" class="col-sm-1 col-form-label">Descripción:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="input" value="<%= producto==null? "": producto.getDescripcion() %>">
+                    <input type="text" class="form-control" id="input" name="descripcion" value="<%= producto==null? "": producto.getDescripcion() %>">
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputPrecio" class="col-sm-1 col-form-label">Precio:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="input" value="<%= producto==null? "": producto.getPrecioSalida() %>">
+                    <input type="text" class="form-control" id="input" name="precio" value="<%= producto==null? "": producto.getPrecioSalida() %>">
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                     <label for="inputFoto" class="col-sm-1 col-form-label">Foto (URL):</label>
                     <div class="col-sm-4">
-                      <input type="text" class="form-control" id="input" value="<%= producto==null? "": producto.getFoto() %>">
+                      <input type="text" class="form-control" id="input" name="foto" value="<%= producto==null? "": producto.getFoto() %>">
                     </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-3">
                     <label  for="inputCategoria" class="col-sm-1 col-form-label">Categoría:</label>
                     <div class="col-sm-4">
-                        <select class="form-select" id="categoria">
+                        <select class="form-select" id="categoria" name="categoria">
                             <%
                               for (Categoria c:categorias){
                                 String selected = "";
@@ -108,7 +113,7 @@
                 
                 <div class="form-group row justify-content-md-center mt-4">
                   <div class="col-sm-10">
-                    <button type="submit" class="btn btn-lg btn-secondary fw-bold border-white">Añadir</button>
+                    <button type="submit" class="btn btn-lg btn-secondary fw-bold border-white"><%= producto==null? "Añadir": "Modificar" %></button>
                   </div>
                 </div>
             </form>                
