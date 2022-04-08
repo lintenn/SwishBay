@@ -14,6 +14,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Producto</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
     </head>
     <%
        Producto producto = (Producto) request.getAttribute("producto");
@@ -58,7 +60,7 @@
             </nav>
             </br>
             </br>
-            <h1 class="mb-4">Datos del producto</h1>
+            <h1 class="mb-2">Datos del producto</h1>
             </br>
             <form  method="POST" action="ProductoGuardarServlet">
                 <div class="form-group row justify-content-md-center mb-4">
@@ -71,11 +73,12 @@
                   <div class="col-sm-4">
                     <input type="text" class="form-control" id="inputNombre" name="nombre" value="<%= producto==null? "": producto.getTitulo() %>" >
                   </div>
+                  *
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputDescripcion" class="col-sm-1 col-form-label">Descripción:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="input" name="descripcion" value="<%= producto==null? "": producto.getDescripcion() %>">
+                      <textarea class="form-control" name="descripcion" rows="3" maxlength="80"><%= producto==null? "": producto.getDescripcion() %></textarea>
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
@@ -83,11 +86,12 @@
                   <div class="col-sm-4">
                     <input type="text" class="form-control" id="input" name="precio" value="<%= producto==null? "": producto.getPrecioSalida() %>">
                   </div>
+                  *
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                     <label for="inputFoto" class="col-sm-1 col-form-label">Foto (URL):</label>
                     <div class="col-sm-4">
-                      <input type="text" class="form-control" id="input" name="foto" value="<%= producto==null? "": producto.getFoto() %>">
+                        <textarea type="text" class="form-control" id="input" rows="2" name="foto" ><%= producto==null? "": producto.getFoto() %></textarea>
                     </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-3">
@@ -111,9 +115,10 @@
                 </div>
                 </br>
                 
-                <div class="form-group row justify-content-md-center mt-4">
+                <div class="form-group row justify-content-md-center mt-2">
                   <div class="col-sm-10">
-                    <button type="submit" class="btn btn-lg btn-secondary fw-bold border-white"><%= producto==null? "Añadir": "Modificar" %></button>
+                    <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2"><%= producto==null? "Añadir": "Modificar" %></button>
+                    <a href="SellerServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
                   </div>
                 </div>
             </form>                
