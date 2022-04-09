@@ -13,17 +13,23 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import swishbay.dao.ProductoFacade;
+import swishbay.dao.PujaFacade;
+import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
+import swishbay.entity.Puja;
+import swishbay.entity.Usuario;
 
 /**
  *
  * @author galop
  */
-@WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends HttpServlet {
+@WebServlet(name = "EnPujaNuevoServlet", urlPatterns = {"/EnPujaNuevoServlet"})
+public class EnPujaNuevoServlet extends HttpServlet {
 
-    @EJB ProductoFacade productoFacade;
+    @EJB PujaFacade pujaFacade;
+    @EJB ProductoFacade pf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,17 +42,15 @@ public class SellerServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String filtroNombre = request.getParameter("filtro");
-        List<Producto> productos = null;
-        
-        if(filtroNombre == null || filtroNombre.isEmpty()){
-            productos = productoFacade.findAll();
-        }else{
-            productos = productoFacade.findByNombre(filtroNombre);
+        String str = request.getParameter("id");
+        if(str !=null ){
+            Producto p = this.pf.find(Integer.parseInt(str));
+            request.setAttribute("producto", p);
         }
         
-        request.setAttribute("productos", productos);
-        request.getRequestDispatcher("seller.jsp").forward(request, response);
+        request.getRequestDispatcher("EnPuja.jsp").forward(request, response);
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

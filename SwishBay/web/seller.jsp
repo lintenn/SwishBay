@@ -27,6 +27,7 @@
                   <a class="nav-link active" aria-current="page" href="/">Home</a>
                   <a class="nav-link" href="/">Features</a>
                   <a class="nav-link" href="/">Contact</a>
+                  <a class="nav-link" href="LogoutServlet">Cerrar sesión</a>
                 </nav>
               </div>
             </header>
@@ -43,16 +44,16 @@
                       <a class="nav-link active" aria-current="page" href="SellerServlet"> Mis productos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Mis pujas</a>
+                      <a class="nav-link" href="PujasServlet">Mis pujas</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="ProductoNuevoEditarServlet">Nuevo producto</a>
                     </li>
                     
                   </ul>
-                  <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  <form method="post" class="d-flex" action="SellerServlet">
+                    <input class="form-control me-2" type="search" placeholder="Search" name="filtro" aria-label="Search">
+                    <input class="btn btn-outline-success" type="submit" value="Search"></>
                   </form>
                 </div>
               </div>
@@ -62,26 +63,30 @@
 
               <%
                 List<Producto> productos = (List)request.getAttribute("productos");
-                
+                int i=0;
                 Usuario user = (Usuario) session.getAttribute("usuario");
                 
                 for(Producto producto : productos){
                     if(producto.getVendedor().equals(user)){
-                       
+                       i++;
             %>      
 
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
                 <div class="row g-4">
                     <h5 class="card-header bg-secondary pt-2"><%= producto.getTitulo() %></h5>
                   <div class="col-sm-12 mt-2">
-                    <img src="<%= producto.getFoto() %>" class="card-img-top" style="max-width: 200px;height: 180px" >
+                    <img src="<%= producto.getFoto() %>" class="card-img-top" style="max-width: 200px;height: 170px" >
                   </div>
                   <div class="col-sm-12 mt-0">
                     <div class="row justify-content-center">
                       <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
                       <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
                       <div class="row justify-content-center pb-2 px-0">
-                        <a href="#" class="btn btn-primary col-5" style="width: 100px">Crear puja</a>
+                        <% if(producto.getEnPuja()==0){
+                        %>
+                        <a href="EnPujaNuevoServlet?id=<%=producto.getId()%>" class="btn btn-primary col-5" style="width: 100px">Crear puja</a>
+                        <% }
+                        %>
                         <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
                         <a href="ProductoBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2">
                             <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
@@ -99,12 +104,26 @@
             <%
                     }
                 }
+                if(i==0){
             %>
+            <div class="py-5">    
+                Lista de productos vacía.
+            </div>
+            </main>
 
+            <footer class="text-white-50 fixed-bottom">
+            <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+
+            <%
+                }else{
+            %>
             </main>
 
             <footer class="mt-5 text-white-50">
-              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+            <p class="pt-5">© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+            <%
+                }
+            %>
             </footer>
         </div>
         
