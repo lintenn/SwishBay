@@ -19,10 +19,10 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author migue
+ * @author Luis, migue
  */
 @WebServlet(name = "UsuarioServlet", urlPatterns = {"/UsuarioServlet"})
-public class UsuarioServlet extends HttpServlet {
+public class UsuarioServlet extends SwishBayServlet {
     
     @EJB UsuarioFacade usuarioFacade;
 
@@ -38,11 +38,20 @@ public class UsuarioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        List<Usuario> usuarios = usuarioFacade.findAll();
-        
-        request.setAttribute("usuarios", usuarios);
-        request.getRequestDispatcher("usuarios.jsp").forward(request, response);        
+        if (super.comprobarSession(request, response)) {
+            
+            String filtroNombre = request.getParameter("filtro");
+            List<Usuario> usuarios = null;
 
+            if (filtroNombre == null || filtroNombre.isEmpty()) {
+                usuarios = this.usuarioFacade.findAll();        
+            } else {
+                usuarios = this.usuarioFacade.findByNombre(filtroNombre);
+            }
+
+            request.setAttribute("usuarios", usuarios);
+            request.getRequestDispatcher("usuarios.jsp").forward(request, response);   
+        }
            
     }
 
