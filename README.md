@@ -34,18 +34,19 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un administrador debe poder añadir categorías al sistema.
 - Un administrador debe poder actualizar categorías del sistema.
 - Un administrador debe poder eliminar categorías del sistema.
-- Un administrador debe poder ver en un listado los usuarios del sistema.
+- Un administrador debe poder ver en un listado los usuarios del sistema. :heavy_check_mark:
 - Un administrador debe poder añadir usuarios al sistema.
 - _Un administrador debe poder modificar los usuarios del sistema_. 
 - Un administrador debe poder eliminar usuarios del sistema.
+- Un administrador debe poder realizar **filtrados y búsquedas** sobre los usuarios. :heavy_check_mark:
 - Un administrador debe poder ver en un listado los productos del sistema.
 - Un administrador debe poder añadir productos al sistema.
 - Un administrador debe poder modificar productos del sistema.
 - Un administrador debe poder eliminar productos del sistema.
-- Un administrador debe poder realizar **filtrados y búsquedas** sobre los usuarios y los productos. 
+- Un administrador debe poder realizar **filtrados y búsquedas** sobre los productos.
 - Un administrador debe poder dar de alta (o asignar los permisos correspondientes) a los usuarios de marketing. 
-- Un USUARIO debe poder registrarse en el sistema como Vendedor o Comprador (los administradores se añaden en la base de datos y estos añadirán al personal de marketing), indicando Nombre, Apellidos, Domicilio, Ciudad de residencia, _Edad_, Sexo (en los Compradores además se indicarán las categorías preferidas). 
-- Un USUARIO debe poder iniciar sesión en el sistema.
+- Un USUARIO debe poder registrarse en el sistema como Vendedor o Comprador (los administradores se añaden en la base de datos y estos añadirán al personal de marketing), indicando Nombre, Apellidos, Domicilio, Ciudad de residencia, _Edad_, Sexo (en los Compradores además se indicarán las categorías preferidas). :heavy_check_mark:
+- Un USUARIO debe poder iniciar sesión en el sistema. :heavy_check_mark:
 
 #### Marketing - Angel Joaquín Rodríguez Mercado
 - Un personal de marketing debe poder ver en un listado los usuarios **compradores** del sistema.
