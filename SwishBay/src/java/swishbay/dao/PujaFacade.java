@@ -5,10 +5,13 @@
  */
 package swishbay.dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import swishbay.entity.Puja;
+import swishbay.entity.Usuario;
 
 /**
  *
@@ -28,5 +31,14 @@ public class PujaFacade extends AbstractFacade<Puja> {
     public PujaFacade() {
         super(Puja.class);
     }
+
+    public Puja findPuja(Integer uId, Integer pId) {
+        Query q;   
+        q= this.getEntityManager().createQuery("select p from Puja p where p.usuario= :usuario and p.producto1= :producto");
+        q.setParameter("usuario", '%' + uId + '%');
+        q.setParameter("producto", '%' + pId + '%');
+        return (Puja) q.getSingleResult();
+    }
+
     
 }
