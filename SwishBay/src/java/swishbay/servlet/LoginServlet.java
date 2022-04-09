@@ -69,7 +69,7 @@ public class LoginServlet extends HttpServlet {
             //session.setAttribute("tipoUsuario", tipoUsuario);
             
             if (user.getTipoUsuario().getTipo().equals("administrador")) {
-                goTo = "prueba.jsp";
+                goTo = "UsuarioServlet";
             } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
                 goTo = "ProductoServlet";
             } else if (user.getTipoUsuario().getTipo().equals("marketing")) {

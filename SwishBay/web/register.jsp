@@ -21,7 +21,7 @@
     if (user != null) {
         String redirectTo = "ProductoServlet";
         if (user.getTipoUsuario().getTipo().equals("administrador")) {
-            redirectTo = "prueba.jsp";
+            redirectTo = "UsuarioServlet";
         } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
             redirectTo = "ProductoServlet";
         } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
