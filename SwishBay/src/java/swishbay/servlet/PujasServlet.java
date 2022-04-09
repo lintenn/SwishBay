@@ -20,10 +20,10 @@ import swishbay.entity.Producto;
  *
  * @author galop
  */
-@WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends HttpServlet {
-
-    @EJB ProductoFacade productoFacade;
+@WebServlet(name = "PujasServlet", urlPatterns = {"/PujasServlet"})
+public class PujasServlet extends HttpServlet {
+    
+    @EJB ProductoFacade pf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,13 +40,13 @@ public class SellerServlet extends HttpServlet {
         List<Producto> productos = null;
         
         if(filtroNombre == null || filtroNombre.isEmpty()){
-            productos = productoFacade.findAll();
+            productos = pf.findAll();
         }else{
-            productos = productoFacade.findByNombre(filtroNombre);
+            productos = pf.findByNombre(filtroNombre);
         }
         
         request.setAttribute("productos", productos);
-        request.getRequestDispatcher("seller.jsp").forward(request, response);
+        request.getRequestDispatcher("pujas.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

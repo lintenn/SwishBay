@@ -4,14 +4,14 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 ## Spanish:
 ### Requisitos: :heavy_check_mark:   :x: 
 #### Vendedor - Galo Pérez Gallego 
-- Un vendedor debe poder registrar un producto. _(no implica ponerlo en puja directamente)_
+- Un vendedor debe poder registrar un producto. _(no implica ponerlo en puja directamente)_ :heavy_check_mark:
 - Un vendedor debe poder poner para venta en puja un producto (indicando precio de salida y duración de la puja).
 - _Un vendedor debe poder ver los productos que los demás vendedores tienen registrados o puja._ ❓
 - Un vendedor debe poder ver los productos que tiene en venta.
 - Un vendedor debe poder **buscar y aplicar filtrados** de búsqueda sobre los productos que tiene en venta.
 - Un vendedor debe poder ver los productos que ha vendido _(y a quién)_. ❔
-- Un vendedor debe poder retirar sus productos registrados o en puja o que ha vendido.
-- Un vendedor debe poder editar sus productos registrados o en puja o que ha vendido.
+- Un vendedor debe poder retirar sus productos registrados o en puja o que ha vendido. :heavy_check_mark:
+- Un vendedor debe poder editar sus productos registrados o en puja o que ha vendido. :heavy_check_mark:
 - Un vendedor debe poder realizar la asignación del producto vendido al comprador que corresponda _(y lo notifica)_. ❔
 
 #### Comprador - Miguel Oña Guerrero
