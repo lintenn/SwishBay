@@ -4,25 +4,40 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.entity.Categoria"%>
+<%@page import="java.util.List"%>
 <%@page import="swishbay.entity.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
 <%
     Usuario user = (Usuario) session.getAttribute("usuario");
+    List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
     String goTo = "RegisterServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
     
-    String status = (String) session.getAttribute("status");
-    session.removeAttribute("status");
+    String status = (String) request.getAttribute("status");
+    //session.removeAttribute("status");
     
-    if(user!=null){
+    if (user != null) {
+        String redirectTo = "ProductoServlet";
+        if (user.getTipoUsuario().getTipo().equals("administrador")) {
+            redirectTo = "UsuarioServlet";
+        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+            redirectTo = "ProductoServlet";
+        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+            redirectTo = "prueba.jsp";
+        }
+        response.sendRedirect(request.getContextPath() + "/" + redirectTo);
+    }
+    
+    /*if(user!=null){
         goTo = "ModificarPerfil?Id="+user.getId()+"";
         fechaNacimiento = user.getFechaNacimiento()+"";
         nombre = user.getNombre();
         email = user.getCorreo();
         apellidos = user.getApellidos();       
         sexo = user.getSexo();
-    }
+    }*/
 %>
 
 <html lang="en">
@@ -30,7 +45,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Register</title>
+    <title>Registrarse</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
 
@@ -116,78 +131,93 @@
   </head>
   <body class="text-center">
       <main class="form-signin">
-        <form class="border border-light p-5" action="<%= goTo %>">
+        <form method="POST" class="border border-light p-5" action="<%= goTo %>">
             <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_black.png" alt="" width="120" height="50">
             
             <% if (user == null) { %>
-            <h1 class="h3 mb-3 fw-normal">Register</h1>
+            <h1 class="h3 mb-3 fw-normal">Registrarse</h1>
                 <% if (status != null) {%>
                     <div class="alert alert-danger"><%=status%></div>
                 <% } %>
             <div class="row g-3">
                 <div class="col-sm-6 form-floating">
-                    <input type="text" maxlength="45" name="nombre" class="form-control" id="floatingInput" placeholder="First name" required="" autofocus=""/>
-                    <label for="inputFirstName" class="sr-only">First name</label>
+                    <input type="text" maxlength="45" name="nombre" class="form-control" id="floatingInput" placeholder="Nombre" required="" autofocus=""/>
+                    <label for="inputFirstName" class="sr-only">Nombre</label>
                 </div>
                 <div class="col-sm-6 form-floating">
-                    <input type="text" maxlength="45" name="apellidos" class="form-control" id="floatingInput" placeholder="Last name" required=""/>
-                    <label for="inputLastName" class="sr-only">Last name</label>
+                    <input type="text" maxlength="45" name="apellidos" class="form-control" id="floatingInput" placeholder="Apellidos" required=""/>
+                    <label for="inputLastName" class="sr-only">Apellidos</label>
                 </div>
             </div>
             <div class="form-floating">
-                <input type="email" maxlength="45" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required=""/>
-                <label for="inputEmail" class="sr-only">Email address</label>
+                <input type="email" maxlength="45" name="correo" class="form-control" id="floatingInput" placeholder="Email" required=""/>
+                <label for="inputEmail" class="sr-only">Email</label>
             </div>
             <div class="form-floating">
-                <input type="password" minlength="6" maxlength="45" name="password" class="form-control" id="floatingPassword" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" required=""/>
-                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" minlength="6" maxlength="45" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña" aria-describedby="defaultRegisterFormPasswordHelpBlock" required=""/>
+                <label for="inputPassword" class="sr-only">Contraseña</label>
             </div>
-            <small id="defaultPasswordFormPhoneHelpBlock" class="form-text text-muted mb-4">Minimal 6 characters lenght</small>
+            <small id="defaultPasswordFormPhoneHelpBlock" class="form-text text-muted mb-4">Mínimo 6 caracteres de longitud</small>
             <div class="form-floating">
-                <input type="text" maxlength="100" name="domicilio" class="form-control" id="floatingInput" placeholder="Adressline"/>
-                <label for="inputAddressline" class="sr-only">Addressline</label>
+                <input type="text" maxlength="100" name="domicilio" class="form-control" id="floatingInput" placeholder="Domicilio"/>
+                <label for="inputAddressline" class="sr-only">Domicilio</label>
             </div>
             <div class="form-floating">
-                <input type="text" maxlength="45" name="ciudad" class="form-control" id="floatingInput" placeholder="City"/>
-                <label for="inputCity" class="sr-only">City</label>
+                <input type="text" maxlength="45" name="ciudad" class="form-control" id="floatingInput" placeholder="Ciudad"/>
+                <label for="inputCity" class="sr-only">Ciudad</label>
             </div>
-            <label for="inputBirthdate" class="form-label">Birth date</label>
+            <label for="inputBirthdate" class="form-label">Fecha de nacimiento:</label>
             <div class="form-floating">
                 <input type="date" name="fechaNacimiento" class="form-control" id="floatingInput" required=""/>
-                <label for="inputBirthdate" class="sr-only">Birth date</label>
+                <label for="inputBirthdate" class="sr-only">Fecha de nacimiento</label>
             </div>
             
-            <label for="inputGender" class="form-label">Gender</label>
+            <label for="inputGender" class="form-label">Sexo:</label>
             <div class="d-flex align-center justify-content-center">
                 <div class="form-check mx-1">
                   <input id="masc" name="sexo" value="masc" type="radio" class="form-check-input" checked="" required=""/>
-                  <label class="form-check-label" for="masc">Masculine</label>
+                  <label class="form-check-label" for="masc">Masculino</label>
                 </div>
                 <div class="form-check mx-1">
                   <input id="fem" name="sexo" value="fem" type="radio" class="form-check-input" required=""/>
-                  <label class="form-check-label" for="fem">Femenine</label>
+                  <label class="form-check-label" for="fem">Fe  menino</label>
                 </div>
             </div>
             
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
-                <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
-            </div>
+            <label for="inputCategory" class="form-label">Categorías preferidas:</label>
+            <%
+                for (Categoria categoria : categorias) {
+            %>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="categoria<%=categoria.getId()%>" name="categoria" value="<%= categoria.getId() %>"/>
+                  <label class="custom-control-label" for="categoria<%=categoria.getId()%>"><%=categoria.getNombre()%></label>
+                </div>
+                
+            <% } %>
+            
+            <!--
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
+                    <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
+                </div>
+            -->
             
             <nav class="botones">
-                <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Register"/>
-                <a href="login.jsp" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Back</a>
+                <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Registrarse"/>
+                <a href="login.jsp" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Volver</a>
             </nav>
             
             <div class="text-center">
             
             <hr>
 
-            <p>By clicking
-                <em>Register</em> you agree to our
-                <a href="" target="_blank">terms of service</a>.
+            <p>Al hacer click en
+                <em>Registrarse</em> aceptas los
+                <a href="./" target="_blank">términos de servicio</a>.
             </p>
             </div>
+            <% } else { %>
+            <p> Ya has iniciado sesión. Cierra sesión primero. </p>
             <% } %>
             
             <p class="mt-5 mb-3 text-muted">© 2022, SwishBay</p>

@@ -4,6 +4,9 @@
     Author     : galop
 --%>
 
+<%@page import="swishbay.entity.Usuario"%>
+<%@page import="swishbay.entity.Producto"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +27,7 @@
                   <a class="nav-link active" aria-current="page" href="/">Home</a>
                   <a class="nav-link" href="/">Features</a>
                   <a class="nav-link" href="/">Contact</a>
+                  <a class="nav-link" href="LogoutServlet">Cerrar sesión</a>
                 </nav>
               </div>
             </header>
@@ -37,29 +41,19 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Productos</a>
+                      <a class="nav-link active" aria-current="page" href="SellerServlet"> Mis productos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                      </a>
-                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
+                      <a class="nav-link" href="PujasServlet">Mis pujas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link disabled">Disabled</a>
+                      <a class="nav-link" href="ProductoNuevoEditarServlet">Nuevo producto</a>
                     </li>
+                    
                   </ul>
-                  <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  <form method="post" class="d-flex" action="SellerServlet">
+                    <input class="form-control me-2" type="search" placeholder="Search" name="filtro" aria-label="Search">
+                    <input class="btn btn-outline-success" type="submit" value="Search"></>
                   </form>
                 </div>
               </div>
@@ -67,27 +61,69 @@
 
             <main class="row d-flex justify-content-center mt-4">
 
-              <div class="card mb-3 ms-2 me-2 col-4 position-relative" >
-                <div class="row g-0">
-                  <h5 class="card-header bg-secondary">Ratón</h5>
-                  <div class="col-md-4">
-                    <img src="https://m.media-amazon.com/images/I/61UxfXTUyvL._AC_SY450_.jpg" class="rounded-start" style="max-width: 100%;" alt="...">
+              <%
+                List<Producto> productos = (List)request.getAttribute("productos");
+                int i=0;
+                Usuario user = (Usuario) session.getAttribute("usuario");
+                
+                for(Producto producto : productos){
+                    if(producto.getVendedor().equals(user)){
+                       i++;
+            %>      
+
+              <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
+                <div class="row g-4">
+                    <h5 class="card-header bg-secondary pt-2"><%= producto.getTitulo() %></h5>
+                  <div class="col-sm-12 mt-2">
+                    <img src="<%= producto.getFoto() %>" class="card-img-top" style="max-width: 200px;height: 170px" >
                   </div>
-                  <div class="col-md-8">
-                    <div class="card-body">
-                      <h5 class="card-title text-dark">50€</h5>
-                      <p class="card-text text-dark text-left">Esta es la descripción del producto. Es un ratón Logitech</p>
-                      <p class="card-text"><small class="text-muted mb-5 position-absolute bottom-0 start-60 translate-middle-x">Fin de puja en 3 horas</small></p>
-                      <a href="#" class="btn btn-primary mb-1 position-absolute bottom-0 start-60 translate-middle-x">Pujar</a>
+                  <div class="col-sm-12 mt-0">
+                    <div class="row justify-content-center">
+                      <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
+                      <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
+                      <div class="row justify-content-center pb-2 px-0">
+                        <% if(producto.getEnPuja()==0){
+                        %>
+                        <a href="EnPujaNuevoServlet?id=<%=producto.getId()%>" class="btn btn-primary col-5" style="width: 100px">Crear puja</a>
+                        <% }
+                        %>
+                        <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
+                        <a href="ProductoBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2">
+                            <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>
+                            </svg>
+                        </a>
+       
+                      </div>
                     </div>
+                    
                   </div>
                 </div>
               </div>
-
+            
+            <%
+                    }
+                }
+                if(i==0){
+            %>
+            <div class="py-5">    
+                Lista de productos vacía.
+            </div>
             </main>
 
-            <footer class="mt-auto text-white-50 fixed-bottom">
-              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+            <footer class="text-white-50 fixed-bottom">
+            <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+
+            <%
+                }else{
+            %>
+            </main>
+
+            <footer class="mt-5 text-white-50">
+            <p class="pt-5">© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+            <%
+                }
+            %>
             </footer>
         </div>
         

@@ -26,6 +26,7 @@
                   <a class="nav-link active" aria-current="page" href="/">Home</a>
                   <a class="nav-link" href="/">Features</a>
                   <a class="nav-link" href="/">Contact</a>
+                  <a class="nav-link" href="LogoutServlet">Cerrar sesión</a>
                 </nav>
               </div>
             </header>
@@ -59,9 +60,9 @@
                       <a class="nav-link disabled">Disabled</a>
                     </li>
                   </ul>
-                  <form class="d-flex">
+                  <form method="post" class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <input class="btn btn-outline-success" type="submit" value="Search"></>
                   </form>
                 </div>
               </div>

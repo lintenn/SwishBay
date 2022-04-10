@@ -6,24 +6,34 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import swishbay.dao.ProductoFacade;
+import swishbay.dao.PujaFacade;
+import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
+import swishbay.entity.Puja;
+import swishbay.entity.Usuario;
 
 /**
  *
  * @author galop
  */
-@WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends HttpServlet {
+@WebServlet(name = "EnPujaGuardarServlet", urlPatterns = {"/EnPujaGuardarServlet"})
+public class EnPujaGuardarServlet extends HttpServlet {
 
-    @EJB ProductoFacade productoFacade;
+    @EJB ProductoFacade pf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,17 +46,57 @@ public class SellerServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String filtroNombre = request.getParameter("filtro");
-        List<Producto> productos = null;
+        Usuario user=null;
         
-        if(filtroNombre == null || filtroNombre.isEmpty()){
-            productos = productoFacade.findAll();
-        }else{
-            productos = productoFacade.findByNombre(filtroNombre);
+        try{
+            HttpSession session = request.getSession();
+            user = (Usuario) session.getAttribute("usuario");
+
+        }catch(Exception e){
+            System.err.println(e.getMessage());
         }
         
-        request.setAttribute("productos", productos);
-        request.getRequestDispatcher("seller.jsp").forward(request, response);
+        if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
+            Producto p;
+            
+            String strId,str, status= null;
+            strId= request.getParameter("id");
+
+            p = this.pf.find(Integer.parseInt(strId));
+            
+            str = request.getParameter("time");
+            SimpleDateFormat dateParser = new SimpleDateFormat("yy-MM-dd");
+            Date d=new Date(); 
+            
+            try {
+                d = dateParser.parse(str);
+            } catch (ParseException ex) {
+               System.err.println(ex.getLocalizedMessage());
+            }
+            
+            Date actual = new Date();
+            if(actual.before(d)){
+                
+                if(p.getEnPuja()==0){
+                    p.setEnPuja((short) 1);
+                    str = request.getParameter("precio");
+                    p.setPrecioSalida(Double.parseDouble(str));
+
+                }
+                p.setFinPuja(d);            
+                pf.edit(p);
+
+                response.sendRedirect(request.getContextPath() + "/PujasServlet");
+            }else{
+                status= "La fecha introducida es anterior a la actual";
+                request.setAttribute("status", status);
+                
+                request.getRequestDispatcher("/EnPujaNuevoServlet").forward(request, response);
+               
+            }
+           
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
