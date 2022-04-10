@@ -4,6 +4,7 @@
     Author     : galop
 --%>
 
+<%@page import="swishbay.entity.Categoria"%>
 <%@page import="java.util.Collections"%>
 <%@page import="swishbay.entity.Usuario"%>
 <%@page import="swishbay.entity.Producto"%>
@@ -56,7 +57,26 @@
                     
                   </ul>
                   <form method="post" class="d-flex" action="SellerServlet">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <div class="col-sm-4">
+                        <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">
+                            
+                            <%
+                              List<Producto> productos = (List)request.getAttribute("productos");
+                              List<Categoria> categorias = (List) request.getAttribute("categorias");
+                              String filtroCategoria = (String) request.getAttribute("selected");
+                             %>
+                             <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
+                             <%
+                              for (Categoria c:categorias){
+                                
+                            %>     
+                                <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
+                           <%  
+                              }
+                           %>
+                        </select>
+                    </div>
+                    <input class="form-control me-2 mx-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>
@@ -66,7 +86,6 @@
             <main class="row d-flex justify-content-center mt-4">
 
               <%
-                List<Producto> productos = (List)request.getAttribute("productos");
                 int i=0;
                 Usuario user = (Usuario) session.getAttribute("usuario");
                 Collections.reverse (productos);

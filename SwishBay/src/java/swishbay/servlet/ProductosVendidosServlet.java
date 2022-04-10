@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import swishbay.dao.CategoriaFacade;
 import swishbay.dao.ProductoFacade;
+import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
@@ -26,6 +28,7 @@ import swishbay.entity.Usuario;
 public class ProductosVendidosServlet extends HttpServlet {
 
     @EJB ProductoFacade pf;
+    @EJB CategoriaFacade cf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,16 +51,32 @@ public class ProductosVendidosServlet extends HttpServlet {
         }
         
         String filtroNombre = request.getParameter("filtro");
+        String filtroCategoria = request.getParameter("filtroCategoria");
         List<Producto> productos = null;
+        List<Categoria> categorias= cf.findAll();
         
         if(filtroNombre == null || filtroNombre.isEmpty()){
-            productos = pf.findAll();
+            if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                productos = pf.findAll();
+                
+            }else{
+                productos= pf.findAll(filtroCategoria);
+                
+            }
         }else{
-            productos = pf.findByNombre(filtroNombre);
+            if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                productos = pf.findByNombre(filtroNombre);
+                
+            }else{
+                productos = pf.findByNombre(filtroNombre,filtroCategoria);
+               
+            }   
         }
         
         request.setAttribute("productos", productos);
         request.setAttribute("user", user);
+        request.setAttribute("categorias", categorias);
+        request.setAttribute("selected", filtroCategoria);
         request.getRequestDispatcher("productosVendidos.jsp").forward(request, response);
         
         
