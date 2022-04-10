@@ -19,6 +19,7 @@
     </head>
     <%
        Producto producto = (Producto) request.getAttribute("producto");
+       String status = (String) request.getAttribute("status");
        List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
 
     %>
@@ -52,6 +53,9 @@
                       <a class="nav-link" href="PujasServlet">Mis pujas</a>
                     </li>
                     <li class="nav-item">
+                      <a class="nav-link" href="ProductosVendidosServlet">Productos vendidos</a>
+                    </li>
+                    <li class="nav-item">
                       <a class="nav-link active" href="ProductoNuevoEditarServlet">Añadir/modificar producto</a> 
                     </li>
                   
@@ -60,19 +64,19 @@
               </div>
             </nav>
             </br>
-            </br>
-            <h1 class="mb-2">Datos del producto</h1>
-            </br>
+
+            <h1 class="mb-1">Datos del producto</h1>
+            
             <form  method="POST" action="ProductoGuardarServlet">
                 <div class="form-group row justify-content-md-center mb-4">
                   <div class="col-sm-4">
-                      <input type="text" class="form-control" id="inputId" name="id" hidden="true" value="<%= producto==null? "": producto.getId() %>" >
+                      <input type="hidden" class="form-control" id="inputId" name="id" value="<%= producto==null? "": producto.getId() %>" >
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-1 col-form-label">Nombre:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputNombre" name="nombre" value="<%= producto==null? "": producto.getTitulo() %>" >
+                    <input type="text" class="form-control" id="inputNombre" name="nombre" value="<%= producto==null? "": producto.getTitulo() %>" required >
                   </div>
                   *
                 </div>
@@ -86,7 +90,7 @@
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputPrecio" class="col-sm-1 col-form-label">Precio:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="input" name="precio" value="<%= producto==null? "": producto.getPrecioSalida() %>">
+                    <input type="text" class="form-control" id="input" name="precio" value="<%= producto==null? "": producto.getPrecioSalida() %>" required>
                   </div>
                   *
                 </div>
@@ -100,7 +104,7 @@
                 <div class="form-group row justify-content-md-center mb-3">
                     <label  for="inputCategoria" class="col-sm-1 col-form-label">Categoría:</label>
                     <div class="col-sm-4">
-                        <select class="form-select" id="categoria" name="categoria">
+                        <select class="form-select mb-2" id="categoria" name="categoria">
                             <%
                               for (Categoria c:categorias){
                                 String selected = "";
@@ -117,9 +121,17 @@
                     </div>
                     &nbsp;
                 </div>
+                        <%
+                    if(status != null){
+                %>
+                <div class="form-group row justify-content-center" style="height: 50px;">
+                    <div class=" alert alert-danger col-sm-4"><%=status%></div>
+                </div>
+                <% }
+                %>
                 </br>
                 
-                <div class="form-group row justify-content-md-center mt-2">
+                <div class="form-group row justify-content-md-center mt-0">
                   <div class="col-sm-10">
                     <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2"><%= producto==null? "Añadir": "Modificar" %></button>
                     <a href="SellerServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>

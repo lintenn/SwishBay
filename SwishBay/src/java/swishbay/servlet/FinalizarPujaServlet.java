@@ -6,27 +6,25 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
 import swishbay.dao.ProductoFacade;
-import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
+import swishbay.entity.Puja;
+import swishbay.entity.Usuario;
 
 /**
  *
  * @author galop
  */
-@WebServlet(name = "ProductoNuevoEditarServlet", urlPatterns = {"/ProductoNuevoEditarServlet"})
-public class ProductoNuevoEditarServlet extends HttpServlet {
+@WebServlet(name = "FinalizarPujaServlet", urlPatterns = {"/FinalizarPujaServlet"})
+public class FinalizarPujaServlet extends HttpServlet {
 
     @EJB ProductoFacade pf;
-    @EJB CategoriaFacade cf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,13 +38,28 @@ public class ProductoNuevoEditarServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String str = request.getParameter("id");
-        if(str !=null && !str.isEmpty()){
-            Producto p = this.pf.find(Integer.parseInt(str));
-            request.setAttribute("producto", p);
+        
+        Producto p = this.pf.find(Integer.parseInt(str));
+        Double d=p.getPrecioSalida();
+        Puja puja=null;
+        
+        
+        if(!p.getPujaList().isEmpty()){
+            for (Puja puj: p.getPujaList()){
+                if(puj.getPrecio()>=d){
+                    d=puj.getPrecio();
+                    puja=puj;
+                }
+            }
+
+            p.setEnPuja((short) 0);
+            p.setComprador(puja.getUsuario());
+
+            this.pf.edit(p);
         }
-        List<Categoria> categorias = this.cf.findAll();
-        request.setAttribute("categorias",categorias );
-        request.getRequestDispatcher("producto.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/PujasServlet");
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
