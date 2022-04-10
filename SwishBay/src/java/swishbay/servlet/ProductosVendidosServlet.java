@@ -6,8 +6,7 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,10 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.CategoriaFacade;
 import swishbay.dao.ProductoFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
@@ -26,12 +22,10 @@ import swishbay.entity.Usuario;
  *
  * @author galop
  */
-@WebServlet(name = "ProductoGuardarServlet", urlPatterns = {"/ProductoGuardarServlet"})
-public class ProductoGuardarServlet extends HttpServlet {
+@WebServlet(name = "ProductosVendidosServlet", urlPatterns = {"/ProductosVendidosServlet"})
+public class ProductosVendidosServlet extends HttpServlet {
 
     @EJB ProductoFacade pf;
-    @EJB CategoriaFacade cf;
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,7 +37,7 @@ public class ProductoGuardarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+            
         Usuario user=null;
         try{
             HttpSession session = request.getSession();
@@ -53,71 +47,20 @@ public class ProductoGuardarServlet extends HttpServlet {
             System.err.println(e.getMessage());
         }
         
-
-        if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
-            Producto p;
-            String strId,str, status=null;
-            strId= request.getParameter("id");
-
-            
-            
-            if(strId == null || strId.isEmpty()){
-                p = new Producto();
-                java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
-                p.setFinPuja(date);
-            }else {
-                p = this.pf.find(Integer.parseInt(strId));
-            }
-
-         
-            str = request.getParameter("nombre");
-            
-            p.setTitulo(str);  
-            
-            
-
-            str = request.getParameter("descripcion");
-            p.setDescripcion(str);
-
-            str = request.getParameter("foto");
-            if(str==null || str.isEmpty()){
-                str= "https://th.bing.com/th/id/OIP.KeKY2Y3R0HRBkPEmGWU3FwHaHa?pid=ImgDet&rs=1";
-            }
-            p.setFoto(str);
-
-            str = request.getParameter("categoria");
-            for(Categoria c : cf.findAll()){
-                if(c.getNombre().equals(str))
-                    p.setCategoria(c);
-            }
-            
-            str = request.getParameter("precio");
-            if(!str.matches("[-+]?\\d*\\.?\\d+")){
-                status= "Formato de precio incorrecto.";
-                request.setAttribute("status", status);
-                
-                request.getRequestDispatcher("ProductoNuevoEditarServlet").forward(request, response);
-               
-            }
-            
-            p.setPrecioSalida(Double.parseDouble(str));
-                
-           
-           
-            
-            short n=0;
-            p.setEnPuja(n);
-            
-            p.setVendedor(user);
-            
-
-            if(strId == null || strId.isEmpty()){
-                pf.create(p);
-            }else {
-                pf.edit(p);
-            }
-            response.sendRedirect(request.getContextPath() + "/SellerServlet");
+        String filtroNombre = request.getParameter("filtro");
+        List<Producto> productos = null;
+        
+        if(filtroNombre == null || filtroNombre.isEmpty()){
+            productos = pf.findAll();
+        }else{
+            productos = pf.findByNombre(filtroNombre);
         }
+        
+        request.setAttribute("productos", productos);
+        request.setAttribute("user", user);
+        request.getRequestDispatcher("productosVendidos.jsp").forward(request, response);
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

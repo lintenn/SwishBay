@@ -36,8 +36,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         Query q;   
         q= this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo");
         q.setParameter("titulo", '%' + titulo + '%');
-        return q.getResultList();
-        
+        return q.getResultList(); 
     }
     
 }

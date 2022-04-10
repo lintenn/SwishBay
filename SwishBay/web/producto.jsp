@@ -53,6 +53,9 @@
                       <a class="nav-link" href="PujasServlet">Mis pujas</a>
                     </li>
                     <li class="nav-item">
+                      <a class="nav-link" href="ProductosVendidosServlet">Productos vendidos</a>
+                    </li>
+                    <li class="nav-item">
                       <a class="nav-link active" href="ProductoNuevoEditarServlet">Añadir/modificar producto</a> 
                     </li>
                   
@@ -67,7 +70,7 @@
             <form  method="POST" action="ProductoGuardarServlet">
                 <div class="form-group row justify-content-md-center mb-4">
                   <div class="col-sm-4">
-                      <input type="text" class="form-control" id="inputId" name="id" hidden="true" value="<%= producto==null? "": producto.getId() %>" >
+                      <input type="hidden" class="form-control" id="inputId" name="id" value="<%= producto==null? "": producto.getId() %>" >
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
