@@ -4,6 +4,7 @@
     Author     : galop
 --%>
 
+<%@page import="swishbay.entity.Puja"%>
 <%@page import="java.text.Format"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
@@ -24,6 +25,11 @@
        String status = (String) request.getAttribute("status");
        Format f = new SimpleDateFormat("yyyy-MM-dd");
        String str = f.format(producto.getFinPuja());
+       Double p= producto.getPrecioSalida();
+       for (Puja puja: producto.getPujaList()){
+            if(puja.getPrecio()>=p)
+                p=puja.getPrecio();
+        }
     %>
     
     <body class="d-flex h-100 text-center text-white bg-dark">
@@ -72,13 +78,13 @@
             <form  method="POST" action="EnPujaGuardarServlet">
                 <div class="form-group row justify-content-md-center mb-4">
                   <div class="col-sm-4">
-                      <input type="text" class="form-control" id="inputId" name="id" hidden="true" value="<%= producto==null? "": producto.getId() %>" >
+                      <input type="hidden" class="form-control" id="inputId" name="id" value="<%= producto==null? "": producto.getId() %>" >
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-2 col-form-label">Precio de salida:</label>
                   <div class="col-sm-3">
-                    <input type="text" class="form-control" id="inputNombre" name="precio" value="<%= producto==null? "": producto.getPrecioSalida() %>" >
+                    <input type="text" class="form-control" id="inputNombre" name="precio" value="<%= producto==null? "": p %>" >
                   </div>
                   
                 </div>
