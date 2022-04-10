@@ -21,6 +21,7 @@
     </head>
     <%
        Producto producto = (Producto) request.getAttribute("producto");
+       String status = (String) request.getAttribute("status");
        Format f = new SimpleDateFormat("yyyy-MM-dd");
        String str = f.format(producto.getFinPuja());
     %>
@@ -76,18 +77,25 @@
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-2 col-form-label">Precio de salida:</label>
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <input type="text" class="form-control" id="inputNombre" name="precio" value="<%= producto==null? "": producto.getPrecioSalida() %>" >
                   </div>
-      
+                  
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputDescripcion" class="col-sm-2 col-form-label">Fecha de fin: </label>
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <input type="date" class="form-control" style="height: 40px" name="time" value=<%= producto.getEnPuja()==0? "2022-07-01": str %>>
                   </div>
-                  &nbsp;
                 </div>
+                <%
+                    if(status != null){
+                %>
+                <div class="form-group row justify-content-center">
+                    <div class=" alert alert-danger col-sm-3"><%=status%></div>
+                </div>
+                <% }
+                %>
               
                 </br>
                 

@@ -47,6 +47,7 @@ public class EnPujaGuardarServlet extends HttpServlet {
             throws ServletException, IOException {
         
         Usuario user=null;
+        
         try{
             HttpSession session = request.getSession();
             user = (Usuario) session.getAttribute("usuario");
@@ -58,14 +59,10 @@ public class EnPujaGuardarServlet extends HttpServlet {
         if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
             Producto p;
             
-            String strId,str;
+            String strId,str, status= null;
             strId= request.getParameter("id");
 
             p = this.pf.find(Integer.parseInt(strId));
-         
-            if(p.getEnPuja()==0){
-                p.setEnPuja((short) 1);
-            }
             
             str = request.getParameter("time");
             SimpleDateFormat dateParser = new SimpleDateFormat("yy-MM-dd");
@@ -77,12 +74,27 @@ public class EnPujaGuardarServlet extends HttpServlet {
                System.err.println(ex.getLocalizedMessage());
             }
             
-            p.setFinPuja(d);
-            
-            pf.edit(p);
-            
-                       
-            response.sendRedirect(request.getContextPath() + "/PujasServlet");
+            Date actual = new Date();
+            if(actual.before(d)){
+                
+                if(p.getEnPuja()==0){
+                    p.setEnPuja((short) 1);
+                    str = request.getParameter("precio");
+                    p.setPrecioSalida(Double.parseDouble(str));
+
+                }
+                p.setFinPuja(d);            
+                pf.edit(p);
+
+                response.sendRedirect(request.getContextPath() + "/PujasServlet");
+            }else{
+                status= "La fecha introducida es anterior a la actual";
+                request.setAttribute("status", status);
+                
+                request.getRequestDispatcher("/EnPujaNuevoServlet").forward(request, response);
+               
+            }
+           
         }
         
     }
