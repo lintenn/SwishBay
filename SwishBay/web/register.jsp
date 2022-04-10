@@ -21,7 +21,7 @@
     if (user != null) {
         String redirectTo = "ProductoServlet";
         if (user.getTipoUsuario().getTipo().equals("administrador")) {
-            redirectTo = "prueba.jsp";
+            redirectTo = "UsuarioServlet";
         } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
             redirectTo = "ProductoServlet";
         } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
@@ -180,7 +180,7 @@
                 </div>
                 <div class="form-check mx-1">
                   <input id="fem" name="sexo" value="fem" type="radio" class="form-check-input" required=""/>
-                  <label class="form-check-label" for="fem">Fe  menino</label>
+                  <label class="form-check-label" for="fem">Femenino</label>
                 </div>
             </div>
             

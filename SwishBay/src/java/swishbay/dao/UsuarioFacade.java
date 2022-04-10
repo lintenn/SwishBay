@@ -58,4 +58,11 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
             return lista.get(0);
         }        
     }
+    
+    public List<Usuario> findByNombre (String nombre) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.nombre like :nombre");
+        q.setParameter("nombre", '%' + nombre +'%');
+        return q.getResultList();
+    }
 }
