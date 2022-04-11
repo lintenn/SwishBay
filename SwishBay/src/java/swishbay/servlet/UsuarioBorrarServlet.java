@@ -7,26 +7,22 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
 import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Categoria;
 import swishbay.entity.Usuario;
 
 /**
  *
  * @author Luis
  */
-@WebServlet(name = "UsuarioNuevoEditarServlet", urlPatterns = {"/UsuarioNuevoEditarServlet"})
-public class UsuarioNuevoEditarServlet extends SwishBayServlet {
+@WebServlet(name = "UsuarioBorrarServlet", urlPatterns = {"/UsuarioBorrarServlet"})
+public class UsuarioBorrarServlet extends SwishBayServlet {
 
-    @EJB CategoriaFacade categoriaFacade;
     @EJB UsuarioFacade usuarioFacade;
     
     /**
@@ -40,19 +36,15 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        if (super.comprobarSession(request, response)) {
-            List<Categoria> categorias = this.categoriaFacade.findAll();
-            
-            request.setAttribute("categorias", categorias);
-            
+        if (super.comprobarSession(request, response)) {        
+                        
             String str = request.getParameter("id");
-            if (str != null && !str.isEmpty()) {
-                Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
-                request.setAttribute("usuario", usuario);
-            }
-            
-            request.getRequestDispatcher("usuario.jsp").forward(request, response);
+
+            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
+
+            this.usuarioFacade.remove(usuario);
+
+            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
         }
     }
 

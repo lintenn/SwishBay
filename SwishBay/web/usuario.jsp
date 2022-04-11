@@ -24,6 +24,7 @@
         List<Categoria> categorias = (List)request.getAttribute("categorias");
         
         Usuario usuario = (Usuario)request.getAttribute("usuario");
+        String status = (String) request.getAttribute("status");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
@@ -65,8 +66,13 @@
             <br/>
             <h1 class="mb-2">Datos del usuario</h1>
             <br/>
-                
+            
             <form  method="POST" action="UsuarioGuardarServlet">
+                <% if (status != null) {%>
+                    <div class="form-group row justify-content-center" style="height: 50px;">
+                        <div class=" alert alert-danger col-sm-4"><%=status%></div>
+                    </div>
+                <% } %>
                 <div class="form-group row justify-content-md-center mb-4">
                   <div class="col-sm-4">
                       <input type="hidden" class="form-control" id="inputId" name="id" value="<%= usuario==null? "": usuario.getId() %>" >
@@ -119,6 +125,13 @@
                   </div>
                   &nbsp;
                 </div>
+                <div class="form-group row justify-content-md-center mb-4">
+                  <label for="inputSaldo" class="col-sm-1 col-form-label">Saldo:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" id="inputSaldo" name="saldo" value="<%= usuario==null? "": usuario.getSaldo() %>" required>
+                  </div>
+                  *
+                </div>
                 <br/>
                 <label for="inputGender" class="form-label">Sexo:</label>
                 <div class="d-flex align-center justify-content-center">
@@ -138,15 +151,15 @@
                 <label for="inputTipo" class="form-label">Tipo de usuario:</label>
                 <div class="d-flex align-center justify-content-center">
                     <div class="form-check mx-1">
-                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getSexo().equals("administrador")? "checked":"") %> required=""/>
+                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getTipoUsuario().getTipo().equals("administrador")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="administrador">Administrador</label>
                     </div>
                     <div class="form-check mx-1">
-                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getSexo().equals("compradorvendedor")? "checked":"") %> required=""/>
+                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getTipoUsuario().getTipo().equals("compradorvendedor")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="compradorvendedor">Comprador/Vendedor</label>
                     </div>
                     <div class="form-check mx-1">
-                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getSexo().equals("marketing")? "checked":"") %> required=""/>
+                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getTipoUsuario().getTipo().equals("marketing")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="marketing">Marketing</label>
                     </div>
                 </div>
@@ -156,7 +169,7 @@
                 <%
                     for (Categoria categoria : categorias) {
                         String checked = "";
-                        if (usuario != null && categoria.getUsuarioList().contains(usuario)) {
+                        if (usuario != null && !categoria.getUsuarioList().isEmpty() && categoria.getUsuarioList().contains(usuario)) {
                             checked = "checked";
                         }
                 %>
