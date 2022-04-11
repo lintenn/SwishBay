@@ -29,21 +29,22 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un comprador debe poder ser notificado cuando se ha cerrado el proceso de puja y si si finalmente se queda con el producto.
 
 #### Administrador y Login/Registro - Luis Miguel García Marín
-- Un administrador debe poder ver en un listado las categorías del sistema.
+- Un administrador debe poder ver en un listado las categorías del sistema. :heavy_check_mark:
 - Un administrador debe poder añadir categorías al sistema.
 - Un administrador debe poder actualizar categorías del sistema.
 - Un administrador debe poder eliminar categorías del sistema.
+- Un administrador debe poder realizar **filtrados y búsquedas** sobre las categorías. :heavy_check_mark:
 - Un administrador debe poder ver en un listado los usuarios del sistema. :heavy_check_mark:
-- Un administrador debe poder añadir usuarios al sistema.
-- _Un administrador debe poder modificar los usuarios del sistema_. 
-- Un administrador debe poder eliminar usuarios del sistema.
+- Un administrador debe poder añadir usuarios al sistema. :heavy_check_mark:
+- _Un administrador debe poder modificar los usuarios del sistema_. :heavy_check_mark:
+- Un administrador debe poder eliminar usuarios del sistema. :heavy_check_mark:
 - Un administrador debe poder realizar **filtrados y búsquedas** sobre los usuarios. :heavy_check_mark:
-- Un administrador debe poder ver en un listado los productos del sistema.
+- Un administrador debe poder ver en un listado los productos del sistema. :heavy_check_mark:
 - Un administrador debe poder añadir productos al sistema.
 - Un administrador debe poder modificar productos del sistema.
 - Un administrador debe poder eliminar productos del sistema.
-- Un administrador debe poder realizar **filtrados y búsquedas** sobre los productos.
-- Un administrador debe poder dar de alta (o asignar los permisos correspondientes) a los usuarios de marketing. 
+- Un administrador debe poder realizar **filtrados y búsquedas** sobre los productos. :heavy_check_mark:
+- Un administrador debe poder dar de alta (o asignar los permisos correspondientes) a los usuarios de marketing. :heavy_check_mark: 
 - Un USUARIO debe poder registrarse en el sistema como Vendedor o Comprador (los administradores se añaden en la base de datos y estos añadirán al personal de marketing), indicando Nombre, Apellidos, Domicilio, Ciudad de residencia, _Edad_, Sexo (en los Compradores además se indicarán las categorías preferidas). :heavy_check_mark:
 - Un USUARIO debe poder iniciar sesión en el sistema. :heavy_check_mark:
 
