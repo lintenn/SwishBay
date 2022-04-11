@@ -22,7 +22,7 @@ import swishbay.entity.Producto;
  * @author Miguel
  */
 @WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends HttpServlet {
+public class ProductoServlet extends SwishBayServlet {
     
     @EJB ProductoFacade productoFacade;
     /**
@@ -37,11 +37,14 @@ public class ProductoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        List<Producto> productos = productoFacade.findAll();
+        if (super.comprobarSession(request, response)) {
+            
+            List<Producto> productos = productoFacade.findAll();
+
+            request.setAttribute("productos", productos);
+            request.getRequestDispatcher("productos.jsp").forward(request, response);
         
-        request.setAttribute("productos", productos);
-        request.getRequestDispatcher("productos.jsp").forward(request, response);
-        
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
