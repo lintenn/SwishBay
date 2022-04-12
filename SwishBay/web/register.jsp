@@ -87,11 +87,11 @@
           align-items: center;
           padding-top: 40px;
           padding-bottom: 40px;
-          background-color: #f5f5f5;
+          background-color: #212529 !important; /*#f5f5f5;*/
         }
         .form-signin {
           width: 100%;
-          max-width: 530px;
+          max-width: 570px;
           padding: 15px;
           margin: auto;
         }
@@ -129,10 +129,10 @@
     <!-- Custom styles for this template -->    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   </head>
-  <body class="text-center">
+  <body class="text-center text-white">
       <main class="form-signin">
-        <form method="POST" class="border border-light p-5" action="<%= goTo %>">
-            <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_black.png" alt="" width="120" height="50">
+        <form method="POST" class="border border-dark p-5" action="<%= goTo %>">
+            <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_white.png" alt="" width="120" height="50">
             
             <% if (user == null) { %>
             <h1 class="h3 mb-3 fw-normal">Registrarse</h1>
@@ -157,7 +157,7 @@
                 <input type="password" minlength="6" maxlength="45" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña" aria-describedby="defaultRegisterFormPasswordHelpBlock" required=""/>
                 <label for="inputPassword" class="sr-only">Contraseña</label>
             </div>
-            <small id="defaultPasswordFormPhoneHelpBlock" class="form-text text-muted mb-4">Mínimo 6 caracteres de longitud</small>
+            <small id="defaultPasswordFormPhoneHelpBlock" class="form-text text-light mb-4">Mínimo 6 caracteres de longitud</small>
             <div class="form-floating">
                 <input type="text" maxlength="100" name="domicilio" class="form-control" id="floatingInput" placeholder="Domicilio"/>
                 <label for="inputAddressline" class="sr-only">Domicilio</label>
@@ -166,12 +166,13 @@
                 <input type="text" maxlength="45" name="ciudad" class="form-control" id="floatingInput" placeholder="Ciudad"/>
                 <label for="inputCity" class="sr-only">Ciudad</label>
             </div>
+            <br/>
             <label for="inputBirthdate" class="form-label">Fecha de nacimiento:</label>
             <div class="form-floating">
                 <input type="date" name="fechaNacimiento" class="form-control" id="floatingInput" required=""/>
                 <label for="inputBirthdate" class="sr-only">Fecha de nacimiento</label>
             </div>
-            
+            <br/>
             <label for="inputGender" class="form-label">Sexo:</label>
             <div class="d-flex align-center justify-content-center">
                 <div class="form-check mx-1">
@@ -180,10 +181,10 @@
                 </div>
                 <div class="form-check mx-1">
                   <input id="fem" name="sexo" value="fem" type="radio" class="form-check-input" required=""/>
-                  <label class="form-check-label" for="fem">Fe  menino</label>
+                  <label class="form-check-label" for="fem">Femenino</label>
                 </div>
             </div>
-            
+            <br/>
             <label for="inputCategory" class="form-label">Categorías preferidas:</label>
             <%
                 for (Categoria categoria : categorias) {
@@ -201,7 +202,7 @@
                     <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
                 </div>
             -->
-            
+            <br/>
             <nav class="botones">
                 <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Registrarse"/>
                 <a href="login.jsp" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Volver</a>
@@ -209,7 +210,7 @@
             
             <div class="text-center">
             
-            <hr>
+            <hr/>
 
             <p>Al hacer click en
                 <em>Registrarse</em> aceptas los

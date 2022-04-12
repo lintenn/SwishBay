@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package swishbay.servlet;
 
@@ -14,19 +15,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
+import swishbay.dao.UsuarioFacade;
 import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
+import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop
+ * @author Luis
  */
-@WebServlet(name = "ProductoNuevoEditarServlet", urlPatterns = {"/ProductoNuevoEditarServlet"})
-public class ProductoNuevoEditarServlet extends HttpServlet {
+@WebServlet(name = "UsuarioNuevoEditarServlet", urlPatterns = {"/UsuarioNuevoEditarServlet"})
+public class UsuarioNuevoEditarServlet extends SwishBayServlet {
 
-    @EJB ProductoFacade pf;
-    @EJB CategoriaFacade cf;
+    @EJB CategoriaFacade categoriaFacade;
+    @EJB UsuarioFacade usuarioFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,15 +40,20 @@ public class ProductoNuevoEditarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String str = request.getParameter("id");
-        if(str !=null && !str.isEmpty()){
-            Producto p = this.pf.find(Integer.parseInt(str));
-            request.setAttribute("producto", p);
+
+        if (super.comprobarSession(request, response)) {
+            List<Categoria> categorias = this.categoriaFacade.findAll();
+            
+            request.setAttribute("categorias", categorias);
+            
+            String str = request.getParameter("id");
+            if (str != null && !str.isEmpty()) {
+                Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
+                request.setAttribute("usuario", usuario);
+            }
+            
+            request.getRequestDispatcher("WEB-INF/jsp/usuario.jsp").forward(request, response);
         }
-        List<Categoria> categorias = this.cf.findAll();
-        request.setAttribute("categorias",categorias );
-        request.getRequestDispatcher("WEB-INF/jsp/producto.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -1,30 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
 
 /**
- *
+ * Muestra todos lo productos registrados.
+ * 
  * @author Miguel
  */
 @WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends HttpServlet {
+public class ProductoServlet extends SwishBayServlet {
     
-    @EJB ProductoFacade productoFacade;
+    @EJB ProductoFacade productoFacade;  
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,11 +31,14 @@ public class ProductoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        List<Producto> productos = productoFacade.findAll();
+        if (super.comprobarSession(request, response)) {
+            
+            List<Producto> productos = productoFacade.findAll();
+
+            request.setAttribute("productos", productos);
+            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
         
-        request.setAttribute("productos", productos);
-        request.getRequestDispatcher("productos.jsp").forward(request, response);
-        
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

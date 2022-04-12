@@ -1,12 +1,12 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,22 +14,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.ProductoFacade;
-import swishbay.dao.PujaFacade;
+import swishbay.dao.CategoriaFacade;
 import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
-import swishbay.entity.Puja;
 import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop
+ * @author Luis
  */
-@WebServlet(name = "EnPujaNuevoServlet", urlPatterns = {"/EnPujaNuevoServlet"})
-public class EnPujaNuevoServlet extends HttpServlet {
+@WebServlet(name = "CategoriaGuardarServlet", urlPatterns = {"/CategoriaGuardarServlet"})
+public class CategoriaGuardarServlet extends HttpServlet {
 
-    @EJB PujaFacade pujaFacade;
-    @EJB ProductoFacade pf;
+    @EJB CategoriaFacade categoriaFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,16 +38,47 @@ public class EnPujaNuevoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Usuario user = (Usuario)session.getAttribute("usuario");
         
-        String str = request.getParameter("id");
-        if(str !=null ){
-            Producto p = this.pf.find(Integer.parseInt(str));
-            request.setAttribute("producto", p);
+        if (user == null || user.getTipoUsuario().getTipo().equals("administrador")) {
+            
+            String strId;
+            String nombre, descripcion, goTo = "CategoriaServlet";
+            Categoria newCategoria;
+            
+            strId = request.getParameter("id");
+            nombre = request.getParameter("nombre");
+            descripcion = request.getParameter("descripcion");
+            
+            if (strId == null || strId.isEmpty()) { // Crear nueva categoria
+                newCategoria = new Categoria();
+            } else {                             // Editar categoria
+                newCategoria = this.categoriaFacade.find(Integer.parseInt(strId));
+            }
+            
+            newCategoria.setNombre(nombre);
+            newCategoria.setDescripcion(descripcion);
+            
+            if (strId == null || strId.isEmpty()) {    // Crear nueva categoría
+                categoriaFacade.create(newCategoria);
+            } else {                                   // Editar categoría
+                categoriaFacade.edit(newCategoria);
+            }  
+            
+            response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            
+        } else {
+            
+            String redirectTo = "ProductoServlet";
+            if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+                redirectTo = "ProductoServlet";
+            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+                redirectTo = "prueba.jsp";
+            }
+            response.sendRedirect(request.getContextPath() + "/" + redirectTo);
+                
         }
-        
-        request.getRequestDispatcher("WEB-INF/jsp/EnPuja.jsp").forward(request, response);
-        
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

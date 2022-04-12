@@ -80,6 +80,9 @@ public class ProductoGuardarServlet extends HttpServlet {
             p.setDescripcion(str);
 
             str = request.getParameter("foto");
+            if(str==null || str.isEmpty()){
+                str= "https://th.bing.com/th/id/OIP.KeKY2Y3R0HRBkPEmGWU3FwHaHa?pid=ImgDet&rs=1";
+            }
             p.setFoto(str);
 
             str = request.getParameter("categoria");
