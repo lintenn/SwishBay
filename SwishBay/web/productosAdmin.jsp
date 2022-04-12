@@ -1,7 +1,7 @@
 <%-- 
-    Document   : seller
-    Created on : 28 mar. 2022, 12:00:43
-    Author     : galop
+    Document   : productosAdmin
+    Created on : 11-abr-2022, 14:10:09
+    Author     : Luis
 --%>
 
 <%@page import="swishbay.entity.Categoria"%>
@@ -36,23 +36,20 @@
 
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
-                <a class="navbar-brand" href="ProductoServlet">Comprar</a>
+                <a class="navbar-brand" href="UsuarioServlet">Panel de Administrador</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="SellerServlet"> Mis productos</a>
+                      <a class="nav-link" href="UsuarioServlet"> Usuarios</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="PujasServlet">Mis pujas</a>
+                      <a class="nav-link active" aria-current="page" href="SellerServlet">Productos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductosVendidosServlet">Productos vendidos</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="ProductoNuevoEditarServlet">Nuevo producto</a>
+                      <a class="nav-link" href="CategoriaServlet">Categorías</a>
                     </li>
                     
                   </ul>
@@ -87,11 +84,11 @@
 
               <%
                 int i=0;
-                Usuario user = (Usuario) session.getAttribute("usuario");
+                //Usuario user = (Usuario) session.getAttribute("usuario");
                 Collections.reverse (productos);
                 for(Producto producto : productos){
-                    if(producto.getVendedor().equals(user)){
-                       i++;
+                    
+                    i++;
             %>      
 
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
@@ -125,7 +122,7 @@
               </div>
             
             <%
-                    }
+                    
                 }
                 if(i==0){
             %>
@@ -156,5 +153,3 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
 </html>
-
-

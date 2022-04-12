@@ -1,18 +1,21 @@
 <%-- 
-    Document   : producto
-    Created on : 6 abr. 2022, 18:30:04
+    Document   : puja
+    Created on : 8 abr. 2022, 18:08:38
     Author     : galop
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
-<%@page import="java.util.List"%>
+<%@page import="swishbay.entity.Puja"%>
+<%@page import="java.text.Format"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.text.DateFormat"%>
 <%@page import="swishbay.entity.Producto"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Producto</title>
+        <title>Puja</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
@@ -20,8 +23,13 @@
     <%
        Producto producto = (Producto) request.getAttribute("producto");
        String status = (String) request.getAttribute("status");
-       List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
-
+       Format f = new SimpleDateFormat("yyyy-MM-dd");
+       String str = f.format(producto.getFinPuja());
+       Double p= producto.getPrecioSalida();
+       for (Puja puja: producto.getPujaList()){
+            if(puja.getPrecio()>=p)
+                p=puja.getPrecio();
+        }
     %>
     
     <body class="d-flex h-100 text-center text-white bg-dark">
@@ -53,10 +61,10 @@
                       <a class="nav-link" href="PujasServlet">Mis pujas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductosVendidosServlet">Productos vendidos</a>
+                      <a class="nav-link" href="ProductoNuevoEditarServlet">Nuevo producto</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="ProductoNuevoEditarServlet">Añadir/modificar producto</a> 
+                      <a class="nav-link active" href="ProductoNuevoEditarServlet">Añadir/modificar puja</a> 
                     </li>
                   
                   </ul>
@@ -64,76 +72,42 @@
               </div>
             </nav>
             </br>
-
-            <h1 class="mb-1">Datos del producto</h1>
-            
-            <form  method="POST" action="ProductoGuardarServlet">
+            </br>
+            <h1 class="mb-2"><%=producto.getTitulo() %></h1>
+            </br>
+            <form  method="POST" action="EnPujaGuardarServlet">
                 <div class="form-group row justify-content-md-center mb-4">
                   <div class="col-sm-4">
                       <input type="hidden" class="form-control" id="inputId" name="id" value="<%= producto==null? "": producto.getId() %>" >
                   </div>
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
-                  <label for="inputNombre" class="col-sm-1 col-form-label">Nombre:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputNombre" name="nombre" value="<%= producto==null? "": producto.getTitulo() %>" required >
+                  <label for="inputNombre" class="col-sm-2 col-form-label">Precio de salida:</label>
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control" id="inputNombre" name="precio" value="<%= producto==null? "": p %>" >
                   </div>
-                  *
+                  
                 </div>
                 <div class="form-group row justify-content-md-center mb-4">
-                  <label for="inputDescripcion" class="col-sm-1 col-form-label">Descripción:</label>
-                  <div class="col-sm-4">
-                      <textarea class="form-control" name="descripcion" rows="3" maxlength="80"><%= producto==null? "": producto.getDescripcion() %></textarea>
+                  <label for="inputDescripcion" class="col-sm-2 col-form-label">Fecha de fin: </label>
+                  <div class="col-sm-3">
+                    <input type="date" class="form-control" style="height: 40px" name="time" value=<%= producto.getEnPuja()==0? "2022-07-01": str %>>
                   </div>
-                  &nbsp;
                 </div>
-                <div class="form-group row justify-content-md-center mb-4">
-                  <label for="inputPrecio" class="col-sm-1 col-form-label">Precio:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" id="input" name="precio" value="<%= producto==null? "": producto.getPrecioSalida() %>" required>
-                  </div>
-                  *
-                </div>
-                <div class="form-group row justify-content-md-center mb-4">
-                    <label for="inputFoto" class="col-sm-1 col-form-label">Foto (URL):</label>
-                    <div class="col-sm-4">
-                        <textarea type="text" class="form-control" id="input" rows="2" name="foto" ><%= producto==null? "": producto.getFoto() %></textarea>
-                    </div>
-                    &nbsp;
-                </div>
-                <div class="form-group row justify-content-md-center mb-3">
-                    <label  for="inputCategoria" class="col-sm-1 col-form-label">Categoría:</label>
-                    <div class="col-sm-4">
-                        <select class="form-select mb-2" id="categoria" name="categoria">
-                            <%
-                              for (Categoria c:categorias){
-                                String selected = "";
-                                
-                                if(producto != null && producto.getCategoria().equals(c))
-                                    selected="selected";
-                               
-                            %>     
-                                <option <%= selected %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
-                           <%  
-                              }
-                           %>
-                        </select>
-                    </div>
-                    &nbsp;
-                </div>
-                        <%
+                <%
                     if(status != null){
                 %>
-                <div class="form-group row justify-content-center" style="height: 50px;">
-                    <div class=" alert alert-danger col-sm-4"><%=status%></div>
+                <div class="form-group row justify-content-center">
+                    <div class=" alert alert-danger col-sm-3"><%=status%></div>
                 </div>
                 <% }
                 %>
+              
                 </br>
                 
-                <div class="form-group row justify-content-md-center mt-0">
+                <div class="form-group row justify-content-md-center mt-2">
                   <div class="col-sm-10">
-                    <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2"><%= producto==null? "Añadir": "Modificar" %></button>
+                    <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2">Confirmar</button>
                     <a href="SellerServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package swishbay.servlet;
 
@@ -14,20 +15,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
 import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop
+ * @author Luis
  */
-@WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends SwishBayServlet {
+@WebServlet(name = "CategoriaServlet", urlPatterns = {"/CategoriaServlet"})
+public class CategoriaServlet extends SwishBayServlet {
 
-    @EJB ProductoFacade productoFacade;
-    @EJB CategoriaFacade cf;
+    @EJB CategoriaFacade categoriaFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,42 +37,19 @@ public class SellerServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         if (super.comprobarSession(request, response)) {
-            Usuario user = (Usuario)request.getSession().getAttribute("usuario");
-        
-            String filtroNombre = request.getParameter("filtro");
-            String filtroCategoria = request.getParameter("filtroCategoria");
-            List<Producto> productos = null;
-            List<Categoria> categorias= cf.findAll();
-
-            if(filtroNombre == null || filtroNombre.isEmpty()){
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findAll();
-
-                }else{
-                    productos= productoFacade.findAll(filtroCategoria);
-
-                }
-            }else{
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findByNombre(filtroNombre);
-
-                }else{
-                    productos = productoFacade.findByNombre(filtroNombre,filtroCategoria);
-
-                }   
-            }
-
-            request.setAttribute("productos", productos);
-            request.setAttribute("categorias", categorias);
-            request.setAttribute("selected", filtroCategoria);
             
-            if (user.getTipoUsuario().getTipo().equals("administrador")) {
-                request.getRequestDispatcher("productosAdmin.jsp").forward(request, response);
+            String filtroNombre = request.getParameter("filtro");
+            List<Categoria> categorias = null;
+
+            if (filtroNombre == null || filtroNombre.isEmpty()) {
+                categorias = this.categoriaFacade.findAll();        
             } else {
-                request.getRequestDispatcher("seller.jsp").forward(request, response);
+                categorias = this.categoriaFacade.findByNombre(filtroNombre);
             }
+
+            request.setAttribute("categorias", categorias);
+            request.getRequestDispatcher("categorias.jsp").forward(request, response);   
         }
     }
 

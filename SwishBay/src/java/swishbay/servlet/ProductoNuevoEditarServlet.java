@@ -40,7 +40,7 @@ public class ProductoNuevoEditarServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String str = request.getParameter("id");
-        if(str !=null ){
+        if(str !=null && !str.isEmpty()){
             Producto p = this.pf.find(Integer.parseInt(str));
             request.setAttribute("producto", p);
         }

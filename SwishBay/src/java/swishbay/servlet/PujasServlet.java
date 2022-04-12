@@ -17,16 +17,15 @@ import swishbay.dao.CategoriaFacade;
 import swishbay.dao.ProductoFacade;
 import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
 
 /**
  *
  * @author galop
  */
-@WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends SwishBayServlet {
-
-    @EJB ProductoFacade productoFacade;
+@WebServlet(name = "PujasServlet", urlPatterns = {"/PujasServlet"})
+public class PujasServlet extends HttpServlet {
+    
+    @EJB ProductoFacade pf;
     @EJB CategoriaFacade cf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,42 +39,34 @@ public class SellerServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if (super.comprobarSession(request, response)) {
-            Usuario user = (Usuario)request.getSession().getAttribute("usuario");
+        String filtroNombre = request.getParameter("filtro");
+        String filtroCategoria = request.getParameter("filtroCategoria");
+        List<Producto> productos = null;
+        List<Categoria> categorias= cf.findAll();
         
-            String filtroNombre = request.getParameter("filtro");
-            String filtroCategoria = request.getParameter("filtroCategoria");
-            List<Producto> productos = null;
-            List<Categoria> categorias= cf.findAll();
-
-            if(filtroNombre == null || filtroNombre.isEmpty()){
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findAll();
-
-                }else{
-                    productos= productoFacade.findAll(filtroCategoria);
-
-                }
+        
+        if(filtroNombre == null || filtroNombre.isEmpty()){
+            if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                productos = pf.findAll();
+                
             }else{
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findByNombre(filtroNombre);
-
-                }else{
-                    productos = productoFacade.findByNombre(filtroNombre,filtroCategoria);
-
-                }   
+                productos= pf.findAll(filtroCategoria);
+                
             }
-
-            request.setAttribute("productos", productos);
-            request.setAttribute("categorias", categorias);
-            request.setAttribute("selected", filtroCategoria);
-            
-            if (user.getTipoUsuario().getTipo().equals("administrador")) {
-                request.getRequestDispatcher("productosAdmin.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("seller.jsp").forward(request, response);
-            }
+        }else{
+            if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                productos = pf.findByNombre(filtroNombre);
+                
+            }else{
+                productos = pf.findByNombre(filtroNombre,filtroCategoria);
+               
+            }   
         }
+        
+        request.setAttribute("productos", productos);
+        request.setAttribute("categorias", categorias);
+        request.setAttribute("selected", filtroCategoria);
+        request.getRequestDispatcher("pujas.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

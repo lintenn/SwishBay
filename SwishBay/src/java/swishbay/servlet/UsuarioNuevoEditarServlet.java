@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package swishbay.servlet;
 
@@ -14,20 +15,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
+import swishbay.dao.UsuarioFacade;
 import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop
+ * @author Luis
  */
-@WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends SwishBayServlet {
+@WebServlet(name = "UsuarioNuevoEditarServlet", urlPatterns = {"/UsuarioNuevoEditarServlet"})
+public class UsuarioNuevoEditarServlet extends SwishBayServlet {
 
-    @EJB ProductoFacade productoFacade;
-    @EJB CategoriaFacade cf;
+    @EJB CategoriaFacade categoriaFacade;
+    @EJB UsuarioFacade usuarioFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,42 +40,19 @@ public class SellerServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        response.setContentType("text/html;charset=UTF-8");
         if (super.comprobarSession(request, response)) {
-            Usuario user = (Usuario)request.getSession().getAttribute("usuario");
-        
-            String filtroNombre = request.getParameter("filtro");
-            String filtroCategoria = request.getParameter("filtroCategoria");
-            List<Producto> productos = null;
-            List<Categoria> categorias= cf.findAll();
-
-            if(filtroNombre == null || filtroNombre.isEmpty()){
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findAll();
-
-                }else{
-                    productos= productoFacade.findAll(filtroCategoria);
-
-                }
-            }else{
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findByNombre(filtroNombre);
-
-                }else{
-                    productos = productoFacade.findByNombre(filtroNombre,filtroCategoria);
-
-                }   
-            }
-
-            request.setAttribute("productos", productos);
-            request.setAttribute("categorias", categorias);
-            request.setAttribute("selected", filtroCategoria);
+            List<Categoria> categorias = this.categoriaFacade.findAll();
             
-            if (user.getTipoUsuario().getTipo().equals("administrador")) {
-                request.getRequestDispatcher("productosAdmin.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("seller.jsp").forward(request, response);
+            request.setAttribute("categorias", categorias);
+            
+            String str = request.getParameter("id");
+            if (str != null && !str.isEmpty()) {
+                Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
+                request.setAttribute("usuario", usuario);
             }
+            
+            request.getRequestDispatcher("usuario.jsp").forward(request, response);
         }
     }
 

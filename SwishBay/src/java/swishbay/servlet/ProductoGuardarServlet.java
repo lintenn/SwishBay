@@ -56,9 +56,11 @@ public class ProductoGuardarServlet extends HttpServlet {
 
         if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
             Producto p;
-            String strId,str;
+            String strId,str, status=null;
             strId= request.getParameter("id");
 
+            
+            
             if(strId == null || strId.isEmpty()){
                 p = new Producto();
                 java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
@@ -69,12 +71,18 @@ public class ProductoGuardarServlet extends HttpServlet {
 
          
             str = request.getParameter("nombre");
-            p.setTitulo(str);
+            
+            p.setTitulo(str);  
+            
+            
 
             str = request.getParameter("descripcion");
             p.setDescripcion(str);
 
             str = request.getParameter("foto");
+            if(str==null || str.isEmpty()){
+                str= "https://th.bing.com/th/id/OIP.KeKY2Y3R0HRBkPEmGWU3FwHaHa?pid=ImgDet&rs=1";
+            }
             p.setFoto(str);
 
             str = request.getParameter("categoria");
@@ -84,8 +92,17 @@ public class ProductoGuardarServlet extends HttpServlet {
             }
             
             str = request.getParameter("precio");
-            p.setPrecioSalida(Double.parseDouble(str));
+            if(!str.matches("[-+]?\\d*\\.?\\d+")){
+                status= "Formato de precio incorrecto.";
+                request.setAttribute("status", status);
+                
+                request.getRequestDispatcher("ProductoNuevoEditarServlet").forward(request, response);
+               
+            }
             
+            p.setPrecioSalida(Double.parseDouble(str));
+                
+           
            
             
             short n=0;
