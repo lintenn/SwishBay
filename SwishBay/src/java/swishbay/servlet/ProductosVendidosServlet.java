@@ -77,7 +77,7 @@ public class ProductosVendidosServlet extends HttpServlet {
         request.setAttribute("user", user);
         request.setAttribute("categorias", categorias);
         request.setAttribute("selected", filtroCategoria);
-        request.getRequestDispatcher("productosVendidos.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/productosVendidos.jsp").forward(request, response);
         
         
     }
