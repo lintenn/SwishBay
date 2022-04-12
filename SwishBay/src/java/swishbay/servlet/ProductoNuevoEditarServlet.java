@@ -46,7 +46,7 @@ public class ProductoNuevoEditarServlet extends HttpServlet {
         }
         List<Categoria> categorias = this.cf.findAll();
         request.setAttribute("categorias",categorias );
-        request.getRequestDispatcher("producto.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/producto.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
