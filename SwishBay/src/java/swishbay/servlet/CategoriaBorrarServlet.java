@@ -7,7 +7,6 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +20,8 @@ import swishbay.entity.Categoria;
  *
  * @author Luis
  */
-@WebServlet(name = "CategoriaServlet", urlPatterns = {"/CategoriaServlet"})
-public class CategoriaServlet extends SwishBayServlet {
+@WebServlet(name = "CategoriaBorrarServlet", urlPatterns = {"/CategoriaBorrarServlet"})
+public class CategoriaBorrarServlet extends SwishBayServlet {
 
     @EJB CategoriaFacade categoriaFacade;
     
@@ -37,20 +36,18 @@ public class CategoriaServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (super.comprobarSession(request, response)) {
-            
-            String filtroNombre = request.getParameter("filtro");
-            List<Categoria> categorias = null;
+        
+        if (super.comprobarSession(request, response)) {        
+                        
+            String str = request.getParameter("id");
 
-            if (filtroNombre == null || filtroNombre.isEmpty()) {
-                categorias = this.categoriaFacade.findAll();        
-            } else {
-                categorias = this.categoriaFacade.findByNombre(filtroNombre);
-            }
+            Categoria categoria = this.categoriaFacade.find(Integer.parseInt(str));
 
-            request.setAttribute("categorias", categorias);
-            request.getRequestDispatcher("WEB-INF/jsp/categorias.jsp").forward(request, response);   
+            this.categoriaFacade.remove(categoria);
+
+            response.sendRedirect(request.getContextPath() + "/CategoriaServlet");
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
