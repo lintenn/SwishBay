@@ -11,14 +11,15 @@ import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
 
 /**
- * Muestra todos lo productos registrados.
+ * Muestra todos los productos en puja.
  * 
- * @author Miguel
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends SwishBayServlet {
+@WebServlet(name = "ProductoEnPujaServlet", urlPatterns = {"/ProductoEnPujaServlet"})
+public class ProductoEnPujaServlet extends SwishBayServlet {
     
-    @EJB ProductoFacade productoFacade;  
+    @EJB ProductoFacade productoFacade; 
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,10 +34,10 @@ public class ProductoServlet extends SwishBayServlet {
         
         if (super.comprobarSession(request, response)) {
             
-            List<Producto> productos = productoFacade.findAll();
+            List<Producto> productos = productoFacade.findEnPuja();
 
-            request.setAttribute("productos", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
+            request.setAttribute("productosenpuja", productos);
+            request.getRequestDispatcher("WEB-INF/jsp/productosenpuja.jsp").forward(request, response);
         
         }
     }

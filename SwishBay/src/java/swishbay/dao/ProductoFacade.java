@@ -55,4 +55,10 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
+        public List<Producto> findEnPuja() {
+        
+        Query q;   
+        q= this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1");
+        return q.getResultList(); 
+    }
 }
