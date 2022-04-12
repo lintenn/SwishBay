@@ -74,7 +74,7 @@
           align-items: center;
           padding-top: 40px;
           padding-bottom: 40px;
-          background-color: #f5f5f5;
+          /*background-color: #f5f5f5;*/
         }
         .form-signin {
           width: 100%;
@@ -116,10 +116,10 @@
     <!-- Custom styles for this template -->    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   </head>
-  <body class="text-center">
+  <body class="text-center bg-dark text-white">
       <main class="form-signin">
         <form method="POST" action="LoginServlet">
-            <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_black.png" alt="" width="120" height="50">
+            <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_white.png" alt="" width="120" height="50">
             <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
             
             <%
@@ -131,11 +131,11 @@
             
             <div class="form-floating">
                 <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required="" autofocus=""/>
-                <label for="inputEmail" class="sr-only">Email</label>
+                <label for="inputEmail" class="sr-only text-dark">Email</label>
             </div>
             <div class="form-floating">
                 <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required=""/>
-                <label for="inputPassword" class="sr-only">Contraseña</label>
+                <label for="inputPassword" class="sr-only text-dark">Contraseña</label>
             </div>
 
             <div class="checkbox mb-3">

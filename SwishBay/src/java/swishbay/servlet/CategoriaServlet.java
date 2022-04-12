@@ -1,24 +1,31 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package swishbay.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Producto;
+import swishbay.dao.CategoriaFacade;
+import swishbay.entity.Categoria;
 
 /**
- * Muestra todos lo productos registrados.
- * 
- * @author Miguel
+ *
+ * @author Luis
  */
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends SwishBayServlet {
+@WebServlet(name = "CategoriaServlet", urlPatterns = {"/CategoriaServlet"})
+public class CategoriaServlet extends SwishBayServlet {
+
+    @EJB CategoriaFacade categoriaFacade;
     
-    @EJB ProductoFacade productoFacade;  
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,14 +37,19 @@ public class ProductoServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         if (super.comprobarSession(request, response)) {
             
-            List<Producto> productos = productoFacade.findAll();
+            String filtroNombre = request.getParameter("filtro");
+            List<Categoria> categorias = null;
 
-            request.setAttribute("productos", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-        
+            if (filtroNombre == null || filtroNombre.isEmpty()) {
+                categorias = this.categoriaFacade.findAll();        
+            } else {
+                categorias = this.categoriaFacade.findByNombre(filtroNombre);
+            }
+
+            request.setAttribute("categorias", categorias);
+            request.getRequestDispatcher("WEB-INF/jsp/categorias.jsp").forward(request, response);   
         }
     }
 

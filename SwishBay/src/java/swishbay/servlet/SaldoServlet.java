@@ -1,24 +1,24 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Producto;
+import javax.servlet.http.HttpSession;
+import swishbay.dao.UsuarioFacade;
+import swishbay.entity.Usuario;
 
 /**
- * Muestra todos lo productos registrados.
+ * Este servlet añade fondos al saldo actual.
  * 
- * @author Miguel
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends SwishBayServlet {
+@WebServlet(name = "SaldoServlet", urlPatterns = {"/SaldoServlet"})
+public class SaldoServlet extends SwishBayServlet {
     
-    @EJB ProductoFacade productoFacade;  
+    @EJB UsuarioFacade usuarioFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,13 +31,21 @@ public class ProductoServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if (super.comprobarSession(request, response)) {
+        if(super.comprobarSession(request, response)){
+            int id = Integer.parseInt(request.getParameter("id")); 
+            Usuario usuario = usuarioFacade.find(id);
             
-            List<Producto> productos = productoFacade.findAll();
-
-            request.setAttribute("productos", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-        
+            double saldo = usuario.getSaldo();
+            saldo += Integer.parseInt(request.getParameter("saldo"));
+            
+            usuario.setSaldo(saldo);
+            
+            usuarioFacade.edit(usuario);
+            
+            HttpSession session = request.getSession();
+            session.setAttribute("usuario", usuario);
+            
+            response.sendRedirect(request.getContextPath() + "/ProductoServlet");
         }
     }
 

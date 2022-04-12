@@ -1,33 +1,32 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
 import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop
+ * @author Luis
  */
-@WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends SwishBayServlet {
+@WebServlet(name = "CategoriaGuardarServlet", urlPatterns = {"/CategoriaGuardarServlet"})
+public class CategoriaGuardarServlet extends HttpServlet {
 
-    @EJB ProductoFacade productoFacade;
-    @EJB CategoriaFacade cf;
+    @EJB CategoriaFacade categoriaFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,42 +38,46 @@ public class SellerServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Usuario user = (Usuario)session.getAttribute("usuario");
         
-        if (super.comprobarSession(request, response)) {
-            Usuario user = (Usuario)request.getSession().getAttribute("usuario");
-        
-            String filtroNombre = request.getParameter("filtro");
-            String filtroCategoria = request.getParameter("filtroCategoria");
-            List<Producto> productos = null;
-            List<Categoria> categorias= cf.findAll();
-
-            if(filtroNombre == null || filtroNombre.isEmpty()){
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findAll();
-
-                }else{
-                    productos= productoFacade.findAll(filtroCategoria);
-
-                }
-            }else{
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findByNombre(filtroNombre);
-
-                }else{
-                    productos = productoFacade.findByNombre(filtroNombre,filtroCategoria);
-
-                }   
-            }
-
-            request.setAttribute("productos", productos);
-            request.setAttribute("categorias", categorias);
-            request.setAttribute("selected", filtroCategoria);
+        if (user == null || user.getTipoUsuario().getTipo().equals("administrador")) {
             
-            if (user.getTipoUsuario().getTipo().equals("administrador")) {
-                request.getRequestDispatcher("WEB-INF/jsp/productosAdmin.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("seller.jsp").forward(request, response);
+            String strId;
+            String nombre, descripcion, goTo = "CategoriaServlet";
+            Categoria newCategoria;
+            
+            strId = request.getParameter("id");
+            nombre = request.getParameter("nombre");
+            descripcion = request.getParameter("descripcion");
+            
+            if (strId == null || strId.isEmpty()) { // Crear nueva categoria
+                newCategoria = new Categoria();
+            } else {                             // Editar categoria
+                newCategoria = this.categoriaFacade.find(Integer.parseInt(strId));
             }
+            
+            newCategoria.setNombre(nombre);
+            newCategoria.setDescripcion(descripcion);
+            
+            if (strId == null || strId.isEmpty()) {    // Crear nueva categoría
+                categoriaFacade.create(newCategoria);
+            } else {                                   // Editar categoría
+                categoriaFacade.edit(newCategoria);
+            }  
+            
+            response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            
+        } else {
+            
+            String redirectTo = "ProductoServlet";
+            if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+                redirectTo = "ProductoServlet";
+            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+                redirectTo = "prueba.jsp";
+            }
+            response.sendRedirect(request.getContextPath() + "/" + redirectTo);
+                
         }
     }
 

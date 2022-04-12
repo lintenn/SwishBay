@@ -24,20 +24,11 @@
         List<Categoria> categorias = (List)request.getAttribute("categorias");
         
         Usuario usuario = (Usuario)request.getAttribute("usuario");
+        String status = (String) request.getAttribute("status");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-            <header class="mb-auto">
-              <div>
-                <h3 class="float-md-start mb-0">SwishBay</h3>
-                <nav class="nav nav-masthead justify-content-center float-md-end">
-                  <a class="nav-link active" aria-current="page" href="/">Home</a>
-                  <a class="nav-link" href="/">Features</a>
-                  <a class="nav-link" href="/">Contact</a>
-                  <a class="nav-link" href="LogoutServlet">Cerrar sesión</a>
-                </nav>
-              </div>
-            </header>
+            <jsp:include page="cabeceraPrincipal.jsp" />
             
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
@@ -65,8 +56,13 @@
             <br/>
             <h1 class="mb-2">Datos del usuario</h1>
             <br/>
-                
+            
             <form  method="POST" action="UsuarioGuardarServlet">
+                <% if (status != null) {%>
+                    <div class="form-group row justify-content-center" style="height: 50px;">
+                        <div class=" alert alert-danger col-sm-4"><%=status%></div>
+                    </div>
+                <% } %>
                 <div class="form-group row justify-content-md-center mb-4">
                   <div class="col-sm-4">
                       <input type="hidden" class="form-control" id="inputId" name="id" value="<%= usuario==null? "": usuario.getId() %>" >
@@ -119,15 +115,22 @@
                   </div>
                   &nbsp;
                 </div>
+                <div class="form-group row justify-content-md-center mb-4">
+                  <label for="inputSaldo" class="col-sm-1 col-form-label">Saldo:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" id="inputSaldo" name="saldo" value="<%= usuario==null? "": usuario.getSaldo() %>" required>
+                  </div>
+                  *
+                </div>
                 <br/>
                 <label for="inputGender" class="form-label">Sexo:</label>
                 <div class="d-flex align-center justify-content-center">
                     <div class="form-check mx-1">
-                        <input id="masc" name="sexo" value="masc" type="radio" class="form-check-input" checked="<%= usuario==null? "true":(usuario.getSexo().equals("masc")? "true":"false") %>" required=""/>
+                        <input id="masc" name="sexo" value="masc" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getSexo().equals("masc")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="masc">Masculino</label>
                     </div>
                     <div class="form-check mx-1">
-                      <input id="fem" name="sexo" value="fem" type="radio" class="form-check-input" checked="<%= usuario==null? "false":(usuario.getSexo().equals("fem")? "true":"false") %>" required=""/>
+                      <input id="fem" name="sexo" value="fem" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getSexo().equals("fem")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="fem">Femenino</label>
                     </div>
                 </div>
@@ -138,45 +141,35 @@
                 <label for="inputTipo" class="form-label">Tipo de usuario:</label>
                 <div class="d-flex align-center justify-content-center">
                     <div class="form-check mx-1">
-                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" checked="<%= usuario==null? "true":(usuario.getSexo().equals("administrador")? "true":"false") %>" required=""/>
+                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getTipoUsuario().getTipo().equals("administrador")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="administrador">Administrador</label>
                     </div>
                     <div class="form-check mx-1">
-                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" checked="<%= usuario==null? "false":(usuario.getSexo().equals("compradorvendedor")? "true":"false") %>" required=""/>
+                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getTipoUsuario().getTipo().equals("compradorvendedor")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="compradorvendedor">Comprador/Vendedor</label>
                     </div>
                     <div class="form-check mx-1">
-                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" checked="<%= usuario==null? "false":(usuario.getSexo().equals("marketing")? "true":"false") %>" required=""/>
+                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getTipoUsuario().getTipo().equals("marketing")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="marketing">Marketing</label>
                     </div>
                 </div>
-                          
-                      
-                  
                 
-                
-  
-                <div class="form-group row justify-content-md-center mb-3">
-                    <label  for="inputCategoria" class="col-sm-1 col-form-label">Categoría:</label>
-                    <div class="col-sm-4">
-                        <select class="form-select" id="categoria" name="categoria">
-                            <%
-                              for (Categoria c:categorias){
-                                String selected = "";
-                                
-                                if(usuario != null)
-                                    selected="selected";
-                               
-                            %>     
-                                <option <%= selected %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
-                           <%  
-                              }
-                           %>
-                        </select>
-                    </div>
-                    &nbsp;
+                <br/>
+                <label for="inputCategory" class="form-label">Categorías preferidas:</label>
+                <%
+                    for (Categoria categoria : categorias) {
+                        String checked = "";
+                        if (usuario != null && !categoria.getUsuarioList().isEmpty() && categoria.getUsuarioList().contains(usuario)) {
+                            checked = "checked";
+                        }
+                %>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="categoria<%=categoria.getId()%>" name="categoria" <%= checked %> value="<%= categoria.getId() %>"/>
+                  <label class="custom-control-label" for="categoria<%=categoria.getId()%>"><%=categoria.getNombre()%></label>
                 </div>
-                </br>
+                
+                <% } %>
+                <br/>
                 
                 <div class="form-group row justify-content-md-center mt-2">
                   <div class="col-sm-10">
@@ -185,6 +178,7 @@
                   </div>
                 </div>
             </form>
+            <br/>
             
             
             
