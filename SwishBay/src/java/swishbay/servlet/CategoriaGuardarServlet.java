@@ -7,22 +7,23 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import swishbay.dao.CategoriaFacade;
 import swishbay.entity.Categoria;
+import swishbay.entity.Usuario;
 
 /**
  *
  * @author Luis
  */
-@WebServlet(name = "CategoriaServlet", urlPatterns = {"/CategoriaServlet"})
-public class CategoriaServlet extends SwishBayServlet {
+@WebServlet(name = "CategoriaGuardarServlet", urlPatterns = {"/CategoriaGuardarServlet"})
+public class CategoriaGuardarServlet extends HttpServlet {
 
     @EJB CategoriaFacade categoriaFacade;
     
@@ -37,19 +38,46 @@ public class CategoriaServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (super.comprobarSession(request, response)) {
+        HttpSession session = request.getSession();
+        Usuario user = (Usuario)session.getAttribute("usuario");
+        
+        if (user == null || user.getTipoUsuario().getTipo().equals("administrador")) {
             
-            String filtroNombre = request.getParameter("filtro");
-            List<Categoria> categorias = null;
-
-            if (filtroNombre == null || filtroNombre.isEmpty()) {
-                categorias = this.categoriaFacade.findAll();        
-            } else {
-                categorias = this.categoriaFacade.findByNombre(filtroNombre);
+            String strId;
+            String nombre, descripcion, goTo = "CategoriaServlet";
+            Categoria newCategoria;
+            
+            strId = request.getParameter("id");
+            nombre = request.getParameter("nombre");
+            descripcion = request.getParameter("descripcion");
+            
+            if (strId == null || strId.isEmpty()) { // Crear nueva categoria
+                newCategoria = new Categoria();
+            } else {                             // Editar categoria
+                newCategoria = this.categoriaFacade.find(Integer.parseInt(strId));
             }
-
-            request.setAttribute("categorias", categorias);
-            request.getRequestDispatcher("WEB-INF/jsp/categorias.jsp").forward(request, response);   
+            
+            newCategoria.setNombre(nombre);
+            newCategoria.setDescripcion(descripcion);
+            
+            if (strId == null || strId.isEmpty()) {    // Crear nueva categoría
+                categoriaFacade.create(newCategoria);
+            } else {                                   // Editar categoría
+                categoriaFacade.edit(newCategoria);
+            }  
+            
+            response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            
+        } else {
+            
+            String redirectTo = "ProductoServlet";
+            if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+                redirectTo = "ProductoServlet";
+            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+                redirectTo = "prueba.jsp";
+            }
+            response.sendRedirect(request.getContextPath() + "/" + redirectTo);
+                
         }
     }
 
