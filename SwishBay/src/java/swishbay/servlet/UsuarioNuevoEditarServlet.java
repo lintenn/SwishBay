@@ -40,7 +40,7 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+
         if (super.comprobarSession(request, response)) {
             List<Categoria> categorias = this.categoriaFacade.findAll();
             
@@ -52,7 +52,7 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
                 request.setAttribute("usuario", usuario);
             }
             
-            request.getRequestDispatcher("usuario.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/usuario.jsp").forward(request, response);
         }
     }
 

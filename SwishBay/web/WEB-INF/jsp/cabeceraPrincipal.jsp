@@ -1,7 +1,7 @@
 <%-- 
-    Document   : cabecera
-    Created on : Apr 12, 2022, 3:01:32 PM
-    Author     : Miguel Oña Guerrero
+    Document   : cabeceraPrincipal
+    Created on : 12-abr-2022, 20:29:59
+    Author     : Linten
 --%>
 
 <%@page import="swishbay.entity.Usuario"%>
