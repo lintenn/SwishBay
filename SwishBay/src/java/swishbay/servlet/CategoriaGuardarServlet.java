@@ -23,7 +23,7 @@ import swishbay.entity.Usuario;
  * @author Luis
  */
 @WebServlet(name = "CategoriaGuardarServlet", urlPatterns = {"/CategoriaGuardarServlet"})
-public class CategoriaGuardarServlet extends HttpServlet {
+public class CategoriaGuardarServlet extends SwishBayServlet {
 
     @EJB CategoriaFacade categoriaFacade;
     
@@ -38,10 +38,8 @@ public class CategoriaGuardarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Usuario user = (Usuario)session.getAttribute("usuario");
         
-        if (user == null || user.getTipoUsuario().getTipo().equals("administrador")) {
+        if (super.comprobarAdminSession(request, response)) {
             
             String strId;
             String nombre, descripcion, goTo = "CategoriaServlet";
@@ -68,17 +66,7 @@ public class CategoriaGuardarServlet extends HttpServlet {
             
             response.sendRedirect(request.getContextPath() + "/" + goTo); 
             
-        } else {
-            
-            String redirectTo = "ProductoServlet";
-            if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
-                redirectTo = "ProductoServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-                redirectTo = "prueba.jsp";
-            }
-            response.sendRedirect(request.getContextPath() + "/" + redirectTo);
-                
-        }
+        } 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

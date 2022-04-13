@@ -1,30 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.ejb.EJB;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.UsuarioFacade;
+import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
 /**
- *
- * @author Luis
+ * Este servlet muestra los productos favoritos de un comprador.
+ * 
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "UsuarioBorrarServlet", urlPatterns = {"/UsuarioBorrarServlet"})
-public class UsuarioBorrarServlet extends SwishBayServlet {
+@WebServlet(name = "ProductoFavorito", urlPatterns = {"/ProductoFavorito"})
+public class ProductoFavorito extends SwishBayServlet {
 
-    @EJB UsuarioFacade usuarioFacade;
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,15 +28,15 @@ public class UsuarioBorrarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (super.comprobarAdminSession(request, response)) {        
-                        
-            String str = request.getParameter("id");
+        
+        if (super.comprobarSession(request, response)) {
+            
+            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
+            List<Producto> productos = usuario.getProductoList();
 
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
-
-            this.usuarioFacade.remove(usuario);
-
-            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
+            request.setAttribute("productos", productos);
+            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
+        
         }
     }
 

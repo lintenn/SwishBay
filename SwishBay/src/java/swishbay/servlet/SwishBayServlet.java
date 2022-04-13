@@ -39,4 +39,23 @@ public abstract class SwishBayServlet extends HttpServlet {
         }        
         
     }
+    
+    protected boolean comprobarAdminSession (HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Usuario user = (Usuario)session.getAttribute("usuario");
+        
+        if (user == null) {
+            response.sendRedirect(request.getContextPath());
+            return false;
+        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+            response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+            return false;
+        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+            response.sendRedirect(request.getContextPath() + "/prueba.jsp");
+            return false;
+        } else {
+            return true;
+        }     
+    }
 }
