@@ -21,7 +21,7 @@
                       <a class="nav-link active" aria-current="page" href="ProductoEnPujaServlet">Pujas Abiertas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductoServlet">Favoritos</a>
+                      <a class="nav-link" href="ProductoFavorito">Favoritos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="ProductoServlet">Comprados</a>

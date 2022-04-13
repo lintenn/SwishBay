@@ -51,8 +51,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "SALDO")
-    private Double saldo;
+    private double saldo;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -312,11 +314,11 @@ public class Usuario implements Serializable {
         return "swishbay.entity.Usuario[ id=" + id + " ]";
     }
 
-    public Double getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(Double saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
     
