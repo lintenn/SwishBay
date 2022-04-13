@@ -2,21 +2,28 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import swishbay.dao.ProductoFacade;
+import swishbay.dao.UsuarioFacade;
 import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
 /**
- * Este servlet muestra los productos favoritos de un comprador.
+ * Añade y elimina productos favoritos de un comprador.
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoFavorito", urlPatterns = {"/ProductoFavorito"})
-public class ProductoFavorito extends SwishBayServlet {
-
+@WebServlet(name = "ManejoFavoritoServlet", urlPatterns = {"/ManejoFavoritoServlet"})
+public class ManejoFavoritoServlet extends SwishBayServlet {
+    
+    @EJB ProductoFacade productoFacade;
+    @EJB UsuarioFacade usuarioFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -29,14 +36,32 @@ public class ProductoFavorito extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if (super.comprobarSession(request, response)) {
+        if(super.comprobarSession(request, response)){
             
-            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
-            List<Producto> productos = usuario.getProductoList();
-
-            request.setAttribute("productos", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-        
+            String str = request.getParameter("id");
+            
+            if(str != null){
+                Producto producto = productoFacade.find(Integer.parseInt(str));
+                
+                HttpSession session = request.getSession();
+                Usuario usuario = (Usuario)session.getAttribute("usuario");
+                List<Producto> favoritos = usuario.getProductoList();
+                
+                if(favoritos.contains(producto)){
+                    favoritos.remove(producto);
+                }else{
+                    favoritos.add(producto);
+                }
+                
+                usuario.setProductoList(favoritos);
+                
+                usuarioFacade.edit(usuario);
+                
+                session.setAttribute("usuario", usuario);
+                
+                response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+                //request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
+            }
         }
     }
 
