@@ -66,7 +66,7 @@ public class PujasServlet extends HttpServlet {
         request.setAttribute("productos", productos);
         request.setAttribute("categorias", categorias);
         request.setAttribute("selected", filtroCategoria);
-        request.getRequestDispatcher("pujas.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/pujas.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

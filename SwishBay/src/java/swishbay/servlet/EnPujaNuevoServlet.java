@@ -48,7 +48,7 @@ public class EnPujaNuevoServlet extends HttpServlet {
             request.setAttribute("producto", p);
         }
         
-        request.getRequestDispatcher("EnPuja.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/EnPuja.jsp").forward(request, response);
         
         
     }

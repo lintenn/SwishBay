@@ -12,6 +12,9 @@
     if(usuario == null){
         response.sendRedirect(request.getContextPath());
     }
+    
+    Double saldo = (Double)usuario.getSaldo();
+
 %>
 <header class="mb-auto">
         <a href="ProductoServlet" col-1>
@@ -24,7 +27,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <span class="navbar-text me-2">
-          Saldo: <%=usuario.getSaldo()%> €
+          Saldo: <%=saldo%> €
       </span>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
@@ -37,7 +40,7 @@
           <a class="nav-link active" aria-current="page" href="#">Notificaciones</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Cerrar sesión</a>
+          <a class="nav-link" href="LogoutServlet">Cerrar sesión</a>
         </li>
       </ul>
         </div>
@@ -48,7 +51,7 @@
 </header>
   
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <form action="" method="POST">
+  <form action="SaldoServlet" method="POST">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -56,11 +59,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-dark">
-          
-                <div class="my-2">
-                    <label for="cantidad" class="form-label">Cantidad que desea añadir: </label>
-                    <input type="number" min="0" id="cantidad" required>         
-                </div>          
+          <input type="hidden" name="id" value="<%=usuario.getId() %>" />
+            <div class="my-2">
+                <label for="cantidad" class="form-label">Cantidad que desea añadir: </label>
+                <input type="number" min="0" id="cantidad" name="saldo" required>         
+            </div>          
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

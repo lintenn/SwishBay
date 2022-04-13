@@ -11,13 +11,14 @@ import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
 
 /**
- *
+ * Muestra todos lo productos registrados.
+ * 
  * @author Miguel
  */
 @WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
 public class ProductoServlet extends SwishBayServlet {
     
-    @EJB ProductoFacade productoFacade;
+    @EJB ProductoFacade productoFacade;  
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

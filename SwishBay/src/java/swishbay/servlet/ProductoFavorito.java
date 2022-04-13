@@ -1,32 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
+import swishbay.entity.Usuario;
 
 /**
- *
- * @author galop
+ * Este servlet muestra los productos favoritos de un comprador.
+ * 
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoNuevoEditarServlet", urlPatterns = {"/ProductoNuevoEditarServlet"})
-public class ProductoNuevoEditarServlet extends HttpServlet {
+@WebServlet(name = "ProductoFavorito", urlPatterns = {"/ProductoFavorito"})
+public class ProductoFavorito extends SwishBayServlet {
 
-    @EJB ProductoFacade pf;
-    @EJB CategoriaFacade cf;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,14 +29,15 @@ public class ProductoNuevoEditarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String str = request.getParameter("id");
-        if(str !=null && !str.isEmpty()){
-            Producto p = this.pf.find(Integer.parseInt(str));
-            request.setAttribute("producto", p);
+        if (super.comprobarSession(request, response)) {
+            
+            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
+            List<Producto> productos = usuario.getProductoList();
+
+            request.setAttribute("productos", productos);
+            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
+        
         }
-        List<Categoria> categorias = this.cf.findAll();
-        request.setAttribute("categorias",categorias );
-        request.getRequestDispatcher("WEB-INF/jsp/producto.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

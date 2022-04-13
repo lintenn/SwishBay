@@ -32,27 +32,30 @@ public class ProductoFacade extends AbstractFacade<Producto> {
     }
 
     public List<Producto> findByNombre(String titulo) {
-        
         Query q;   
-        q= this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo");
         q.setParameter("titulo", '%' + titulo + '%');
         return q.getResultList(); 
     }
 
     public List<Producto> findAll(String filtroNombre) {
-
         Query q;   
-        q= this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroNombre");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroNombre");
         q.setParameter("filtroNombre",  filtroNombre);
         return q.getResultList();
     }
 
     public List<Producto> findByNombre(String filtroNombre, String filtroCategoria) {
         Query q;   
-        q= this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria");
         q.setParameter("titulo", '%' + filtroNombre + '%');
         q.setParameter("filtroCategoria",  filtroCategoria);
         return q.getResultList(); 
     }
     
+    public List<Producto> findEnPuja() {
+        Query q;   
+        q = this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1");
+        return q.getResultList(); 
+    }
 }
