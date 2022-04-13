@@ -38,7 +38,7 @@ public class UsuarioServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if (super.comprobarSession(request, response)) {
+        if (super.comprobarAdminSession(request, response)) {
             
             String filtroNombre = request.getParameter("filtro");
             List<Usuario> usuarios = null;

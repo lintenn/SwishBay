@@ -37,7 +37,7 @@ public class CategoriaBorrarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if (super.comprobarSession(request, response)) {        
+        if (super.comprobarAdminSession(request, response)) {        
                         
             String str = request.getParameter("id");
 

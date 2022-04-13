@@ -41,7 +41,7 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (super.comprobarSession(request, response)) {
+        if (super.comprobarAdminSession(request, response)) {
             List<Categoria> categorias = this.categoriaFacade.findAll();
             
             request.setAttribute("categorias", categorias);
