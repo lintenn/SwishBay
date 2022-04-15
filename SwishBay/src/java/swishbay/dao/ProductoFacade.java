@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import swishbay.entity.Producto;
-import swishbay.entity.Puja;
 
 /**
  *
@@ -57,6 +56,13 @@ public class ProductoFacade extends AbstractFacade<Producto> {
     public List<Producto> findEnPuja() {
         Query q;   
         q = this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1");
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findByComprador(int id){
+        Query q;   
+        q = this.getEntityManager().createQuery("select p from Producto p where p.comprador.id = :id");
+        q.setParameter("id", id);
         return q.getResultList(); 
     }
 }
