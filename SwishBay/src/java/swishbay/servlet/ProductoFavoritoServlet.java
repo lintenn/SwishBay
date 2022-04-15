@@ -14,8 +14,8 @@ import swishbay.entity.Usuario;
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoFavorito", urlPatterns = {"/ProductoFavorito"})
-public class ProductoFavorito extends SwishBayServlet {
+@WebServlet(name = "ProductoFavoritoServlet", urlPatterns = {"/ProductoFavoritoServlet"})
+public class ProductoFavoritoServlet extends SwishBayServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
