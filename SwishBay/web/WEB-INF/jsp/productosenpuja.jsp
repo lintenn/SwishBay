@@ -31,8 +31,19 @@
                 Usuario usuario = (Usuario)session.getAttribute("usuario");
                 List<Producto> favoritos = usuario.getProductoList();
                 
-                for(Producto producto : productos){
-                    Puja puja = getMayorPuja(producto.getPujaList());
+                if(productos.isEmpty()){
+            %>
+                <div class="py-5">    
+                    Lista de productos vacía.
+                </div>
+                <footer class="mt-auto text-white-50 fixed-bottom">
+                    <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+                </footer>
+            <%
+                }else{
+                
+                    for(Producto producto : productos){
+                        Puja puja = getMayorPuja(producto.getPujaList());
             %> 
 
                 <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
@@ -86,7 +97,7 @@
                 </div>
             
             <%
-                }
+                    }
             %>
 
             </main>
@@ -95,7 +106,9 @@
               <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>
-
+            <%
+                }                             
+            %>
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
