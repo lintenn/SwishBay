@@ -10,35 +10,12 @@ import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
 /**
- * Este servlet muestra los productos favoritos de un comprador.
+ * Recupera los productos favoritos de un comprador.
  * 
  * @author Miguel Oña Guerrero
  */
 @WebServlet(name = "ProductoFavoritoServlet", urlPatterns = {"/ProductoFavoritoServlet"})
-public class ProductoFavoritoServlet extends SwishBayServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        if (super.comprobarSession(request, response)) {
-            
-            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
-            List<Producto> productos = usuario.getProductoList();
-
-            request.setAttribute("productos", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-        
-        }
-    }
+public class ProductoFavoritoServlet extends ProductosServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -52,7 +29,7 @@ public class ProductoFavoritoServlet extends SwishBayServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        super.processRequest(request, response);
     }
 
     /**
@@ -66,7 +43,7 @@ public class ProductoFavoritoServlet extends SwishBayServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        super.processRequest(request, response);
     }
 
     /**
@@ -79,4 +56,13 @@ public class ProductoFavoritoServlet extends SwishBayServlet {
         return "Short description";
     }// </editor-fold>
 
+        @Override
+    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
+        return usuario.getProductoList();
+    }
+    
+    @Override
+    protected String getServlet() {
+        return this.getServletName();
+    }
 }
