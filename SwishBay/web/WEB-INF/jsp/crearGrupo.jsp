@@ -45,8 +45,13 @@
             <br/>
             <h1 class="mb-2">Datos del grupo</h1>
             <br/>
-            
-            <form  method="POST" action="GrupoGuardarServlet?id=<%= grupo.getId() %>">
+            <%
+            String id = "";
+            if(grupo != null){
+                id = "?id="+grupo.getId();
+            }
+            %>
+            <form  method="POST" action="GrupoGuardarServlet<%=id%>">
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-1 col-form-label">Nombre:</label>
                   <div class="col-sm-4">
@@ -62,7 +67,7 @@
                 <div class="form-group row justify-content-md-center mt-2">
                   <div class="col-sm-10">
                     <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2"><%= grupo==null? "Añadir": "Modificar" %></button>
-                    <a href="UsuarioServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
+                    <a href="GrupoServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
                   </div>
                 </div>
             </form>
