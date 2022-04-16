@@ -5,8 +5,7 @@
 --%>
 
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="swishbay.entity.Usuario"%>
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.entity.Grupo"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,6 +19,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     </head>
+    <%
+        Grupo grupo = (Grupo)request.getAttribute("grupo");
+    %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <jsp:include page="cabeceraPrincipal.jsp" />
@@ -44,11 +46,11 @@
             <h1 class="mb-2">Datos del grupo</h1>
             <br/>
             
-            <form  method="POST" action="GrupoGuardarServlet">
+            <form  method="POST" action="GrupoGuardarServlet?id=<%= grupo.getId() %>">
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-1 col-form-label">Nombre:</label>
                   <div class="col-sm-4">
-                    <input type="text" maxlength="45" class="form-control" id="inputNombre" name="nombre" required="" autofocus="" value="" >
+                    <input type="text" maxlength="45" class="form-control" id="inputNombre" name="nombre" required="" autofocus="" value="<%= grupo==null? "": grupo.getNombre() %>" >
                   </div>
                   *
                 <br/>
@@ -59,7 +61,7 @@
                 
                 <div class="form-group row justify-content-md-center mt-2">
                   <div class="col-sm-10">
-                    <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2">Añadir</button>
+                    <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2"><%= grupo==null? "Añadir": "Modificar" %></button>
                     <a href="UsuarioServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
                   </div>
                 </div>

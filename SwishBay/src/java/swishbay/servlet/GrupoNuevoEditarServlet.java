@@ -6,19 +6,24 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dao.GrupoFacade;
+import swishbay.entity.Grupo;
 
 /**
  *
  * @author angel
  */
-@WebServlet(name = "GrupoNuevoServlet", urlPatterns = {"/GrupoNuevoServlet"})
-public class GrupoNuevoServlet extends SwishBayServlet {
+@WebServlet(name = "GrupoNuevoEditarServlet", urlPatterns = {"/GrupoNuevoEditarServlet"})
+public class GrupoNuevoEditarServlet extends SwishBayServlet {
 
+    @EJB GrupoFacade grupoFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,6 +36,11 @@ public class GrupoNuevoServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+            String str = request.getParameter("id");
+            if (str != null && !str.isEmpty()) {
+                Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
+                request.setAttribute("grupo", grupo);
+            }
             request.getRequestDispatcher("WEB-INF/jsp/crearGrupo.jsp").forward(request, response);
     }
 

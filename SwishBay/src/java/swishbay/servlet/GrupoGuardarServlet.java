@@ -45,18 +45,28 @@ public class GrupoGuardarServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
             Usuario user = (Usuario)session.getAttribute("usuario");
-            String nombre, goTo = "GrupoServlet";
+            String nombre, goTo = "GrupoServlet", strId;
 
+            strId = request.getParameter("id");
+            System.out.println(strId);
             Grupo newGroup = null;
             
             nombre = request.getParameter("nombre");
             
-            newGroup = new Grupo();
+            if(strId == null || strId.isEmpty()){
+                newGroup = new Grupo();
+            } else {
+                newGroup = this.grupoFacade.find(Integer.parseInt(strId));
+            }
                
             newGroup.setNombre(nombre);
             newGroup.setMarketing(user);
                
-            grupoFacade.create(newGroup);
+            if(strId == null || strId.isEmpty()){
+                grupoFacade.create(newGroup);
+            } else {
+                grupoFacade.edit(newGroup);   
+            }
 
             response.sendRedirect(request.getContextPath() + "/" + goTo); 
             
