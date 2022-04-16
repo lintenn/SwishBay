@@ -9,38 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
+import swishbay.entity.Usuario;
 
 /**
- * Muestra todos los productos en puja.
+ * Recupera todos los productos en puja.
  * 
  * @author Miguel Oña Guerrero
  */
 @WebServlet(name = "ProductoEnPujaServlet", urlPatterns = {"/ProductoEnPujaServlet"})
-public class ProductoEnPujaServlet extends SwishBayServlet {
-    
-    @EJB ProductoFacade productoFacade; 
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        if (super.comprobarSession(request, response)) {
-            
-            List<Producto> productos = productoFacade.findEnPuja();
-
-            request.setAttribute("productosenpuja", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productosenpuja.jsp").forward(request, response);
-        
-        }
-    }
+public class ProductoEnPujaServlet extends ProductosServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -80,5 +57,14 @@ public class ProductoEnPujaServlet extends SwishBayServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
+    @Override
+    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
+        return productoFacade.findEnPujaByFiltro(filtroTitulo, filtroCategoria);
+    }
+    
+    @Override
+    protected String getServlet() {
+        return this.getServletName();
+    }
 }

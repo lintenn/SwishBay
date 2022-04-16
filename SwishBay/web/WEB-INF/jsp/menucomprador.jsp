@@ -44,7 +44,10 @@
                       <a class="nav-link disabled">Disabled</a>
                     </li> -->
                   </ul>
-                  <form action="ProductoServlet" method="POST" class="d-flex">
+                  <%
+                      String action = (String)request.getAttribute("action");
+                  %>
+                  <form action="<%=action %>" method="POST" class="d-flex">
                     <div class="col-sm-4">
                         <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">         
                             <%
