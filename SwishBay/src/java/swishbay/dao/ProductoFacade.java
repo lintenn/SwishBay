@@ -14,7 +14,7 @@ import swishbay.entity.Producto;
 
 /**
  *
- * @author migue
+ * @author Miguel Oña Guerrero
  */
 @Stateless
 public class ProductoFacade extends AbstractFacade<Producto> {
@@ -91,6 +91,15 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
         return q.getResultList(); 
+    }
+    
+    public Producto findByID(int id) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.id = :id");
+        q.setParameter("id", id);
+        
+        Producto producto = (Producto)q.getResultList().get(0);
+        return producto; 
     }
     
     /*
