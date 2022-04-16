@@ -1,12 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -16,22 +18,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.TipoUsuarioFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.TipoUsuario;
+import swishbay.dao.GrupoFacade;
+import swishbay.entity.Grupo;
 import swishbay.entity.Usuario;
-import swishbay.service.UsuarioService;
 
 /**
  *
- * @author Luis
+ * @author angel
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-
-    @EJB UsuarioFacade usuarioFacade;
-    @EJB TipoUsuarioFacade tipoUsuarioFacade;
-    @EJB UsuarioService usuarioService;
+@WebServlet(name = "GrupoGuardarServlet", urlPatterns = {"/GrupoGuardarServlet"})
+public class GrupoGuardarServlet extends HttpServlet {
+    
+    @EJB GrupoFacade grupoFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,41 +42,34 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String correo, status = null, goTo = "ProductoServlet", password;
-        correo = request.getParameter("correo");
-        password = request.getParameter("password");
-        //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);
-        
-        Usuario user = null;
-        //TipoUsuario tipoUsuario = null;
-        
-        try {
-            user = usuarioFacade.comprobarUsuario(correo, password);
-        } catch(EJBException ex){
-            user = null;
-        }
-        
-        HttpSession session = request.getSession();
-        if (user == null) {
-           status = "El correo o la clave son incorrectos";
-           request.setAttribute("status", status);
-           request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            session.setAttribute("usuario", user);
-            //session.setAttribute("tipoUsuario", tipoUsuario);
+
+            HttpSession session = request.getSession();
+            Usuario user = (Usuario)session.getAttribute("usuario");
+            String nombre, goTo = "GrupoServlet", strId;
+
+            strId = request.getParameter("id");
+            System.out.println(strId);
+            Grupo newGroup = null;
             
-            if (user.getTipoUsuario().getTipo().equals("administrador")) {
-                goTo = "UsuarioServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
-                goTo = "ProductoServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-                goTo = "UsuarioCompradorServlet";
+            nombre = request.getParameter("nombre");
+            
+            if(strId == null || strId.isEmpty()){
+                newGroup = new Grupo();
+            } else {
+                newGroup = this.grupoFacade.find(Integer.parseInt(strId));
             }
+               
+            newGroup.setNombre(nombre);
+            newGroup.setMarketing(user);
+               
+            if(strId == null || strId.isEmpty()){
+                grupoFacade.create(newGroup);
+            } else {
+                grupoFacade.edit(newGroup);   
+            }
+
+            response.sendRedirect(request.getContextPath() + "/" + goTo); 
             
-            response.sendRedirect(request.getContextPath() + "/" + goTo);
-        }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

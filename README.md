@@ -49,13 +49,13 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un USUARIO debe poder iniciar sesión en el sistema. :heavy_check_mark:
 
 #### Marketing - Angel Joaquín Rodríguez Mercado
-- Un personal de marketing debe poder ver en un listado los usuarios **compradores** del sistema.
-- Un personal de marketing debe poder **buscar y aplicar filtrados** de búsqueda sobre los usuarios compradores del sistema.
-- Un personal de marketing debe poder crear grupos (también llamadas *listas*) de usuarios.
-- Un personal de marketing debe poder modificar sus grupos creados (como su nombre).
+- Un personal de marketing debe poder ver en un listado los usuarios **compradores** del sistema. :heavy_check_mark:
+- Un personal de marketing debe poder **buscar y aplicar filtrados** de búsqueda sobre los usuarios compradores del sistema. :heavy_check_mark:
+- Un personal de marketing debe poder crear grupos (también llamadas *listas*) de usuarios. :heavy_check_mark:
+- Un personal de marketing debe poder modificar sus grupos creados (como su nombre). :heavy_check_mark:
 - Un personal de marketing debe poder añadir usuarios a sus grupos creados.
 - Un personal de marketing debe poder eliminar usuarios de sus grupos creados.
-- Un personal de marketing debe poder eliminar sus grupos creados.
+- Un personal de marketing debe poder eliminar sus grupos creados. :heavy_check_mark:
 - Un personal de marketing debe poder consultar los mensajes de grupos de usuarios. ❔
 - Un personal de marketing debe poder enviar mensajes a sus grupos de usuarios.
 - _Un personal de marketing debe poder modificar mensajes de sus grupos de usuarios_. ❔
