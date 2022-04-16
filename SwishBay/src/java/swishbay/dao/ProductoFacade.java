@@ -38,10 +38,10 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
 
-    public List<Producto> findAll(String filtroNombre) {
+    public List<Producto> findAll(String filtroCategoria) {
         Query q;   
-        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroNombre");
-        q.setParameter("filtroNombre",  filtroNombre);
+        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroCategoria");
+        q.setParameter("filtroCategoria",  filtroCategoria);
         return q.getResultList();
     }
 
