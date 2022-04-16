@@ -19,11 +19,10 @@
         } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
             goTo = "ProductoServlet";
         } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-            goTo = "prueba.jsp";
+            goTo = "UsuarioCompradorServlet";
         }
         response.sendRedirect(request.getContextPath() + "/" + goTo);
     }
-
 %>
 
 <!DOCTYPE html>
