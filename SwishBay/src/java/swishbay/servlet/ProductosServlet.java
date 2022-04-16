@@ -58,13 +58,16 @@ public abstract class ProductosServlet extends SwishBayServlet {
             request.setAttribute("selected", filtroCategoria);
             request.setAttribute("action", this.getServlet());
             
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-        
+            forward(request, response);
         }
     }
     
     abstract protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario);
     
     abstract protected String getServlet();
+    
+    protected void forward(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
+    }
 
 }

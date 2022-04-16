@@ -65,4 +65,9 @@ public class ProductoEnPujaServlet extends ProductosServlet {
     protected String getServlet() {
         return this.getServletName();
     }
+    
+    @Override
+    protected void forward(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        request.getRequestDispatcher("WEB-INF/jsp/productosenpuja.jsp").forward(request, response);
+    }
 }

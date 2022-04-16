@@ -27,7 +27,7 @@
             <main class="row d-flex justify-content-center mt-4">
                 
             <%
-                List<Producto> productos = (List)request.getAttribute("productosenpuja");
+                List<Producto> productos = (List)request.getAttribute("productos");
                 Usuario usuario = (Usuario)session.getAttribute("usuario");
                 List<Producto> favoritos = usuario.getProductoList();
                 
