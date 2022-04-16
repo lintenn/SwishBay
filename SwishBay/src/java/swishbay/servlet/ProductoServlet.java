@@ -7,39 +7,18 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dao.CategoriaFacade;
 import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
+import swishbay.entity.Usuario;
 
 /**
- * Muestra todos lo productos registrados.
+ * Recupera todos lo productos registrados.
  * 
  * @author Miguel
  */
 @WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends SwishBayServlet {
-    
-    @EJB ProductoFacade productoFacade;  
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        if (super.comprobarSession(request, response)) {
-            
-            List<Producto> productos = productoFacade.findAll();
-
-            request.setAttribute("productos", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-        
-        }
-    }
+public class ProductoServlet extends ProductosServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -79,5 +58,14 @@ public class ProductoServlet extends SwishBayServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
+    @Override
+    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
+        return productoFacade.findAllByFiltro(filtroTitulo, filtroCategoria);
+    }
+    
+    @Override
+    protected String getServlet() {
+        return this.getServletName();
+    }
 }

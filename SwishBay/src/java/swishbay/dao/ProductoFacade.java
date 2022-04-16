@@ -32,16 +32,16 @@ public class ProductoFacade extends AbstractFacade<Producto> {
     }
 
     public List<Producto> findByNombre(String titulo) {
-        Query q;   
+        Query q;
         q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo");
         q.setParameter("titulo", '%' + titulo + '%');
         return q.getResultList(); 
     }
 
-    public List<Producto> findAll(String filtroNombre) {
-        Query q;   
-        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroNombre");
-        q.setParameter("filtroNombre",  filtroNombre);
+    public List<Producto> findAll(String filtroCategoria) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroCategoria");
+        q.setParameter("filtroCategoria",  filtroCategoria);
         return q.getResultList();
     }
 
@@ -53,6 +53,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
+    /*
     public List<Producto> findEnPuja() {
         Query q;   
         q = this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1");
@@ -65,4 +66,41 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("id", id);
         return q.getResultList(); 
     }
+    */
+    
+    public List<Producto> findAllByFiltro(String filtroNombre, String filtroCategoria) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria");
+        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findEnPujaByFiltro(String filtroNombre, String filtroCategoria) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.enPuja = 1");
+        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findCompradosByFiltro(String filtroNombre, String filtroCategoria, int usuario) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.comprador.id = :id");
+        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("id", usuario);
+        return q.getResultList(); 
+    }
+    
+    /*
+    public List<Producto> findFavoritosByFiltro(String filtroNombre, String filtroCategoria, int usuario) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.usuarioList.id = :id");
+        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("id", usuario);
+        return q.getResultList(); 
+    }
+    */
 }

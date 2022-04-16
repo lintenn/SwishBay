@@ -12,36 +12,12 @@ import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
 /**
- * Muestra todos los productos comprados.
+ * Recupera todos los productos comprados por un comprador.
  * 
  * @author Miguel Oña Guerrero
  */
 @WebServlet(name = "ProductoCompradoServlet", urlPatterns = {"/ProductoCompradoServlet"})
-public class ProductoCompradoServlet extends SwishBayServlet {
-    
-    @EJB ProductoFacade productoFacade;
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (super.comprobarSession(request, response)) {
-            
-            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
-            List<Producto> productos = productoFacade.findByComprador(usuario.getId());
-
-            request.setAttribute("productos", productos);
-            request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-        
-        }
-    }
+public class ProductoCompradoServlet extends ProductosServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -82,4 +58,13 @@ public class ProductoCompradoServlet extends SwishBayServlet {
         return "Short description";
     }// </editor-fold>
 
+    @Override
+    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
+        return productoFacade.findCompradosByFiltro(filtroTitulo, filtroCategoria, usuario.getId());
+    }
+
+    @Override
+    protected String getServlet() {
+        return this.getServletName();
+    }
 }

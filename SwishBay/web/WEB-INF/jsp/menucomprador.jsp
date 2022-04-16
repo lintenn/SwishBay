@@ -4,6 +4,8 @@
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="swishbay.entity.Categoria"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -42,9 +44,29 @@
                       <a class="nav-link disabled">Disabled</a>
                     </li> -->
                   </ul>
-                  <form method="post" class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                    <input class="btn btn-outline-success" type="submit" value="Buscar"></>
+                  <%
+                      String action = (String)request.getAttribute("action");
+                  %>
+                  <form action="<%=action %>" method="POST" class="d-flex">
+                    <div class="col-sm-4">
+                        <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">         
+                            <%
+                              List<Categoria> categorias = (List) request.getAttribute("categorias");
+                              String filtroCategoria = (String) request.getAttribute("selected");
+                             %>
+                             <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
+                             <%
+                              for (Categoria c:categorias){
+                                
+                            %>     
+                                <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
+                           <%  
+                              }
+                           %>
+                        </select>
+                    </div>
+                    <input class="form-control me-2 mx-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <input class="btn btn-outline-success" type="submit" value="Buscar">
                   </form>
                 </div>
               </div>
