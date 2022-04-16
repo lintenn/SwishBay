@@ -2,13 +2,10 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
