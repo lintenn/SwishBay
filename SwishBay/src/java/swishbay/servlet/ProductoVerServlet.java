@@ -1,21 +1,46 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dao.ProductoFacade;
 import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
 
 /**
- * Recupera todos los productos en puja.
+ * Muestra los datos de un producto.
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoEnPujaServlet", urlPatterns = {"/ProductoEnPujaServlet"})
-public class ProductoEnPujaServlet extends ProductosServlet {
+@WebServlet(name = "ProductoVerServlet", urlPatterns = {"/ProductoVerServlet"})
+public class ProductoVerServlet extends SwishBayServlet {
+    
+    @EJB ProductoFacade productoFacade;
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        if(super.comprobarSession(request, response)){
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            Producto producto = (Producto)productoFacade.findByID(id);
+            
+            request.setAttribute("producto", producto);
+            
+            request.getRequestDispatcher("WEB-INF/jsp/productover.jsp").forward(request, response);
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -55,19 +80,5 @@ public class ProductoEnPujaServlet extends ProductosServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    @Override
-    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
-        return productoFacade.findEnPujaByFiltro(filtroTitulo, filtroCategoria);
-    }
-    
-    @Override
-    protected String getServlet() {
-        return this.getServletName();
-    }
-    
-    @Override
-    protected void forward(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        request.getRequestDispatcher("WEB-INF/jsp/productosenpuja.jsp").forward(request, response);
-    }
+
 }
