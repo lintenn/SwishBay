@@ -52,7 +52,7 @@ public abstract class SwishBayServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/ProductoServlet");
             return false;
         } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-            response.sendRedirect(request.getContextPath() + "/prueba.jsp");
+            response.sendRedirect(request.getContextPath() + "/UsuarioCompradorServlet");
             return false;
         } else {
             return true;
