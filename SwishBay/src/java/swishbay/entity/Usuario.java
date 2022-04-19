@@ -54,7 +54,7 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "SALDO")
-    private double saldo;
+    private Double saldo;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -314,11 +314,11 @@ public class Usuario implements Serializable {
         return "swishbay.entity.Usuario[ id=" + id + " ]";
     }
 
-    public double getSaldo() {
+    public Double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
     

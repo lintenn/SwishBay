@@ -18,7 +18,7 @@
         } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
             home = "ProductoServlet";
         } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-            home = "prueba.jsp";
+            home = "UsuarioCompradorServlet";
         }
     }
 %>

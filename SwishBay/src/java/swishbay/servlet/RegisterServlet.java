@@ -3,6 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+// OJO!!!!!!!!!!!
+
+// DEPRECATED. ESTE ARCHIVO SERÁ ELIMINADO!!!!!!!!!!!!!!!
+
 package swishbay.servlet;
 
 import java.io.IOException;
@@ -31,7 +36,7 @@ import swishbay.service.UsuarioService;
 
 /**
  *
- * @author Linten
+ * @author Luis
  */
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
 public class RegisterServlet extends HttpServlet {
