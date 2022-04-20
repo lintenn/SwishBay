@@ -6,6 +6,8 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,17 +15,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
+import swishbay.entity.Usuario;
 
 /**
  *
  * @author angel
  */
-@WebServlet(name = "GrupoNuevoEditarServlet", urlPatterns = {"/GrupoNuevoEditarServlet"})
-public class GrupoNuevoEditarServlet extends SwishBayServlet {
-
-    @EJB GrupoFacade grupoFacade;
+@WebServlet(name = "ParticipantesGrupoEditarServlet", urlPatterns = {"/ParticipantesGrupoEditarServlet"})
+public class ParticipantesGrupoEditarServlet extends HttpServlet {
     
+    @EJB GrupoFacade grupoFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,12 +37,19 @@ public class GrupoNuevoEditarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-            String str = request.getParameter("id");
-            if (str != null && !str.isEmpty()) {
-                Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
-                request.setAttribute("grupo", grupo);
+            String filtroNombre = request.getParameter("filtro");
+            Integer strId = Integer.parseInt(request.getParameter("id"));
+            List<Usuario> usuarios;
+            List<Usuario> usuariosCompradores = new ArrayList<>();
+
+            if (filtroNombre == null || filtroNombre.isEmpty()) {
+                usuarios = this.grupoFacade.findById(strId);
+            } else {
+                usuarios = this.grupoFacade.findByIdAndNombre(strId, filtroNombre);
             }
-            request.getRequestDispatcher("WEB-INF/jsp/crearEditarGrupo.jsp").forward(request, response);
+
+            request.setAttribute("usuarios", usuarios);
+            request.getRequestDispatcher("WEB-INF/jsp/participantesGrupoEditar.jsp").forward(request, response);   
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
