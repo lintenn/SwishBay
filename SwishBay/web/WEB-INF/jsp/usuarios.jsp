@@ -65,6 +65,7 @@
                     <th>DOMICILIO</th>
                     <th>NACIMIENTO</th>
                     <th>SEXO</th>
+                    <th>TIPO</th>
                     <th>SALDO</th>
                     <th></th>
                     <th></th>
@@ -82,6 +83,7 @@
                 <td><%= usuario.getDomicilio()%></td>
                 <td><%= strFechaNacimiento %></td>
                 <td><%= usuario.getSexo()%></td>
+                <td><%= (usuario.getTipoUsuario().getTipo().equals("compradorvendedor")) ? "comprador/vendedor" : usuario.getTipoUsuario().getTipo() %></td>
                 <td><%= usuario.getSaldo()%></td>
                 <td><a href="UsuarioNuevoEditarServlet?id=<%= usuario.getId() %>" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
