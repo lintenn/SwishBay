@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import swishbay.entity.Usuario;
 import java.util.List;
-import javax.persistence.Query;
+import swishbay.entity.Producto;
 
 /**
  *

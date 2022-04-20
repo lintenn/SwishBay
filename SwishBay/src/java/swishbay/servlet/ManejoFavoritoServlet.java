@@ -1,28 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import swishbay.dao.ProductoFacade;
 import swishbay.dao.UsuarioFacade;
+import swishbay.entity.Producto;
 import swishbay.entity.Usuario;
 
 /**
- *
- * @author Luis
+ * Añade y elimina productos favoritos de un comprador.
+ * 
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "UsuarioBorrarServlet", urlPatterns = {"/UsuarioBorrarServlet"})
-public class UsuarioBorrarServlet extends SwishBayServlet {
-
+@WebServlet(name = "ManejoFavoritoServlet", urlPatterns = {"/ManejoFavoritoServlet"})
+public class ManejoFavoritoServlet extends SwishBayServlet {
+    
+    @EJB ProductoFacade productoFacade;
     @EJB UsuarioFacade usuarioFacade;
     
     /**
@@ -36,15 +35,33 @@ public class UsuarioBorrarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (super.comprobarAdminSession(request, response)) {        
-                        
+        
+        if(super.comprobarSession(request, response)){
+            
             String str = request.getParameter("id");
-
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
-
-            this.usuarioFacade.remove(usuario);
-
-            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
+            
+            if(str != null){
+                Producto producto = productoFacade.find(Integer.parseInt(str));
+                
+                HttpSession session = request.getSession();
+                Usuario usuario = (Usuario)session.getAttribute("usuario");
+                List<Producto> favoritos = usuario.getProductoList();
+                
+                if(favoritos.contains(producto)){
+                    favoritos.remove(producto);
+                }else{
+                    favoritos.add(producto);
+                }
+                
+                usuario.setProductoList(favoritos);
+                
+                usuarioFacade.edit(usuario);
+                
+                session.setAttribute("usuario", usuario);
+                
+                response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+                //request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
+            }
         }
     }
 

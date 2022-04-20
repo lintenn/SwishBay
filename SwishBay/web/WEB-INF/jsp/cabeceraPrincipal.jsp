@@ -1,7 +1,7 @@
 <%-- 
     Document   : cabeceraPrincipal
     Created on : 12-abr-2022, 20:29:59
-    Author     : Linten
+    Author     : Luis
 --%>
 
 <%@page import="swishbay.entity.Usuario"%>
@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <%
     Usuario user = (Usuario)session.getAttribute("usuario");
-    String home = "ProductoServlet";
+    String home = "UsuarioServlet";
     if (user == null) {
         response.sendRedirect(request.getContextPath());
     } else {
@@ -18,20 +18,23 @@
         } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
             home = "ProductoServlet";
         } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-            home = "prueba.jsp";
+            home = "UsuarioCompradorServlet";
         }
     }
 %>
+
 <header class="mb-auto">
     <div>
         <a href="<%= home %>">
-            <img class="float-md-start mb-0" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_white.png" alt="" width="120" height="50">
+            <img class="float-md-start mb-3" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_white.png" alt="" width="15%" height="15%"/>
         </a>
-        <nav class="nav nav-masthead justify-content-center float-md-end">
-            <a class="nav-link active" aria-current="page" href="<%= home %>">Home</a>
-            <a class="nav-link" href="/">Features</a>
-            <a class="nav-link" href="/">Contact</a>
-            <a class="nav-link" href="LogoutServlet">Cerrar sesión</a>
+        <nav class="nav nav-masthead navbar-dark justify-content-center float-md-end">
+            <span class="navbar-text me-2">
+                Bienvenido/a, <%= user.getNombre() %> <%= user.getApellidos() %>
+            </span>
+              <div class="nav-item">
+                <a class="nav-link link-light active" href="LogoutServlet">Cerrar sesión</a>
+              </div>
         </nav>
     </div>
 </header>

@@ -13,7 +13,7 @@
 <%
     Usuario user = (Usuario) session.getAttribute("usuario");
     List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
-    String goTo = "RegisterServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
+    String goTo = "UsuarioGuardarServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
     
     String status = (String) request.getAttribute("status");
     //session.removeAttribute("status");
@@ -25,7 +25,7 @@
         } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
             redirectTo = "ProductoServlet";
         } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-            redirectTo = "prueba.jsp";
+            redirectTo = "UsuarioCompradorServlet";
         }
         response.sendRedirect(request.getContextPath() + "/" + redirectTo);
     }
@@ -35,7 +35,7 @@
         fechaNacimiento = user.getFechaNacimiento()+"";
         nombre = user.getNombre();
         email = user.getCorreo();
-        apellidos = user.getApellidos();       
+        apellidos = user.getApellidos();   
         sexo = user.getSexo();
     }*/
 %>

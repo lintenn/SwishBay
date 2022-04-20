@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package swishbay.servlet;
 
@@ -13,18 +12,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Usuario;
+import swishbay.dao.GrupoFacade;
+import swishbay.entity.Grupo;
 
 /**
  *
- * @author Luis
+ * @author angel
  */
-@WebServlet(name = "UsuarioBorrarServlet", urlPatterns = {"/UsuarioBorrarServlet"})
-public class UsuarioBorrarServlet extends SwishBayServlet {
+@WebServlet(name = "GrupoBorrarServlet", urlPatterns = {"/GrupoBorrarServlet"})
+public class GrupoBorrarServlet extends HttpServlet {
 
-    @EJB UsuarioFacade usuarioFacade;
-    
+    @EJB GrupoFacade grupoFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,16 +34,14 @@ public class UsuarioBorrarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (super.comprobarAdminSession(request, response)) {        
-                        
+        
             String str = request.getParameter("id");
 
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
+            Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
 
-            this.usuarioFacade.remove(usuario);
+            this.grupoFacade.remove(grupo);
 
-            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
-        }
+            response.sendRedirect(request.getContextPath() + "/GrupoServlet");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

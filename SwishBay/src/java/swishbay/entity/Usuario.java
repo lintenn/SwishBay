@@ -51,6 +51,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "SALDO")
     private Double saldo;
 

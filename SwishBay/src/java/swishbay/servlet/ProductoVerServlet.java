@@ -1,30 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Usuario;
+import swishbay.dao.ProductoFacade;
+import swishbay.entity.Producto;
 
 /**
- *
- * @author Luis
+ * Muestra los datos de un producto.
+ * 
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "UsuarioBorrarServlet", urlPatterns = {"/UsuarioBorrarServlet"})
-public class UsuarioBorrarServlet extends SwishBayServlet {
-
-    @EJB UsuarioFacade usuarioFacade;
+@WebServlet(name = "ProductoVerServlet", urlPatterns = {"/ProductoVerServlet"})
+public class ProductoVerServlet extends SwishBayServlet {
     
+    @EJB ProductoFacade productoFacade;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,15 +30,15 @@ public class UsuarioBorrarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (super.comprobarAdminSession(request, response)) {        
-                        
-            String str = request.getParameter("id");
-
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
-
-            this.usuarioFacade.remove(usuario);
-
-            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
+        
+        if(super.comprobarSession(request, response)){
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            Producto producto = (Producto)productoFacade.findByID(id);
+            
+            request.setAttribute("producto", producto);
+            
+            request.getRequestDispatcher("WEB-INF/jsp/productover.jsp").forward(request, response);
         }
     }
 

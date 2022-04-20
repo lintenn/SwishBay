@@ -222,7 +222,7 @@ public class UsuarioGuardarServlet extends HttpServlet {
             if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
                 redirectTo = "ProductoServlet";
             } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
-                redirectTo = "prueba.jsp";
+                redirectTo = "UsuarioCompradorServlet";
             }
             response.sendRedirect(request.getContextPath() + "/" + redirectTo);
                 

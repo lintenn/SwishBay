@@ -5,9 +5,11 @@
  */
 package swishbay.dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import swishbay.entity.Grupo;
 
 /**
@@ -27,6 +29,13 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
 
     public GrupoFacade() {
         super(Grupo.class);
+    }
+    
+    public List<Grupo> findByNombre (String nombre) {
+        Query q;
+        q = this.getEntityManager().createQuery("select g from Grupo g where g.nombre like :nombre");
+        q.setParameter("nombre", '%' + nombre +'%');
+        return q.getResultList();
     }
     
 }

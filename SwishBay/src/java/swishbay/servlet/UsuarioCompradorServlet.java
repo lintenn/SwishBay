@@ -1,12 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,13 +18,12 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author Luis
+ * @author angel
  */
-@WebServlet(name = "UsuarioBorrarServlet", urlPatterns = {"/UsuarioBorrarServlet"})
-public class UsuarioBorrarServlet extends SwishBayServlet {
+@WebServlet(name = "UsuarioCompradorServlet", urlPatterns = {"/UsuarioCompradorServlet"})
+public class UsuarioCompradorServlet extends SwishBayServlet {
 
     @EJB UsuarioFacade usuarioFacade;
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,16 +35,18 @@ public class UsuarioBorrarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (super.comprobarAdminSession(request, response)) {        
-                        
-            String str = request.getParameter("id");
+        
+            String filtroNombre = request.getParameter("filtro");
+            List<Usuario> usuarios = null;
 
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
+            if (filtroNombre == null || filtroNombre.isEmpty()) {
+                usuarios = this.usuarioFacade.findAll();        
+            } else {
+                usuarios = this.usuarioFacade.findByNombre(filtroNombre);
+            }
 
-            this.usuarioFacade.remove(usuario);
-
-            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
-        }
+            request.setAttribute("usuarios", usuarios);
+            request.getRequestDispatcher("WEB-INF/jsp/usuariosCompradores.jsp").forward(request, response);   
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
