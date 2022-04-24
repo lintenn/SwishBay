@@ -14,11 +14,11 @@
     
     if (user != null) {
         String goTo = "ProductoServlet";
-        if (user.getTipoUsuario().getTipo().equals("administrador")) {
+        if (user.getRol().getNombre().equals("administrador")) {
             goTo = "UsuarioServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+        } else if (user.getRol().getNombre().equals("compradorvendedor")) {
             goTo = "ProductoServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+        } else if (user.getRol().getNombre().equals("marketing")) {
             goTo = "UsuarioCompradorServlet";
         }
         response.sendRedirect(request.getContextPath() + "/" + goTo);

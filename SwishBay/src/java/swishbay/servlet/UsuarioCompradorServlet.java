@@ -44,7 +44,7 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
             if (filtroNombre == null || filtroNombre.isEmpty()) {
                 usuarios = this.usuarioFacade.findAll();
                 for (Usuario usuario : usuarios){
-                    if(usuario.getTipoUsuario().getTipo().equals("compradorvendedor")){
+                    if(usuario.getRol().getNombre().equals("compradorvendedor")){
                         usuariosCompradores.add(usuario);
                     }
                 }

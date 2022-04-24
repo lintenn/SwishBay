@@ -54,7 +54,7 @@ public class ProductoGuardarServlet extends HttpServlet {
         }
         
 
-        if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
+        if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
             Producto p;
             String strId,str, status=null;
             strId= request.getParameter("id");

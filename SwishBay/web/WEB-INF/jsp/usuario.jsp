@@ -135,21 +135,21 @@
                     </div>
                 </div>
                 <%
-                    String strTipo = usuario==null? "":usuario.getTipoUsuario().getTipo();
+                    String strTipo = usuario==null? "":usuario.getRol().getNombre();
                 %>
                 <br/>
                 <label for="inputTipo" class="form-label">Tipo de usuario:</label>
                 <div class="d-flex align-center justify-content-center">
                     <div class="form-check mx-1">
-                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getTipoUsuario().getTipo().equals("administrador")? "checked":"") %> required=""/>
+                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getRol().getNombre().equals("administrador")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="administrador">Administrador</label>
                     </div>
                     <div class="form-check mx-1">
-                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getTipoUsuario().getTipo().equals("compradorvendedor")? "checked":"") %> required=""/>
+                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getRol().getNombre().equals("compradorvendedor")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="compradorvendedor">Comprador/Vendedor</label>
                     </div>
                     <div class="form-check mx-1">
-                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getTipoUsuario().getTipo().equals("marketing")? "checked":"") %> required=""/>
+                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getRol().getNombre().equals("marketing")? "checked":"") %> required=""/>
                       <label class="form-check-label" for="marketing">Marketing</label>
                     </div>
                 </div>

@@ -68,11 +68,11 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("usuario", user);
             //session.setAttribute("tipoUsuario", tipoUsuario);
             
-            if (user.getTipoUsuario().getTipo().equals("administrador")) {
+            if (user.getRol().getNombre().equals("administrador")) {
                 goTo = "UsuarioServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+            } else if (user.getRol().getNombre().equals("compradorvendedor")) {
                 goTo = "ProductoServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+            } else if (user.getRol().getNombre().equals("marketing")) {
                 goTo = "UsuarioCompradorServlet";
             }
             

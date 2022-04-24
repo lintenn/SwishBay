@@ -48,10 +48,10 @@ public abstract class SwishBayServlet extends HttpServlet {
         if (user == null) {
             response.sendRedirect(request.getContextPath());
             return false;
-        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+        } else if (user.getRol().getNombre().equals("compradorvendedor")) {
             response.sendRedirect(request.getContextPath() + "/ProductoServlet");
             return false;
-        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+        } else if (user.getRol().getNombre().equals("marketing")) {
             response.sendRedirect(request.getContextPath() + "/UsuarioCompradorServlet");
             return false;
         } else {
