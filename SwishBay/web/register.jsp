@@ -20,11 +20,11 @@
     
     if (user != null) {
         String redirectTo = "ProductoServlet";
-        if (user.getTipoUsuario().getTipo().equals("administrador")) {
+        if (user.getRol().getNombre().equals("administrador")) {
             redirectTo = "UsuarioServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+        } else if (user.getRol().getNombre().equals("compradorvendedor")) {
             redirectTo = "ProductoServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+        } else if (user.getRol().getNombre().equals("marketing")) {
             redirectTo = "UsuarioCompradorServlet";
         }
         response.sendRedirect(request.getContextPath() + "/" + redirectTo);

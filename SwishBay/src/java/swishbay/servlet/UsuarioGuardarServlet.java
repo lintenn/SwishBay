@@ -52,7 +52,7 @@ public class UsuarioGuardarServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Usuario user = (Usuario)session.getAttribute("usuario");
         
-        if (user == null || user.getTipoUsuario().getTipo().equals("administrador")) {
+        if (user == null || user.getRol().getNombre().equals("administrador")) {
             
             String strId, strTipoUsuario, strSaldo;
             String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "ProductoServlet";
@@ -219,9 +219,9 @@ public class UsuarioGuardarServlet extends HttpServlet {
         } else {
             
             String redirectTo = "ProductoServlet";
-            if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+            if (user.getRol().getNombre().equals("compradorvendedor")) {
                 redirectTo = "ProductoServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+            } else if (user.getRol().getNombre().equals("marketing")) {
                 redirectTo = "UsuarioCompradorServlet";
             }
             response.sendRedirect(request.getContextPath() + "/" + redirectTo);
