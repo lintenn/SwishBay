@@ -110,6 +110,15 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
         return q.getResultList(); 
+    }*/
+    
+    public List<Producto> findFavoritosByFiltro(String filtroNombre, String filtroCategoria, int usuario) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p"
+                + " JOIN p.usuarioList u where p. = u.id and u.id = :id");
+        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("id", usuario);
+        return q.getResultList(); 
     }
-    */
 }
