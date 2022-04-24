@@ -5,17 +5,16 @@
  */
 package swishbay.dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import swishbay.entity.Usuario;
-import java.util.List;
-import swishbay.entity.Producto;
 
 /**
  *
- * @author migue
+ * @author Luis
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
@@ -65,4 +64,5 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         q.setParameter("nombre", '%' + nombre +'%');
         return q.getResultList();
     }
+    
 }
