@@ -66,6 +66,7 @@
                 
                 <div class="form-group row justify-content-md-center mt-2">
                   <div class="col-sm-10">
+                    <a href="ParticipantesGrupoEditarServlet<%=id%>" class="btn btn-lg btn-success fw-bold border-white mx-2"><%= grupo==null? "Añadir participantes": "Modificar participantes" %></a>
                     <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2"><%= grupo==null? "Añadir": "Modificar" %></button>
                     <a href="GrupoServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
                   </div>

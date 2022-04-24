@@ -6,6 +6,8 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,17 +15,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
+import swishbay.dao.UsuarioFacade;
+import swishbay.entity.Usuario;
 
 /**
  *
  * @author angel
  */
-@WebServlet(name = "GrupoNuevoEditarServlet", urlPatterns = {"/GrupoNuevoEditarServlet"})
-public class GrupoNuevoEditarServlet extends SwishBayServlet {
+@WebServlet(name = "ParticipantesGrupoAnadirServlet", urlPatterns = {"/ParticipantesGrupoAnadirServlet"})
+public class ParticipantesGrupoAnadirServlet extends HttpServlet {
 
     @EJB GrupoFacade grupoFacade;
-    
+    @EJB UsuarioFacade usuarioFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,12 +39,34 @@ public class GrupoNuevoEditarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-            String str = request.getParameter("id");
-            if (str != null && !str.isEmpty()) {
-                Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
-                request.setAttribute("grupo", grupo);
+            String filtroNombre = request.getParameter("filtro");
+            Integer strId = Integer.parseInt(request.getParameter("id"));
+            List<Usuario> usuarios;
+            List<Usuario> usuariosGrupo;
+            List<Usuario> usuariosCompradores = new ArrayList<>();
+
+            if (filtroNombre == null || filtroNombre.isEmpty()) {
+                usuariosGrupo = this.grupoFacade.findById(strId);
+                usuarios = this.usuarioFacade.findAll();
+                for (Usuario usuario : usuarios){
+                    if(usuario.getTipoUsuario().getTipo().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
+                        usuariosCompradores.add(usuario);
+                    }
+                }
+                usuarios = usuariosCompradores;
+            } else {
+                usuariosGrupo = this.grupoFacade.findByIdAndNombre(strId, filtroNombre);
+                usuarios = this.usuarioFacade.findByNombre(filtroNombre);
+                for (Usuario usuario : usuarios){
+                    if(usuario.getTipoUsuario().getTipo().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
+                        usuariosCompradores.add(usuario);
+                    }
+                }
+                usuarios = usuariosCompradores;
             }
-            request.getRequestDispatcher("WEB-INF/jsp/crearEditarGrupo.jsp").forward(request, response);
+
+            request.setAttribute("usuarios", usuarios);
+            request.getRequestDispatcher("WEB-INF/jsp/participantesGrupoAnadir.jsp").forward(request, response);   
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
