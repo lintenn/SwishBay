@@ -6,6 +6,7 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -37,11 +38,20 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
             throws ServletException, IOException {
         
             String filtroNombre = request.getParameter("filtro");
-            List<Usuario> usuarios = null;
+            List<Usuario> usuarios;
+            List<Usuario> usuariosCompradores = new ArrayList<>();
 
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                usuarios = this.usuarioFacade.findAll();        
+                usuarios = this.usuarioFacade.findAll();
+                for (Usuario usuario : usuarios){
+                    if(usuario.getTipoUsuario().getTipo().equals("compradorvendedor")){
+                        usuariosCompradores.add(usuario);
+                    }
+                }
+                usuarios = usuariosCompradores;
             } else {
+                System.out.println(filtroNombre);
+                System.out.println(this.usuarioFacade.findByNombre(filtroNombre));
                 usuarios = this.usuarioFacade.findByNombre(filtroNombre);
             }
 

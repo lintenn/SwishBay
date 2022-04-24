@@ -95,11 +95,9 @@
                       <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
                       <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
                       <div class="row justify-content-center pb-2 px-0">
-                        <% if(producto.getEnPuja()==0){
-                        %>
-                        <a href="EnPujaNuevoServlet?id=<%=producto.getId()%>" class="btn btn-primary col-5" style="width: 100px">Crear puja</a>
-                        <% }
-                        %>
+                        
+                        <a href="EnPujaNuevoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5" style="width: 100px"> <%= producto.getEnPuja()==0 ?  "Crear puja" : "Ver puja" %></a>
+                        
                         <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
                         <a href="ProductoBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2">
                             <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">

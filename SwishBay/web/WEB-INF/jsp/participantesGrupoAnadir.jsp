@@ -1,6 +1,6 @@
 <%-- 
-    Document   : usuariosCompradores
-    Created on : 16 abr 2022, 1:58:16
+    Document   : participantesGrupoAñadir
+    Created on : 20 abr 2022, 21:21:54
     Author     : angel
 --%>
 
@@ -18,6 +18,9 @@
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     </head>
+    <%
+        Integer strId = Integer.parseInt(request.getParameter("id"));
+    %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <jsp:include page="cabeceraPrincipal.jsp" />
@@ -25,16 +28,11 @@
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="UsuarioCompradorServlet">Panel de usuarios compradores</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="GrupoServlet">Panel de grupos</a>
-                    </li>
-                    
-                  </ul>
-                  <form method="post" class="d-flex" action="UsuarioCompradorServlet">
+                <%
+                    String id = "";
+                    id = "?id="+strId;
+                %>
+                  <form method="post" class="d-flex" action="ParticipantesGrupoAnadirServlet<%=id%>">
                     <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
@@ -58,6 +56,7 @@
                     <th>NACIMIENTO</th>
                     <th>SEXO</th>
                     <th>SALDO</th>
+                    <th></th>
                 </tr>
             <%
                 List<Usuario> usuarios = (List)request.getAttribute("usuarios");
@@ -74,6 +73,13 @@
                 <td><%= strFechaNacimiento %></td>
                 <td><%= usuario.getSexo()%></td>
                 <td><%= usuario.getSaldo()%></td>
+                <td>
+                    <a href="ParticipanteAnadirGrupoServlet<%=id%>&&idUsuario=<%=usuario.getId()%>" class="btn btn-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                        </svg>
+                    </a>
+                </td>
             </tr>
 
             <%
@@ -86,6 +92,18 @@
             <%
                 }
             %>
+            
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+                
+            <div class="form-group row justify-content-md-center mt-2">
+                <div class="col-sm-10">
+                    <a href="ParticipantesGrupoEditarServlet<%=id%>" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Volver</a>
+                </div>
+            </div>
             
             </main>
             

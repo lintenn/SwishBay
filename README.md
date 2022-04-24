@@ -53,8 +53,8 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un personal de marketing debe poder **buscar y aplicar filtrados** de búsqueda sobre los usuarios compradores del sistema. :heavy_check_mark:
 - Un personal de marketing debe poder crear grupos (también llamadas *listas*) de usuarios. :heavy_check_mark:
 - Un personal de marketing debe poder modificar sus grupos creados (como su nombre). :heavy_check_mark:
-- Un personal de marketing debe poder añadir usuarios a sus grupos creados.
-- Un personal de marketing debe poder eliminar usuarios de sus grupos creados.
+- Un personal de marketing debe poder añadir usuarios a sus grupos creados. :heavy_check_mark:
+- Un personal de marketing debe poder eliminar usuarios de sus grupos creados. :heavy_check_mark:
 - Un personal de marketing debe poder eliminar sus grupos creados. :heavy_check_mark:
 - Un personal de marketing debe poder consultar los mensajes de grupos de usuarios. ❔
 - Un personal de marketing debe poder enviar mensajes a sus grupos de usuarios.
