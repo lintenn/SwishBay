@@ -12,7 +12,7 @@ import swishbay.entity.RolUsuario;
 
 /**
  *
- * @author migue
+ * @author Luis
  */
 @Stateless
 public class RolUsuarioFacade extends AbstractFacade<RolUsuario> {
