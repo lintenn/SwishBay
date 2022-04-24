@@ -56,7 +56,7 @@ public class EnPujaGuardarServlet extends HttpServlet {
             System.err.println(e.getMessage());
         }
         
-        if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
+        if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
             Producto p;
             
             String strId,str, status= null;

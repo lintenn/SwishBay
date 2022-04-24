@@ -49,7 +49,7 @@ public class ParticipantesGrupoAnadirServlet extends HttpServlet {
                 usuariosGrupo = this.grupoFacade.findById(strId);
                 usuarios = this.usuarioFacade.findAll();
                 for (Usuario usuario : usuarios){
-                    if(usuario.getTipoUsuario().getTipo().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
+                    if(usuario.getRol().getNombre().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
                         usuariosCompradores.add(usuario);
                     }
                 }
@@ -58,7 +58,7 @@ public class ParticipantesGrupoAnadirServlet extends HttpServlet {
                 usuariosGrupo = this.grupoFacade.findByIdAndNombre(strId, filtroNombre);
                 usuarios = this.usuarioFacade.findByNombre(filtroNombre);
                 for (Usuario usuario : usuarios){
-                    if(usuario.getTipoUsuario().getTipo().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
+                    if(usuario.getRol().getNombre().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
                         usuariosCompradores.add(usuario);
                     }
                 }

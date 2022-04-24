@@ -21,6 +21,6 @@
     </head>
     <body>
         <h1>¡Bienvenido, <%= user.getNombre() + " " + user.getApellidos() %>!</h1>
-        <p>Eres <%= user.getTipoUsuario().getTipo() %></p>
+        <p>Eres <%= user.getRol().getNombre() %></p>
     </body>
 </html>
