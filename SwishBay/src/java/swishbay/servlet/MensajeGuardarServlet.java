@@ -6,18 +6,17 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import swishbay.dao.MensajeFacade;
+import swishbay.entity.Mensaje;
 import swishbay.dao.GrupoFacade;
 import swishbay.entity.Grupo;
 import swishbay.entity.Usuario;
@@ -26,9 +25,10 @@ import swishbay.entity.Usuario;
  *
  * @author angel
  */
-@WebServlet(name = "GrupoGuardarServlet", urlPatterns = {"/GrupoGuardarServlet"})
-public class GrupoGuardarServlet extends HttpServlet {
-    
+@WebServlet(name = "MensajeGuardarServlet", urlPatterns = {"/MensajeGuardarServlet"})
+public class MensajeGuardarServlet extends HttpServlet {
+
+    @EJB MensajeFacade mensajeFacade;
     @EJB GrupoFacade grupoFacade;
     
     /**
@@ -45,26 +45,34 @@ public class GrupoGuardarServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
             Usuario user = (Usuario)session.getAttribute("usuario");
-            String nombre, goTo = "GrupoServlet", strId;
+            String asunto, contenido, goTo = "GrupoVerMensajeServlet", strId, strIdGrupo;
 
             strId = request.getParameter("id");
-            Grupo newGroup = null;
+            strIdGrupo = request.getParameter("idGrupo");
+            goTo += "?id="+strIdGrupo;
+            Mensaje newMensaje = null;
             
-            nombre = request.getParameter("nombre");
+            asunto = request.getParameter("asunto");
+            contenido = request.getParameter("contenido");
             
             if(strId == null || strId.isEmpty()){
-                newGroup = new Grupo();
+                newMensaje = new Mensaje();
+                Grupo grupo = this.grupoFacade.find(Integer.parseInt(strIdGrupo));
+                newMensaje.setGrupo(grupo);
+                newMensaje.setMarketing(user);
+                newMensaje.setFecha(new Date());
+                newMensaje.setUsuarioList(new ArrayList<Usuario>());
             } else {
-                newGroup = this.grupoFacade.find(Integer.parseInt(strId));
+                newMensaje = this.mensajeFacade.find(Integer.parseInt(strId));
             }
                
-            newGroup.setNombre(nombre);
-            newGroup.setMarketing(user);
+            newMensaje.setAsunto(asunto);
+            newMensaje.setContenido(contenido);
                
             if(strId == null || strId.isEmpty()){
-                grupoFacade.create(newGroup);
+                mensajeFacade.create(newMensaje);
             } else {
-                grupoFacade.edit(newGroup);   
+                mensajeFacade.edit(newMensaje);   
             }
 
             response.sendRedirect(request.getContextPath() + "/" + goTo); 
