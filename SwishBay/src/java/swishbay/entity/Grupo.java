@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author migue
+ * @author Linten
  */
 @Entity
 @Table(name = "GRUPO")
@@ -52,7 +52,7 @@ public class Grupo implements Serializable {
     @JoinColumn(name = "MARKETING", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Usuario marketing;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupo1")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupo")
     private List<Mensaje> mensajeList;
 
     public Grupo() {

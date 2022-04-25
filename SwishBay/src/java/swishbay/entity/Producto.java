@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author migue
+ * @author Linten
  */
 @Entity
 @Table(name = "PRODUCTO")
@@ -43,7 +43,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Producto.findByTitulo", query = "SELECT p FROM Producto p WHERE p.titulo = :titulo")
     , @NamedQuery(name = "Producto.findByPrecioSalida", query = "SELECT p FROM Producto p WHERE p.precioSalida = :precioSalida")
     , @NamedQuery(name = "Producto.findByFinPuja", query = "SELECT p FROM Producto p WHERE p.finPuja = :finPuja")
-    , @NamedQuery(name = "Producto.findByFoto", query = "SELECT p FROM Producto p WHERE p.foto = :foto")
     , @NamedQuery(name = "Producto.findByEnPuja", query = "SELECT p FROM Producto p WHERE p.enPuja = :enPuja")})
 public class Producto implements Serializable {
 
@@ -66,12 +65,11 @@ public class Producto implements Serializable {
     @NotNull
     @Column(name = "PRECIO_SALIDA")
     private double precioSalida;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "FIN_PUJA")
     @Temporal(TemporalType.DATE)
     private Date finPuja;
-    @Size(max = 150)
+    @Lob
+    @Size(max = 2147483647)
     @Column(name = "FOTO")
     private String foto;
     @Basic(optional = false)
@@ -99,11 +97,10 @@ public class Producto implements Serializable {
         this.id = id;
     }
 
-    public Producto(Integer id, String titulo, double precioSalida, Date finPuja, short enPuja) {
+    public Producto(Integer id, String titulo, double precioSalida, short enPuja) {
         this.id = id;
         this.titulo = titulo;
         this.precioSalida = precioSalida;
-        this.finPuja = finPuja;
         this.enPuja = enPuja;
     }
 
