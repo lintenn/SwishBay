@@ -16,7 +16,6 @@
     String goTo = "UsuarioGuardarServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
     
     String status = (String) request.getAttribute("status");
-    //session.removeAttribute("status");
     
     if (user != null) {
         String redirectTo = "ProductoServlet";
@@ -30,14 +29,6 @@
         response.sendRedirect(request.getContextPath() + "/" + redirectTo);
     }
     
-    /*if(user!=null){
-        goTo = "ModificarPerfil?Id="+user.getId()+"";
-        fechaNacimiento = user.getFechaNacimiento()+"";
-        nombre = user.getNombre();
-        email = user.getCorreo();
-        apellidos = user.getApellidos();   
-        sexo = user.getSexo();
-    }*/
 %>
 
 <html lang="en">
@@ -196,12 +187,6 @@
                 
             <% } %>
             
-            <!--
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
-                    <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
-                </div>
-            -->
             <br/>
             <nav class="botones">
                 <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Registrarse"/>
