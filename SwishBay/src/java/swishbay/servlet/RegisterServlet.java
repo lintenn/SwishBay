@@ -27,10 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import swishbay.dao.CategoriaFacade;
-import swishbay.dao.TipoUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
 import swishbay.entity.Categoria;
-import swishbay.entity.TipoUsuario;
 import swishbay.entity.Usuario;
 import swishbay.service.UsuarioService;
 
@@ -42,7 +40,6 @@ import swishbay.service.UsuarioService;
 public class RegisterServlet extends HttpServlet {
 
     @EJB UsuarioFacade usuarioFacade;
-    @EJB TipoUsuarioFacade tipoUsuarioFacade;
     @EJB CategoriaFacade categoriaFacade;
     @EJB UsuarioService usuarioService;
     
@@ -147,8 +144,8 @@ public class RegisterServlet extends HttpServlet {
                                  
            //newUser.setTipoUsuario(tipoUsuario); // no actualiza la bd
            
-           TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),"compradorvendedor");
-           tipoUsuarioFacade.create(tipoUsuario);
+           //TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),"compradorvendedor");
+           //tipoUsuarioFacade.create(tipoUsuario);
            
            session.setAttribute("usuario", newUser);
            

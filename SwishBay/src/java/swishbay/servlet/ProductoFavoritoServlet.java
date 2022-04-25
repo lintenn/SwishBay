@@ -58,7 +58,8 @@ public class ProductoFavoritoServlet extends ProductosServlet {
 
         @Override
     protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
-        return usuario.getProductoList();
+        //return usuario.getProductoList();
+        return productoFacade.findFavoritosByFiltro("", "", 5);
     }
     
     @Override

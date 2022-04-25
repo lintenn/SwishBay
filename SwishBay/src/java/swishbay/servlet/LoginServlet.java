@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.TipoUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
-import swishbay.entity.TipoUsuario;
 import swishbay.entity.Usuario;
 import swishbay.service.UsuarioService;
 
@@ -30,7 +28,6 @@ import swishbay.service.UsuarioService;
 public class LoginServlet extends HttpServlet {
 
     @EJB UsuarioFacade usuarioFacade;
-    @EJB TipoUsuarioFacade tipoUsuarioFacade;
     @EJB UsuarioService usuarioService;
     
     /**
@@ -68,11 +65,11 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("usuario", user);
             //session.setAttribute("tipoUsuario", tipoUsuario);
             
-            if (user.getTipoUsuario().getTipo().equals("administrador")) {
+            if (user.getRol().getNombre().equals("administrador")) {
                 goTo = "UsuarioServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+            } else if (user.getRol().getNombre().equals("compradorvendedor")) {
                 goTo = "ProductoServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+            } else if (user.getRol().getNombre().equals("marketing")) {
                 goTo = "UsuarioCompradorServlet";
             }
             

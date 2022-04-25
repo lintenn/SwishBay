@@ -47,7 +47,7 @@ public class ProductoBorrarServlet extends HttpServlet {
             System.err.println(e.getMessage());
         }
         
-        if(user!=null && user.getTipoUsuario().getTipo().equals("compradorvendedor")){
+        if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
             String str = request.getParameter("id");
             Producto p = this.pf.find(Integer.parseInt(str));
             

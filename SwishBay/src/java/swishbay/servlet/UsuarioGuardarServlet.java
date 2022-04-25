@@ -20,10 +20,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import swishbay.dao.CategoriaFacade;
-import swishbay.dao.TipoUsuarioFacade;
+import swishbay.dao.RolUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
 import swishbay.entity.Categoria;
-import swishbay.entity.TipoUsuario;
+import swishbay.entity.RolUsuario;
 import swishbay.entity.Usuario;
 
 /**
@@ -35,7 +35,7 @@ public class UsuarioGuardarServlet extends HttpServlet {
 
     @EJB UsuarioFacade usuarioFacade;
     @EJB CategoriaFacade categoriaFacade;
-    @EJB TipoUsuarioFacade tipoUsuarioFacade;
+    @EJB RolUsuarioFacade rolUsuarioFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,7 +52,7 @@ public class UsuarioGuardarServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Usuario user = (Usuario)session.getAttribute("usuario");
         
-        if (user == null || user.getTipoUsuario().getTipo().equals("administrador")) {
+        if (user == null || user.getRol().getNombre().equals("administrador")) {
             
             String strId, strTipoUsuario, strSaldo;
             String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "ProductoServlet";
@@ -151,6 +151,21 @@ public class UsuarioGuardarServlet extends HttpServlet {
                
                if (strSaldo != null && !strSaldo.isEmpty()) saldo = Double.parseDouble(strSaldo);
                newUser.setSaldo(saldo);
+               
+               RolUsuario rol;
+               if (strTipoUsuario == null || strTipoUsuario.isEmpty()) { // Crear usuario a registrar
+                   //TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),"compradorvendedor");
+                   //tipoUsuarioFacade.create(tipoUsuario);
+                   rol = rolUsuarioFacade.findByNombre("compradorvendedor");
+                   
+               } else {                                 // Crear/editar usuario desde panel administrador
+                   //TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),strTipoUsuario);
+                   //tipoUsuarioFacade.create(tipoUsuario);
+                   rol = rolUsuarioFacade.findByNombre(strTipoUsuario);
+                   
+               } 
+               newUser.setRol(rol);
+               
                // Faltarían las categorias...
 
                if (strId == null || strId.isEmpty()) {    // Crear nuevo usuario
@@ -190,20 +205,6 @@ public class UsuarioGuardarServlet extends HttpServlet {
                     //newUser.setCategoriaList(categoriaList); // no actualiza la bd
 
                }
-
-               //newUser.setTipoUsuario(tipoUsuario); // no actualiza la bd
-
-               if (strTipoUsuario == null || strTipoUsuario.isEmpty()) { // Crear usuario a registrar
-                   TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),"compradorvendedor");
-                   tipoUsuarioFacade.create(tipoUsuario);
-               } else if (strId == null || strId.isEmpty()) {           // Crear usuario desde panel administrador
-                   TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),strTipoUsuario);
-                   tipoUsuarioFacade.create(tipoUsuario);
-               } else {                                                 // Editar usuario
-                   TipoUsuario tipoUsuario = this.tipoUsuarioFacade.find(newUser.getId());
-                   tipoUsuario.setTipo(strTipoUsuario);
-                   tipoUsuarioFacade.edit(tipoUsuario);
-               }
                
                if (user == null) {              // Registro de compradorvendedor
                    session.setAttribute("usuario", newUser);
@@ -219,9 +220,9 @@ public class UsuarioGuardarServlet extends HttpServlet {
         } else {
             
             String redirectTo = "ProductoServlet";
-            if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+            if (user.getRol().getNombre().equals("compradorvendedor")) {
                 redirectTo = "ProductoServlet";
-            } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+            } else if (user.getRol().getNombre().equals("marketing")) {
                 redirectTo = "UsuarioCompradorServlet";
             }
             response.sendRedirect(request.getContextPath() + "/" + redirectTo);

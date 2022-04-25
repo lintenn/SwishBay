@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import swishbay.entity.Grupo;
+import swishbay.entity.Usuario;
 
 /**
  *
@@ -35,6 +36,28 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         Query q;
         q = this.getEntityManager().createQuery("select g from Grupo g where g.nombre like :nombre");
         q.setParameter("nombre", '%' + nombre +'%');
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findById (Integer id) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Grupo g JOIN g.usuarioList u where g.id = :id");
+        q.setParameter("id", id);
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByIdAndNombre (Integer id, String nombre) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Grupo g JOIN g.usuarioList u where g.id = :id and u.nombre like :nombre");
+        q.setParameter("id", id);
+        q.setParameter("nombre", '%' + nombre +'%');
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByIdNotAre (Integer id) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Grupo g JOIN g.usuarioList ug where g.id = :id and u.nombre like :nombre");
+        q.setParameter("id", id);
         return q.getResultList();
     }
     

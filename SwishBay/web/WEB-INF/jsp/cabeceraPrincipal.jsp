@@ -13,11 +13,11 @@
     if (user == null) {
         response.sendRedirect(request.getContextPath());
     } else {
-        if (user.getTipoUsuario().getTipo().equals("administrador")) {
+        if (user.getRol().getNombre().equals("administrador")) {
             home = "UsuarioServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+        } else if (user.getRol().getNombre().equals("compradorvendedor")) {
             home = "ProductoServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+        } else if (user.getRol().getNombre().equals("marketing")) {
             home = "UsuarioCompradorServlet";
         }
     }

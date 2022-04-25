@@ -16,28 +16,19 @@
     String goTo = "UsuarioGuardarServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
     
     String status = (String) request.getAttribute("status");
-    //session.removeAttribute("status");
     
     if (user != null) {
         String redirectTo = "ProductoServlet";
-        if (user.getTipoUsuario().getTipo().equals("administrador")) {
+        if (user.getRol().getNombre().equals("administrador")) {
             redirectTo = "UsuarioServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("compradorvendedor")) {
+        } else if (user.getRol().getNombre().equals("compradorvendedor")) {
             redirectTo = "ProductoServlet";
-        } else if (user.getTipoUsuario().getTipo().equals("marketing")) {
+        } else if (user.getRol().getNombre().equals("marketing")) {
             redirectTo = "UsuarioCompradorServlet";
         }
         response.sendRedirect(request.getContextPath() + "/" + redirectTo);
     }
     
-    /*if(user!=null){
-        goTo = "ModificarPerfil?Id="+user.getId()+"";
-        fechaNacimiento = user.getFechaNacimiento()+"";
-        nombre = user.getNombre();
-        email = user.getCorreo();
-        apellidos = user.getApellidos();   
-        sexo = user.getSexo();
-    }*/
 %>
 
 <html lang="en">
@@ -196,12 +187,6 @@
                 
             <% } %>
             
-            <!--
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
-                    <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
-                </div>
-            -->
             <br/>
             <nav class="botones">
                 <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Registrarse"/>

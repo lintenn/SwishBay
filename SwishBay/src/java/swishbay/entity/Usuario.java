@@ -18,10 +18,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author migue
+ * @author Luis
  */
 @Entity
 @Table(name = "USUARIO")
@@ -47,14 +47,32 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByDomicilio", query = "SELECT u FROM Usuario u WHERE u.domicilio = :domicilio")
     , @NamedQuery(name = "Usuario.findByFechaNacimiento", query = "SELECT u FROM Usuario u WHERE u.fechaNacimiento = :fechaNacimiento")
     , @NamedQuery(name = "Usuario.findBySexo", query = "SELECT u FROM Usuario u WHERE u.sexo = :sexo")
-    , @NamedQuery(name = "Usuario.findByCiudad", query = "SELECT u FROM Usuario u WHERE u.ciudad = :ciudad")})
+    , @NamedQuery(name = "Usuario.findByCiudad", query = "SELECT u FROM Usuario u WHERE u.ciudad = :ciudad")
+    , @NamedQuery(name = "Usuario.findBySaldo", query = "SELECT u FROM Usuario u WHERE u.saldo = :saldo")})
 public class Usuario implements Serializable {
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "SALDO")
-    private Double saldo;
+    @JoinTable(name = "FAVORITO", joinColumns = {
+        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "PRODUCTO", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<Producto> productoList;
+    @JoinTable(name = "GRUPOCOMPRADOR", joinColumns = {
+        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "GRUPO", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<Grupo> grupoList;
+    @ManyToMany(mappedBy = "usuarioList")
+    private List<Categoria> categoriaList;
+    @OneToMany(mappedBy = "comprador")
+    private List<Producto> productoList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vendedor")
+    private List<Producto> productoList2;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marketing")
+    private List<Grupo> grupoList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Puja> pujaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Mensaje> mensajeList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -96,30 +114,13 @@ public class Usuario implements Serializable {
     @Size(max = 45)
     @Column(name = "CIUDAD")
     private String ciudad;
-    @JoinTable(name = "FAVORITO", joinColumns = {
-        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "PRODUCTO", referencedColumnName = "ID")})
-    @ManyToMany
-    private List<Producto> productoList;
-    @JoinTable(name = "GRUPOCOMPRADOR", joinColumns = {
-        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "GRUPO", referencedColumnName = "ID")})
-    @ManyToMany
-    private List<Grupo> grupoList;
-    @ManyToMany(mappedBy = "usuarioList")
-    private List<Categoria> categoriaList;
-    @OneToMany(mappedBy = "comprador")
-    private List<Producto> productoList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vendedor")
-    private List<Producto> productoList2;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private TipoUsuario tipoUsuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marketing")
-    private List<Grupo> grupoList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<Puja> pujaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<Mensaje> mensajeList;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "SALDO")
+    private double saldo;
+    @JoinColumn(name = "ROL", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private RolUsuario rol;
 
     public Usuario() {
     }
@@ -128,13 +129,14 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String correo, String password, String nombre, String apellidos, Date fechaNacimiento) {
+    public Usuario(Integer id, String correo, String password, String nombre, String apellidos, Date fechaNacimiento, double saldo) {
         this.id = id;
         this.correo = correo;
         this.password = password;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
+        this.saldo = saldo;
     }
 
     public Integer getId() {
@@ -209,6 +211,47 @@ public class Usuario implements Serializable {
         this.ciudad = ciudad;
     }
 
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public RolUsuario getRol() {
+        return rol;
+    }
+
+    public void setRol(RolUsuario rol) {
+        this.rol = rol;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Usuario)) {
+            return false;
+        }
+        Usuario other = (Usuario) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "swishbay.entity.Usuario[ id=" + id + " ]";
+    }
+
     @XmlTransient
     public List<Producto> getProductoList() {
         return productoList;
@@ -254,14 +297,6 @@ public class Usuario implements Serializable {
         this.productoList2 = productoList2;
     }
 
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
     @XmlTransient
     public List<Grupo> getGrupoList1() {
         return grupoList1;
@@ -287,39 +322,6 @@ public class Usuario implements Serializable {
 
     public void setMensajeList(List<Mensaje> mensajeList) {
         this.mensajeList = mensajeList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
-            return false;
-        }
-        Usuario other = (Usuario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "swishbay.entity.Usuario[ id=" + id + " ]";
-    }
-
-    public Double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
     }
     
 }
