@@ -9,7 +9,6 @@
 
 <%
     String status = (String) request.getAttribute("status");
-    //session.removeAttribute("status");
     Usuario user = (Usuario) session.getAttribute("usuario");
     
     if (user != null) {

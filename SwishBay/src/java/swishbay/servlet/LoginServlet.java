@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.TipoUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
-import swishbay.entity.TipoUsuario;
 import swishbay.entity.Usuario;
 import swishbay.service.UsuarioService;
 
@@ -30,7 +28,6 @@ import swishbay.service.UsuarioService;
 public class LoginServlet extends HttpServlet {
 
     @EJB UsuarioFacade usuarioFacade;
-    @EJB TipoUsuarioFacade tipoUsuarioFacade;
     @EJB UsuarioService usuarioService;
     
     /**
