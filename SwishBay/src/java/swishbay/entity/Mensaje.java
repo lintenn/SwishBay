@@ -7,12 +7,16 @@ package swishbay.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,25 +26,28 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author migue
+ * @author Linten
  */
 @Entity
 @Table(name = "MENSAJE")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Mensaje.findAll", query = "SELECT m FROM Mensaje m")
-    , @NamedQuery(name = "Mensaje.findByMarketing", query = "SELECT m FROM Mensaje m WHERE m.mensajePK.marketing = :marketing")
-    , @NamedQuery(name = "Mensaje.findByGrupo", query = "SELECT m FROM Mensaje m WHERE m.mensajePK.grupo = :grupo")
+    , @NamedQuery(name = "Mensaje.findById", query = "SELECT m FROM Mensaje m WHERE m.id = :id")
     , @NamedQuery(name = "Mensaje.findByAsunto", query = "SELECT m FROM Mensaje m WHERE m.asunto = :asunto")
     , @NamedQuery(name = "Mensaje.findByFecha", query = "SELECT m FROM Mensaje m WHERE m.fecha = :fecha")})
 public class Mensaje implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected MensajePK mensajePK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "ID")
+    private Integer id;
     @Size(max = 150)
     @Column(name = "ASUNTO")
     private String asunto;
@@ -53,35 +60,33 @@ public class Mensaje implements Serializable {
     @Column(name = "FECHA")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @JoinColumn(name = "GRUPO", referencedColumnName = "ID", insertable = false, updatable = false)
+    @ManyToMany(mappedBy = "mensajeList")
+    private List<Usuario> usuarioList;
+    @JoinColumn(name = "GRUPO", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Grupo grupo1;
-    @JoinColumn(name = "MARKETING", referencedColumnName = "ID", insertable = false, updatable = false)
+    private Grupo grupo;
+    @JoinColumn(name = "MARKETING", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Usuario usuario;
+    private Usuario marketing;
 
     public Mensaje() {
     }
 
-    public Mensaje(MensajePK mensajePK) {
-        this.mensajePK = mensajePK;
+    public Mensaje(Integer id) {
+        this.id = id;
     }
 
-    public Mensaje(MensajePK mensajePK, Date fecha) {
-        this.mensajePK = mensajePK;
+    public Mensaje(Integer id, Date fecha) {
+        this.id = id;
         this.fecha = fecha;
     }
 
-    public Mensaje(int marketing, int grupo) {
-        this.mensajePK = new MensajePK(marketing, grupo);
+    public Integer getId() {
+        return id;
     }
 
-    public MensajePK getMensajePK() {
-        return mensajePK;
-    }
-
-    public void setMensajePK(MensajePK mensajePK) {
-        this.mensajePK = mensajePK;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getAsunto() {
@@ -108,26 +113,35 @@ public class Mensaje implements Serializable {
         this.fecha = fecha;
     }
 
-    public Grupo getGrupo1() {
-        return grupo1;
+    @XmlTransient
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
     }
 
-    public void setGrupo1(Grupo grupo1) {
-        this.grupo1 = grupo1;
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Grupo getGrupo() {
+        return grupo;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public Usuario getMarketing() {
+        return marketing;
+    }
+
+    public void setMarketing(Usuario marketing) {
+        this.marketing = marketing;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (mensajePK != null ? mensajePK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -138,7 +152,7 @@ public class Mensaje implements Serializable {
             return false;
         }
         Mensaje other = (Mensaje) object;
-        if ((this.mensajePK == null && other.mensajePK != null) || (this.mensajePK != null && !this.mensajePK.equals(other.mensajePK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -146,7 +160,7 @@ public class Mensaje implements Serializable {
 
     @Override
     public String toString() {
-        return "swishbay.entity.Mensaje[ mensajePK=" + mensajePK + " ]";
+        return "swishbay.entity.Mensaje[ id=" + id + " ]";
     }
     
 }

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author migue
+ * @author Linten
  */
 @Entity
 @Table(name = "ROL_USUARIO")
@@ -35,9 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "RolUsuario.findById", query = "SELECT r FROM RolUsuario r WHERE r.id = :id")
     , @NamedQuery(name = "RolUsuario.findByNombre", query = "SELECT r FROM RolUsuario r WHERE r.nombre = :nombre")})
 public class RolUsuario implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rol")
-    private List<Usuario> usuarioList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,6 +47,8 @@ public class RolUsuario implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "NOMBRE")
     private String nombre;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rol")
+    private List<Usuario> usuarioList;
 
     public RolUsuario() {
     }
@@ -79,6 +78,15 @@ public class RolUsuario implements Serializable {
         this.nombre = nombre;
     }
 
+    @XmlTransient
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
+    }
+
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -102,15 +110,6 @@ public class RolUsuario implements Serializable {
     @Override
     public String toString() {
         return "swishbay.entity.RolUsuario[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public List<Usuario> getUsuarioList() {
-        return usuarioList;
-    }
-
-    public void setUsuarioList(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
     }
     
 }

@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Luis
+ * @author Linten
  */
 @Entity
 @Table(name = "USUARIO")
@@ -50,29 +50,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByCiudad", query = "SELECT u FROM Usuario u WHERE u.ciudad = :ciudad")
     , @NamedQuery(name = "Usuario.findBySaldo", query = "SELECT u FROM Usuario u WHERE u.saldo = :saldo")})
 public class Usuario implements Serializable {
-
-    @JoinTable(name = "FAVORITO", joinColumns = {
-        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "PRODUCTO", referencedColumnName = "ID")})
-    @ManyToMany
-    private List<Producto> productoList;
-    @JoinTable(name = "GRUPOCOMPRADOR", joinColumns = {
-        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "GRUPO", referencedColumnName = "ID")})
-    @ManyToMany
-    private List<Grupo> grupoList;
-    @ManyToMany(mappedBy = "usuarioList")
-    private List<Categoria> categoriaList;
-    @OneToMany(mappedBy = "comprador")
-    private List<Producto> productoList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vendedor")
-    private List<Producto> productoList2;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marketing")
-    private List<Grupo> grupoList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<Puja> pujaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<Mensaje> mensajeList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -118,9 +95,36 @@ public class Usuario implements Serializable {
     @NotNull
     @Column(name = "SALDO")
     private double saldo;
+    @JoinTable(name = "FAVORITO", joinColumns = {
+        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "PRODUCTO", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<Producto> productoList;
+    @JoinTable(name = "GRUPOCOMPRADOR", joinColumns = {
+        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "GRUPO", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<Grupo> grupoList;
+    @JoinTable(name = "MENSAJECOMPRADOR", joinColumns = {
+        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "MENSAJE", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<Mensaje> mensajeList;
+    @ManyToMany(mappedBy = "usuarioList")
+    private List<Categoria> categoriaList;
+    @OneToMany(mappedBy = "comprador")
+    private List<Producto> productoList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vendedor")
+    private List<Producto> productoList2;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marketing")
+    private List<Grupo> grupoList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Puja> pujaList;
     @JoinColumn(name = "ROL", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private RolUsuario rol;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marketing")
+    private List<Mensaje> mensajeList1;
 
     public Usuario() {
     }
@@ -219,39 +223,6 @@ public class Usuario implements Serializable {
         this.saldo = saldo;
     }
 
-    public RolUsuario getRol() {
-        return rol;
-    }
-
-    public void setRol(RolUsuario rol) {
-        this.rol = rol;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
-            return false;
-        }
-        Usuario other = (Usuario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "swishbay.entity.Usuario[ id=" + id + " ]";
-    }
-
     @XmlTransient
     public List<Producto> getProductoList() {
         return productoList;
@@ -268,6 +239,15 @@ public class Usuario implements Serializable {
 
     public void setGrupoList(List<Grupo> grupoList) {
         this.grupoList = grupoList;
+    }
+
+    @XmlTransient
+    public List<Mensaje> getMensajeList() {
+        return mensajeList;
+    }
+
+    public void setMensajeList(List<Mensaje> mensajeList) {
+        this.mensajeList = mensajeList;
     }
 
     @XmlTransient
@@ -315,13 +295,46 @@ public class Usuario implements Serializable {
         this.pujaList = pujaList;
     }
 
-    @XmlTransient
-    public List<Mensaje> getMensajeList() {
-        return mensajeList;
+    public RolUsuario getRol() {
+        return rol;
     }
 
-    public void setMensajeList(List<Mensaje> mensajeList) {
-        this.mensajeList = mensajeList;
+    public void setRol(RolUsuario rol) {
+        this.rol = rol;
+    }
+
+    @XmlTransient
+    public List<Mensaje> getMensajeList1() {
+        return mensajeList1;
+    }
+
+    public void setMensajeList1(List<Mensaje> mensajeList1) {
+        this.mensajeList1 = mensajeList1;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Usuario)) {
+            return false;
+        }
+        Usuario other = (Usuario) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "swishbay.entity.Usuario[ id=" + id + " ]";
     }
     
 }
