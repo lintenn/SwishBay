@@ -6,31 +6,23 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
-import swishbay.entity.Usuario;
+import swishbay.dao.MensajeFacade;
+import swishbay.entity.Mensaje;
 
 /**
  *
  * @author angel
  */
-@WebServlet(name = "GrupoGuardarServlet", urlPatterns = {"/GrupoGuardarServlet"})
-public class GrupoGuardarServlet extends HttpServlet {
-    
-    @EJB GrupoFacade grupoFacade;
-    
+@WebServlet(name = "MensajeBorrarServlet", urlPatterns = {"/MensajeBorrarServlet"})
+public class MensajeBorrarServlet extends HttpServlet {
+
+    @EJB MensajeFacade mensajeFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,33 +34,15 @@ public class GrupoGuardarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+            String str = request.getParameter("id");
+            String strGrupo = request.getParameter("idGrupo");
 
-            HttpSession session = request.getSession();
-            Usuario user = (Usuario)session.getAttribute("usuario");
-            String nombre, goTo = "GrupoServlet", strId;
+            Mensaje mensaje = this.mensajeFacade.find(Integer.parseInt(str));
 
-            strId = request.getParameter("id");
-            Grupo newGroup = null;
-            
-            nombre = request.getParameter("nombre");
-            
-            if(strId == null || strId.isEmpty()){
-                newGroup = new Grupo();
-            } else {
-                newGroup = this.grupoFacade.find(Integer.parseInt(strId));
-            }
-               
-            newGroup.setNombre(nombre);
-            newGroup.setMarketing(user);
-               
-            if(strId == null || strId.isEmpty()){
-                grupoFacade.create(newGroup);
-            } else {
-                grupoFacade.edit(newGroup);   
-            }
+            this.mensajeFacade.remove(mensaje);
 
-            response.sendRedirect(request.getContextPath() + "/" + goTo); 
-            
+            response.sendRedirect(request.getContextPath() + "/GrupoVerMensajeServlet?id="+strGrupo);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
