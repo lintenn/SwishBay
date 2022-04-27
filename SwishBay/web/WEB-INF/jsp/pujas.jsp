@@ -81,15 +81,13 @@
             <main class="row d-flex justify-content-center mt-4">
 
                 <%
-                    int i = 0;
+                    
                     Usuario user = (Usuario) session.getAttribute("usuario");
                     Double p=null;
                     
                     Collections.reverse(productos);
 
                     for (Producto producto : productos) {
-                        if (producto.getVendedor().equals(user) && producto.getEnPuja() == 1) {
-                            i++;
 
                             String str = DateFormat.getDateInstance(DateFormat.SHORT).format(producto.getFinPuja());
                             p=producto.getPrecioSalida();
@@ -132,9 +130,9 @@
                 </div>
 
                 <%
-                        }
+                        
                     }
-                    if (i == 0) {
+                    if (productos == null || productos.isEmpty()) {
                 %>
                 <div class="py-5">    
                     Lista de productos vacía.
