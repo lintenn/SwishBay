@@ -25,7 +25,7 @@ import swishbay.entity.Usuario;
  * @author galop
  */
 @WebServlet(name = "ProductosVendidosServlet", urlPatterns = {"/ProductosVendidosServlet"})
-public class ProductosVendidosServlet extends HttpServlet {
+public class ProductosVendidosServlet extends SwishBayServlet {
 
     @EJB ProductoFacade pf;
     @EJB CategoriaFacade cf;
@@ -41,45 +41,40 @@ public class ProductosVendidosServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             
-        Usuario user=null;
-        try{
-            HttpSession session = request.getSession();
-            user = (Usuario) session.getAttribute("usuario");
+        if (super.comprobarSession(request, response)) {
+            Usuario user = (Usuario)request.getSession().getAttribute("usuario");
+        
 
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-        }
-        
-        String filtroNombre = request.getParameter("filtro");
-        String filtroCategoria = request.getParameter("filtroCategoria");
-        List<Producto> productos = null;
-        List<Categoria> categorias= cf.findAll();
-        
-        if(filtroNombre == null || filtroNombre.isEmpty()){
-            if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                productos = pf.findAll();
-                
+            String filtroNombre = request.getParameter("filtro");
+            String filtroCategoria = request.getParameter("filtroCategoria");
+            List<Object[]> productos = null;
+            List<Categoria> categorias= cf.findAll();
+
+            if(filtroNombre == null || filtroNombre.isEmpty()){
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                    productos = pf.findVendidosAUser(user);
+
+                }else{
+                    productos= pf.findVendidosAUserFiltered(user, filtroCategoria);
+
+                }
             }else{
-                productos= pf.findAll(filtroCategoria);
-                
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                    productos = pf.findVendidosAUserByNombre(user, filtroNombre);
+
+                }else{
+                    productos = pf.findVendidosAUserByNombreFiltered(user, filtroNombre,filtroCategoria);
+
+                }   
             }
-        }else{
-            if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                productos = pf.findByNombre(filtroNombre);
-                
-            }else{
-                productos = pf.findByNombre(filtroNombre,filtroCategoria);
-               
-            }   
+
+            request.setAttribute("productos", productos);
+            request.setAttribute("user", user);
+            request.setAttribute("categorias", categorias);
+            request.setAttribute("selected", filtroCategoria);
+            request.getRequestDispatcher("WEB-INF/jsp/productosVendidos.jsp").forward(request, response);
+
         }
-        
-        request.setAttribute("productos", productos);
-        request.setAttribute("user", user);
-        request.setAttribute("categorias", categorias);
-        request.setAttribute("selected", filtroCategoria);
-        request.getRequestDispatcher("WEB-INF/jsp/productosVendidos.jsp").forward(request, response);
-        
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
