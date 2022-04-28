@@ -4,11 +4,11 @@
     Author     : Luis
 --%>
 
-<%@page import="swishbay.entity.Usuario"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    Usuario user = (Usuario)session.getAttribute("usuario");
+    UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
     String home = "UsuarioServlet";
     if (user == null) {
         response.sendRedirect(request.getContextPath());

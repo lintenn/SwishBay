@@ -6,18 +6,14 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
 import swishbay.service.UsuarioService;
 
 /**
@@ -26,8 +22,7 @@ import swishbay.service.UsuarioService;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
-
-    @EJB UsuarioFacade usuarioFacade;
+    
     @EJB UsuarioService usuarioService;
     
     /**
@@ -47,14 +42,7 @@ public class LoginServlet extends HttpServlet {
         password = request.getParameter("password");
         //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);
         
-        Usuario user = null;
-        //TipoUsuario tipoUsuario = null;
-        
-        try {
-            user = usuarioFacade.comprobarUsuario(correo, password);
-        } catch(EJBException ex){
-            user = null;
-        }
+        UsuarioDTO user = this.usuarioService.comprobarCredenciales(correo, password);
         
         HttpSession session = request.getSession();
         if (user == null) {
@@ -63,7 +51,6 @@ public class LoginServlet extends HttpServlet {
            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             session.setAttribute("usuario", user);
-            //session.setAttribute("tipoUsuario", tipoUsuario);
             
             if (user.getRol().getNombre().equals("administrador")) {
                 goTo = "UsuarioServlet";

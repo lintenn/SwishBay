@@ -38,4 +38,11 @@ public class CategoriaFacade extends AbstractFacade<Categoria> {
         return q.getResultList();
     }
     
+    public List<Categoria> findByUsuario (Integer id) {
+        Query q;
+        q = this.getEntityManager().createQuery("select c from Categoria c JOIN c.usuarioList u WHERE u.id = :id");
+        q.setParameter("id", id);
+        return q.getResultList();
+    }
+    
 }

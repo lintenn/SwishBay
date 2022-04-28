@@ -6,18 +6,16 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Usuario;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.CategoriaService;
+import swishbay.service.UsuarioService;
 
 /**
  *
@@ -25,9 +23,9 @@ import swishbay.entity.Usuario;
  */
 @WebServlet(name = "UsuarioNuevoEditarServlet", urlPatterns = {"/UsuarioNuevoEditarServlet"})
 public class UsuarioNuevoEditarServlet extends SwishBayServlet {
-
-    @EJB CategoriaFacade categoriaFacade;
-    @EJB UsuarioFacade usuarioFacade;
+    
+    @EJB CategoriaService categoriaService;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,14 +40,16 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
             throws ServletException, IOException {
 
         if (super.comprobarAdminSession(request, response)) {
-            List<Categoria> categorias = this.categoriaFacade.findAll();
+            List<CategoriaDTO> categorias = this.categoriaService.listarCategorias();
             
             request.setAttribute("categorias", categorias);
             
             String str = request.getParameter("id");
             if (str != null && !str.isEmpty()) {
-                Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
+                UsuarioDTO usuario = this.usuarioService.buscarUsuario(Integer.parseInt(str));
                 request.setAttribute("usuario", usuario);
+                List<CategoriaDTO> categoriasPreferidas = this.categoriaService.listarCategoriasPreferidas(usuario.getId());
+                request.setAttribute("categoriasPreferidas", categoriasPreferidas);
             }
             
             request.getRequestDispatcher("WEB-INF/jsp/usuario.jsp").forward(request, response);
