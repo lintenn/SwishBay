@@ -6,6 +6,7 @@
 package swishbay.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -29,6 +30,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.PujaDTO;
 
 /**
  *
@@ -225,6 +228,31 @@ public class Producto implements Serializable {
     @Override
     public String toString() {
         return "swishbay.entity.Producto[ id=" + id + " ]";
+    }
+    
+    public ProductoDTO toDTO () {
+        ProductoDTO dto = new ProductoDTO();
+        
+        dto.setId(id);
+        dto.setTitulo(titulo);
+        dto.setDescripcion(descripcion);
+        dto.setFinPuja(finPuja);
+        dto.setPrecioSalida(precioSalida);
+        dto.setFoto(foto);
+        dto.setEnPuja(enPuja);
+        if(comprador!=null)
+            dto.setComprador(comprador.toDTO());
+        dto.setVendedor(vendedor.toDTO());
+        List<PujaDTO> listaDTO = null;
+        if (pujaList != null) {
+            listaDTO = new ArrayList<>();
+            for (Puja puja : pujaList) {
+                listaDTO.add(puja.toDTO());
+            }
+        }
+        dto.setPujaList(listaDTO);
+        
+        return dto;
     }
     
 }
