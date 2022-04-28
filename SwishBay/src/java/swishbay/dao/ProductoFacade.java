@@ -157,25 +157,25 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    public List<Producto> findEnPujaFiltered(Usuario user, String filtroCategoria) {
+    public List<Object[]> findEnPujaFiltered(Usuario user, String filtroCategoria) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.vendedor= :user and p.categoria.nombre like :filtroCategoria and p.enPuja = 1");
+        q = this.getEntityManager().createQuery("select p, MAX(pu.precio) from Producto p LEFT JOIN p.pujaList pu where p.categoria.nombre like :filtroCategoria and p.enPuja=1 and p.vendedor= :user GROUP BY p");
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("user", user);
         return q.getResultList(); 
     }
     
-    public List<Producto> findEnPujaByNombre(Usuario user, String filtroNombre) {
+    public List<Object[]> findEnPujaByNombre(Usuario user, String filtroNombre) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.vendedor= :user and p.titulo like :titulo and p.enPuja = 1");
+        q = this.getEntityManager().createQuery("select p, MAX(pu.precio) from Producto p LEFT JOIN p.pujaList pu where p.titulo like :titulo and p.enPuja=1 and p.vendedor= :user GROUP BY p");
         q.setParameter("titulo",  '%' + filtroNombre + '%');
         q.setParameter("user", user);
         return q.getResultList(); 
     }
     
-    public List<Producto> findEnPujaByNombreFiltered(Usuario user, String filtroNombre, String filtroCategoria) {
+    public List<Object[]> findEnPujaByNombreFiltered(Usuario user, String filtroNombre, String filtroCategoria) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.vendedor= :user and p.categoria.nombre like :filtroCategoria and p.enPuja = 1");
+        q = this.getEntityManager().createQuery("select p, MAX(pu.precio) from Producto p LEFT JOIN p.pujaList pu where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.enPuja=1 and p.vendedor= :user GROUP BY p");
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("titulo", '%' + filtroNombre + '%');
         q.setParameter("user", user);

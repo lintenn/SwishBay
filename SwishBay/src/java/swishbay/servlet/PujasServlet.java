@@ -53,15 +53,15 @@ public class PujasServlet extends SwishBayServlet {
                     productos = pf.findEnPuja(user);
 
                 }else{
-                    //productos= pf.findEnPujaFiltered(user,filtroCategoria);
+                    productos= pf.findEnPujaFiltered(user,filtroCategoria);
 
                 }
             }else{
                 if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    //productos = pf.findEnPujaByNombre(user,filtroNombre);
+                    productos = pf.findEnPujaByNombre(user,filtroNombre);
 
                 }else{
-                    //productos = pf.findEnPujaByNombreFiltered(user,filtroNombre,filtroCategoria);
+                    productos = pf.findEnPujaByNombreFiltered(user,filtroNombre,filtroCategoria);
 
                 }   
             }
