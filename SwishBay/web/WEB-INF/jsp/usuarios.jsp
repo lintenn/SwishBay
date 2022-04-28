@@ -4,9 +4,9 @@
     Author     : Luis, migue
 --%>
 
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
-<%@page import="swishbay.entity.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,6 +56,15 @@
                     <a href="UsuarioNuevoEditarServlet" class="btn btn-lg btn-secondary fw-bold border-white">Crear nuevo usuario</a>
                 </div>
                 
+            <%
+                List<UsuarioDTO> usuarios = (List)request.getAttribute("usuarios");
+                if (usuarios == null || usuarios.isEmpty() ) {
+            %>    
+            <h2>No hay usuarios.</h2>
+            <%
+                } else { 
+            %> 
+                
             <table class="table table-dark table-striped">
                 <tr>
                     <th>NOMBRE</th>
@@ -71,9 +80,8 @@
                     <th></th>
                 </tr>
             <%
-                List<Usuario> usuarios = (List)request.getAttribute("usuarios");
-                for (Usuario usuario : usuarios) {
-                    String strFechaNacimiento = DateFormat.getDateInstance(DateFormat.SHORT).format(usuario.getFechaNacimiento());
+                    for (UsuarioDTO usuario : usuarios) {
+                        String strFechaNacimiento = DateFormat.getDateInstance(DateFormat.SHORT).format(usuario.getFechaNacimiento());
             %>    
             <tr>
                 <td><%= usuario.getNombre()%></td>
@@ -102,9 +110,13 @@
             </tr>
 
             <%
-                }
+                    }
             %>
             </table>
+            
+            <%  
+                }
+            %>
             
             </main>
             

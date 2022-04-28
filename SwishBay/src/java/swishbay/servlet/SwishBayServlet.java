@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
 
 /**
  *
@@ -30,7 +30,7 @@ public abstract class SwishBayServlet extends HttpServlet {
     protected boolean comprobarSession (HttpServletRequest request, HttpServletResponse response) 
                 throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Usuario user = (Usuario)session.getAttribute("usuario");
+        UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
         if (user == null) {
             response.sendRedirect(request.getContextPath());
             return false;
@@ -43,7 +43,7 @@ public abstract class SwishBayServlet extends HttpServlet {
     protected boolean comprobarAdminSession (HttpServletRequest request, HttpServletResponse response)
                 throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Usuario user = (Usuario)session.getAttribute("usuario");
+        UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
         
         if (user == null) {
             response.sendRedirect(request.getContextPath());

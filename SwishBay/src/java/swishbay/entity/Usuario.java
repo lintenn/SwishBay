@@ -6,6 +6,7 @@
 package swishbay.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -29,10 +30,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.UsuarioDTO;
 
 /**
  *
- * @author Linten
+ * @author Luis
  */
 @Entity
 @Table(name = "USUARIO")
@@ -337,4 +340,30 @@ public class Usuario implements Serializable {
         return "swishbay.entity.Usuario[ id=" + id + " ]";
     }
     
+    public UsuarioDTO toDTO () {    
+        UsuarioDTO dto = new UsuarioDTO();
+        
+        dto.setApellidos(apellidos);
+        dto.setCiudad(ciudad);
+        dto.setCorreo(correo);
+        dto.setDomicilio(domicilio);
+        dto.setFechaNacimiento(fechaNacimiento);
+        dto.setId(id);
+        dto.setNombre(nombre);
+        dto.setPassword(password);
+        dto.setPassword(password);
+        dto.setRol(rol.toDTO());
+        dto.setSaldo(saldo);
+        dto.setSexo(sexo);
+        List<CategoriaDTO> listaDTO = null;
+        if (categoriaList != null) {
+            listaDTO = new ArrayList<>();
+            for (Categoria categoria : categoriaList) {
+                listaDTO.add(categoria.toDTO());
+            }
+        }
+        dto.setCategoriaList(listaDTO);
+                
+        return dto;        
+    }  
 }
