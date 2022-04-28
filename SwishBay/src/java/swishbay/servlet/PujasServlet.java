@@ -44,7 +44,7 @@ public class PujasServlet extends SwishBayServlet {
             Usuario user = (Usuario)request.getSession().getAttribute("usuario");
             String filtroNombre = request.getParameter("filtro");
             String filtroCategoria = request.getParameter("filtroCategoria");
-            List<Producto> productos = null;
+            List<Object[]> productos = null;
             List<Categoria> categorias= cf.findAll();
 
 
@@ -53,15 +53,15 @@ public class PujasServlet extends SwishBayServlet {
                     productos = pf.findEnPuja(user);
 
                 }else{
-                    productos= pf.findEnPujaFiltered(user,filtroCategoria);
+                    //productos= pf.findEnPujaFiltered(user,filtroCategoria);
 
                 }
             }else{
                 if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = pf.findEnPujaByNombre(user,filtroNombre);
+                    //productos = pf.findEnPujaByNombre(user,filtroNombre);
 
                 }else{
-                    productos = pf.findEnPujaByNombreFiltered(user,filtroNombre,filtroCategoria);
+                    //productos = pf.findEnPujaByNombreFiltered(user,filtroNombre,filtroCategoria);
 
                 }   
             }

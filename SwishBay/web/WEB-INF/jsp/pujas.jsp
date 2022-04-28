@@ -56,7 +56,8 @@
                                 <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">
 
                                     <%
-                                      List<Producto> productos = (List)request.getAttribute("productos");
+                                      List<Object[]> productosPrecio = (List)request.getAttribute("productos");
+                                      
                                       List<Categoria> categorias = (List) request.getAttribute("categorias");
                                       String filtroCategoria = (String) request.getAttribute("selected");
                                      %>
@@ -83,18 +84,12 @@
                 <%
                     
                     Usuario user = (Usuario) session.getAttribute("usuario");
-                    Double p=null;
-                    
-                    Collections.reverse(productos);
 
-                    for (Producto producto : productos) {
-
+                    for (Object[] prodPrecio : productosPrecio) {
+                            Producto producto = (Producto) prodPrecio[0];
+                            Double p = (Double) prodPrecio[1] == 0.0 ? producto.getPrecioSalida():(Double) prodPrecio[1];
                             String str = DateFormat.getDateInstance(DateFormat.SHORT).format(producto.getFinPuja());
-                            p=producto.getPrecioSalida();
-                            for (Puja puja: producto.getPujaList()){
-                                if(puja.getPrecio()>=p)
-                                    p=puja.getPrecio();
-                            }
+                            
                     
 
 
@@ -132,7 +127,7 @@
                 <%
                         
                     }
-                    if (productos == null || productos.isEmpty()) {
+                    if (productosPrecio == null || productosPrecio.isEmpty()) {
                 %>
                 <div class="py-5">    
                     Lista de productos vacía.

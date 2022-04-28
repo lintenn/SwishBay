@@ -142,9 +142,9 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    public List<Producto> findEnPuja(Usuario user) {
+    public List<Object[]> findEnPuja(Usuario user) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.vendedor= :user and p.enPuja = 1");
+        q = this.getEntityManager().createQuery("select p, MAX(pu.precio) from Producto p LEFT JOIN p.pujaList pu where p.enPuja=1 and p.vendedor= :user GROUP BY p");
         q.setParameter("user", user);
         return q.getResultList(); 
     }
