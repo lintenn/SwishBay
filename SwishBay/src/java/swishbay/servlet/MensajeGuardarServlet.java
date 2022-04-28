@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +20,7 @@ import swishbay.dao.MensajeFacade;
 import swishbay.entity.Mensaje;
 import swishbay.dao.GrupoFacade;
 import swishbay.entity.Grupo;
+import swishbay.dao.UsuarioFacade;
 import swishbay.entity.Usuario;
 
 /**
@@ -30,6 +32,7 @@ public class MensajeGuardarServlet extends HttpServlet {
 
     @EJB MensajeFacade mensajeFacade;
     @EJB GrupoFacade grupoFacade;
+    @EJB UsuarioFacade usuarioFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,10 +57,11 @@ public class MensajeGuardarServlet extends HttpServlet {
             
             asunto = request.getParameter("asunto");
             contenido = request.getParameter("contenido");
+            Grupo grupo = null;
             
             if(strId == null || strId.isEmpty()){
                 newMensaje = new Mensaje();
-                Grupo grupo = this.grupoFacade.find(Integer.parseInt(strIdGrupo));
+                grupo = this.grupoFacade.find(Integer.parseInt(strIdGrupo));
                 newMensaje.setGrupo(grupo);
                 newMensaje.setMarketing(user);
                 newMensaje.setFecha(new Date());
@@ -71,9 +75,17 @@ public class MensajeGuardarServlet extends HttpServlet {
                
             if(strId == null || strId.isEmpty()){
                 mensajeFacade.create(newMensaje);
+                for(Usuario usuario : grupo.getUsuarioList()){
+                    List<Mensaje> mensajeList = usuario.getMensajeList();
+                    mensajeList.add(newMensaje);
+                    usuario.setMensajeList(mensajeList);
+                    usuarioFacade.edit(usuario);
+                };
             } else {
                 mensajeFacade.edit(newMensaje);   
             }
+            
+            
 
             response.sendRedirect(request.getContextPath() + "/" + goTo); 
             
