@@ -51,7 +51,8 @@
                         <div class="col-sm-4">
                             <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">
                                 <%
-                                  List<Producto> productos = (List)request.getAttribute("productos");
+                                  List<Object[]> productosPrecio = (List<Object[]>) request.getAttribute("productos");
+                                  
                                   List<Categoria> categorias = (List) request.getAttribute("categorias");
                                   String filtroCategoria = (String) request.getAttribute("selected");
                                 %>
@@ -77,20 +78,14 @@
 
               <%
 
-                int i=0;
                 Usuario user = (Usuario) session.getAttribute("usuario");
-                
-                Collections.reverse(productos);
-                
-                for(Producto producto : productos){
-                    if(producto.getVendedor().equals(user) && producto.getComprador()!=null){
-                       String nombre= producto.getComprador().getNombre() + " " + producto.getComprador().getApellidos();
-                       i++;
-                       Double p=producto.getPrecioSalida();
-                        for (Puja puja: producto.getPujaList()){
-                             if(puja.getPrecio()>=p)
-                                 p=puja.getPrecio();
-                        }
+                       
+                for(Object[] prodPrecio : productosPrecio){
+                    Producto producto = (Producto) prodPrecio[0];
+                    Double p = (Double) prodPrecio[1];
+                   
+                    String nombre = producto.getComprador().getNombre() + " " + producto.getComprador().getApellidos();
+                    
             %>      
 
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
@@ -112,9 +107,9 @@
               </div>
             
             <%
-                    }
+                 
                 }
-                if(i==0){
+                if(productosPrecio==null || productosPrecio.isEmpty()){
             %>
             <div class="py-5">    
                 Lista de productos vacía.
