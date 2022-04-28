@@ -4,12 +4,12 @@
     Author     : Luis
 --%>
 
-<%@page import="swishbay.entity.Usuario"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
     String status = (String) request.getAttribute("status");
-    Usuario user = (Usuario) session.getAttribute("usuario");
+    UsuarioDTO user = (UsuarioDTO) session.getAttribute("usuario");
     
     if (user != null) {
         String goTo = "ProductoServlet";

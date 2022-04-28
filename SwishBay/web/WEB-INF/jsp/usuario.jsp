@@ -4,9 +4,9 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.dto.UsuarioDTO"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="swishbay.entity.Usuario"%>
-<%@page import="swishbay.entity.Categoria"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -21,9 +21,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     </head>
     <%
-        List<Categoria> categorias = (List)request.getAttribute("categorias");
+        List<CategoriaDTO> categorias = (List)request.getAttribute("categorias");
+        List<CategoriaDTO> categoriasPreferidas = (List)request.getAttribute("categoriasPreferidas");
         
-        Usuario usuario = (Usuario)request.getAttribute("usuario");
+        UsuarioDTO usuario = (UsuarioDTO)request.getAttribute("usuario");
         String status = (String) request.getAttribute("status");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
@@ -157,9 +158,10 @@
                 <br/>
                 <label for="inputCategory" class="form-label">Categorías preferidas:</label>
                 <%
-                    for (Categoria categoria : categorias) {
+                    
+                    for (CategoriaDTO categoria : categorias) {
                         String checked = "";
-                        if (usuario != null && !categoria.getUsuarioList().isEmpty() && categoria.getUsuarioList().contains(usuario)) {
+                        if (usuario != null && categoriasPreferidas != null && categoriasPreferidas.contains(categoria)) { // && usuario.categoriaList != null && usuario.categoriaList.contains(categoria)) {
                             checked = "checked";
                         }
                 %>

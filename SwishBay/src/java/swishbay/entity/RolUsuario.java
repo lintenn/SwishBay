@@ -22,10 +22,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.RolUsuarioDTO;
 
 /**
  *
- * @author Linten
+ * @author Luis
  */
 @Entity
 @Table(name = "ROL_USUARIO")
@@ -110,6 +111,15 @@ public class RolUsuario implements Serializable {
     @Override
     public String toString() {
         return "swishbay.entity.RolUsuario[ id=" + id + " ]";
+    }
+
+    public RolUsuarioDTO toDTO() {
+        RolUsuarioDTO dto = new RolUsuarioDTO();
+        
+        dto.setId(id);
+        dto.setNombre(nombre);
+        
+        return dto;
     }
     
 }
