@@ -351,11 +351,10 @@ public class Usuario implements Serializable {
         dto.setId(id);
         dto.setNombre(nombre);
         dto.setPassword(password);
-        dto.setPassword(password);
         dto.setRol(rol.toDTO());
         dto.setSaldo(saldo);
         dto.setSexo(sexo);
-        List<CategoriaDTO> listaDTO = null;
+        /*List<CategoriaDTO> listaDTO = null;
         if (categoriaList != null) {
             listaDTO = new ArrayList<>();
             for (Categoria categoria : categoriaList) {
@@ -363,7 +362,7 @@ public class Usuario implements Serializable {
             }
         }
         dto.setCategoriaList(listaDTO);
-                
+          */      
         return dto;        
     }  
 }

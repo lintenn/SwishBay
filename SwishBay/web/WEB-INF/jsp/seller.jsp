@@ -4,10 +4,10 @@
     Author     : galop
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
+<%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.util.Collections"%>
-<%@page import="swishbay.entity.Usuario"%>
-<%@page import="swishbay.entity.Producto"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -51,13 +51,13 @@
                         <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">
                             
                             <%
-                              List<Producto> productos = (List)request.getAttribute("productos");
-                              List<Categoria> categorias = (List) request.getAttribute("categorias");
+                              List<ProductoDTO> productos = (List)request.getAttribute("productos");
+                              List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
                               String filtroCategoria = (String) request.getAttribute("selected");
                              %>
                              <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
                              <%
-                              for (Categoria c:categorias){
+                              for (CategoriaDTO c:categorias){
                                 
                             %>     
                                 <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
@@ -76,10 +76,12 @@
             <main class="row d-flex justify-content-center mt-4">
 
               <%
-                int i=0;
-                Usuario user = (Usuario) session.getAttribute("usuario");
-                Collections.reverse (productos);
-                for(Producto producto : productos){
+                UsuarioDTO user = (UsuarioDTO) request.getAttribute("usuario");
+                //Collections.reverse (productos);
+                if(productos!=null)
+                    System.out.println(productos.size());
+                if(user!=null && productos!=null){
+                for(ProductoDTO producto : productos){
             %>      
 
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
@@ -111,7 +113,7 @@
               </div>
             
             <%
-                    
+                }
                 }
                 if(productos == null || productos.isEmpty()){
             %>

@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import swishbay.dto.PujaDTO;
 
 /**
  *
@@ -136,5 +137,17 @@ public class Puja implements Serializable {
     public String toString() {
         return "swishbay.entity.Puja[ pujaPK=" + pujaPK + " ]";
     }
+    
+    public PujaDTO toDTO () {    
+        PujaDTO dto = new PujaDTO();
+        
+        dto.setComprador(usuario.toDTO());
+        dto.setFecha(fecha);
+        dto.setPrecio(precio);
+        dto.setProducto(producto1.getId());
+        
+                
+        return dto;        
+    }  
     
 }

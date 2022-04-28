@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
             if (user.getRol().getNombre().equals("administrador")) {
                 goTo = "UsuarioServlet";
             } else if (user.getRol().getNombre().equals("compradorvendedor")) {
-                goTo = "ProductoServlet";
+                goTo = "SellerServlet";
             } else if (user.getRol().getNombre().equals("marketing")) {
                 goTo = "UsuarioCompradorServlet";
             }

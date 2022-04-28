@@ -13,11 +13,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.CategoriaService;
+import swishbay.service.SellerService;
+
 
 /**
  *
@@ -26,8 +27,8 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
 public class SellerServlet extends SwishBayServlet {
 
-    @EJB ProductoFacade productoFacade;
-    @EJB CategoriaFacade cf;
+    @EJB SellerService ss;
+    @EJB CategoriaService cs;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,34 +42,19 @@ public class SellerServlet extends SwishBayServlet {
             throws ServletException, IOException {
         
         if (super.comprobarSession(request, response)) {
-            Usuario user = (Usuario)request.getSession().getAttribute("usuario");
+            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
         
             String filtroNombre = request.getParameter("filtro");
             String filtroCategoria = request.getParameter("filtroCategoria");
-            List<Producto> productos = null;
-            List<Categoria> categorias= cf.findAll();
+            
+            List<CategoriaDTO> categorias = cs.listarCategorias();
 
-            if(filtroNombre == null || filtroNombre.isEmpty()){
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findVendidos(user);
-
-                }else{
-                    productos= productoFacade.findVendidosFiltered(user, filtroCategoria);
-
-                }
-            }else{
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findVendidosByNombre(user,filtroNombre);
-
-                }else{
-                    productos = productoFacade.findVendidosByNombreFiltered(user,filtroNombre,filtroCategoria);
-
-                }   
-            }
+            List<ProductoDTO> productos = ss.listarProductos(user, filtroNombre, filtroCategoria);
 
             request.setAttribute("productos", productos);
             request.setAttribute("categorias", categorias);
             request.setAttribute("selected", filtroCategoria);
+            request.setAttribute("usuario", user);
             
             if (user.getRol().getNombre().equals("administrador")) {
                 request.getRequestDispatcher("WEB-INF/jsp/productosAdmin.jsp").forward(request, response);
