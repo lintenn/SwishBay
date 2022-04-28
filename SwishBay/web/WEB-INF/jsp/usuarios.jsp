@@ -1,7 +1,7 @@
 <%-- 
     Document   : listado
     Created on : Mar 21, 2022, 11:58:59 AM
-    Author     : Luis, migue
+    Author     : Luis
 --%>
 
 <%@page import="swishbay.dto.UsuarioDTO"%>

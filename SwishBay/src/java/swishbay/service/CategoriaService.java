@@ -42,8 +42,8 @@ public class CategoriaService {
         return this.listaEntityADTO(lista);
     }
     
-    public List<CategoriaDTO> listarCategoriasPreferidas (Integer idUsuario) {
+    /*public List<CategoriaDTO> listarCategoriasPreferidas (Integer idUsuario) {
         List<Categoria> lista = this.categoriaFacade.findByUsuario(idUsuario);
         return this.listaEntityADTO(lista);
-    }
+    }*/
 }
