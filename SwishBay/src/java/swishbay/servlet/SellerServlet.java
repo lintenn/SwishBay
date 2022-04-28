@@ -50,18 +50,18 @@ public class SellerServlet extends SwishBayServlet {
 
             if(filtroNombre == null || filtroNombre.isEmpty()){
                 if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findAll();
+                    productos = productoFacade.findVendidos(user);
 
                 }else{
-                    productos= productoFacade.findAll(filtroCategoria);
+                    productos= productoFacade.findVendidosFiltered(user, filtroCategoria);
 
                 }
             }else{
                 if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
-                    productos = productoFacade.findByNombre(filtroNombre);
+                    productos = productoFacade.findVendidosByNombre(user,filtroNombre);
 
                 }else{
-                    productos = productoFacade.findByNombre(filtroNombre,filtroCategoria);
+                    productos = productoFacade.findVendidosByNombreFiltered(user,filtroNombre,filtroCategoria);
 
                 }   
             }

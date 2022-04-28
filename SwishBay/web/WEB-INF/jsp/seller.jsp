@@ -80,8 +80,6 @@
                 Usuario user = (Usuario) session.getAttribute("usuario");
                 Collections.reverse (productos);
                 for(Producto producto : productos){
-                    if(producto.getVendedor().equals(user)){
-                       i++;
             %>      
 
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
@@ -113,9 +111,9 @@
               </div>
             
             <%
-                    }
+                    
                 }
-                if(i==0){
+                if(productos == null || productos.isEmpty()){
             %>
             <div class="py-5">    
                 Lista de productos vacía.
