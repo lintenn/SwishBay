@@ -4,11 +4,11 @@
     Author     : Miguel Oña Guerrero
 --%>
 
-<%@page import="swishbay.entity.Usuario"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    Usuario usuario = (Usuario)session.getAttribute("usuario");
+    UsuarioDTO usuario = (UsuarioDTO)session.getAttribute("usuario");
     if(usuario == null){
         response.sendRedirect(request.getContextPath());
     }

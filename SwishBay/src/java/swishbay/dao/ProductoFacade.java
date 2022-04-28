@@ -46,9 +46,9 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList();
     }
 
-    public List<Producto> findVendidos(Usuario user) {
+    public List<Producto> findVendidos(int user) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.vendedor=:user");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.vendedor.id= :user");
         q.setParameter("user", user);
         return q.getResultList();
     }
@@ -60,9 +60,9 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList();
     }
     
-    public List<Producto> findVendidosFiltered(Usuario user, String filtroCategoria) {
+    public List<Producto> findVendidosFiltered(int user, String filtroCategoria) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroCategoria and p.vendedor=:user");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroCategoria and p.vendedor.id=:user");
         q.setParameter("filtroCategoria",  filtroCategoria);
         q.setParameter("user", user);
         return q.getResultList();
@@ -84,9 +84,9 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    public List<Producto> findVendidosByNombre(Usuario user,String filtroNombre) {
+    public List<Producto> findVendidosByNombre(int user,String filtroNombre) {
         Query q;   
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.vendedor=:user and p.comprador is not null");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.vendedor.id=:user");
         q.setParameter("titulo", '%' + filtroNombre + '%');
         q.setParameter("user", user);
         return q.getResultList(); 
@@ -100,9 +100,9 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    public List<Producto> findVendidosByNombreFiltered(Usuario user,String filtroNombre, String filtroCategoria) {
+    public List<Producto> findVendidosByNombreFiltered(int user,String filtroNombre, String filtroCategoria) {
         Query q;   
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor=:user");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id=:user");
         q.setParameter("titulo", '%' + filtroNombre + '%');
         q.setParameter("filtroCategoria",  filtroCategoria);
         q.setParameter("user", user);
