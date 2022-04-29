@@ -20,6 +20,7 @@ public class ProductoDTO {
     private Date finPuja;
     private String foto;
     private short enPuja;
+    private CategoriaDTO categoria;
     private UsuarioDTO comprador;
     private UsuarioDTO vendedor;
     private List<PujaDTO> pujaList;
@@ -162,6 +163,20 @@ public class ProductoDTO {
      */
     public void setPujaList(List<PujaDTO> pujaList) {
         this.pujaList = pujaList;
+    }
+
+    /**
+     * @return the categoria
+     */
+    public CategoriaDTO getCategoria() {
+        return categoria;
+    }
+
+    /**
+     * @param categoria the categoria to set
+     */
+    public void setCategoria(CategoriaDTO categoria) {
+        this.categoria = categoria;
     }
     
     

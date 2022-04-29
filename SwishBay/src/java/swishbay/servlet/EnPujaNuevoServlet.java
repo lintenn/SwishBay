@@ -14,12 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.ProductoFacade;
-import swishbay.dao.PujaFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
-import swishbay.entity.Puja;
-import swishbay.entity.Usuario;
+import swishbay.dto.ProductoDTO;
+import swishbay.service.ProductoService;
+
 
 /**
  *
@@ -28,8 +25,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "EnPujaNuevoServlet", urlPatterns = {"/EnPujaNuevoServlet"})
 public class EnPujaNuevoServlet extends HttpServlet {
 
-    @EJB PujaFacade pujaFacade;
-    @EJB ProductoFacade pf;
+    @EJB ProductoService ps;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,8 +40,15 @@ public class EnPujaNuevoServlet extends HttpServlet {
         
         String str = request.getParameter("id");
         if(str !=null ){
-            Producto p = this.pf.find(Integer.parseInt(str));
+            ProductoDTO p = ps.buscarProducto(str);
+            Double precio = 0.0;
+            if(p.getEnPuja()==1)
+                precio = ps.precioMax(str);
+            else
+                precio = p.getPrecioSalida();
+            
             request.setAttribute("producto", p);
+            request.setAttribute("precio", precio);
         }
         
         request.getRequestDispatcher("WEB-INF/jsp/EnPuja.jsp").forward(request, response);

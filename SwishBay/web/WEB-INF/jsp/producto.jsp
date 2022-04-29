@@ -4,9 +4,9 @@
     Author     : galop
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
+<%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.util.List"%>
-<%@page import="swishbay.entity.Producto"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -18,9 +18,9 @@
 
     </head>
     <%
-       Producto producto = (Producto) request.getAttribute("producto");
+       ProductoDTO producto = (ProductoDTO) request.getAttribute("producto");
        String status = (String) request.getAttribute("status");
-       List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+       List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
 
     %>
     
@@ -96,10 +96,11 @@
                     <div class="col-sm-4">
                         <select class="form-select mb-2" id="categoria" name="categoria">
                             <%
-                              for (Categoria c:categorias){
+                              
+                              for (CategoriaDTO c:categorias){
                                 String selected = "";
-                                
-                                if(producto != null && producto.getCategoria().equals(c))
+                               
+                                if(producto != null && producto.getCategoria().getNombre().equals(c.getNombre()))
                                     selected="selected";
                                
                             %>     

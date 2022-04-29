@@ -4,11 +4,10 @@
     Author     : galop
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
+<%@page import="swishbay.dto.ProductoDTO"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="java.util.Collections"%>
-<%@page import="swishbay.entity.Puja"%>
-<%@page import="swishbay.entity.Usuario"%>
-<%@page import="swishbay.entity.Producto"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -53,12 +52,12 @@
                                 <%
                                   List<Object[]> productosPrecio = (List<Object[]>) request.getAttribute("productos");
                                   
-                                  List<Categoria> categorias = (List) request.getAttribute("categorias");
+                                  List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
                                   String filtroCategoria = (String) request.getAttribute("selected");
                                 %>
                                 <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
                                 <%
-                                  for (Categoria c:categorias){
+                                  for (CategoriaDTO c:categorias){
 
                                 %>     
                                     <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
@@ -78,10 +77,10 @@
 
               <%
 
-                Usuario user = (Usuario) session.getAttribute("usuario");
+                UsuarioDTO user = (UsuarioDTO) request.getAttribute("usuario");
                        
                 for(Object[] prodPrecio : productosPrecio){
-                    Producto producto = (Producto) prodPrecio[0];
+                    ProductoDTO producto = (ProductoDTO) prodPrecio[0];
                     Double p = (Double) prodPrecio[1];
                    
                     String nombre = producto.getComprador().getNombre() + " " + producto.getComprador().getApellidos();

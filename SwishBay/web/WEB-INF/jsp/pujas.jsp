@@ -4,15 +4,14 @@
     Author     : galop
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
+<%@page import="swishbay.dto.ProductoDTO"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="java.util.Collections"%>
-<%@page import="swishbay.entity.Puja"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.ParseException"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="swishbay.entity.Usuario"%>
-<%@page import="swishbay.entity.Producto"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -58,12 +57,12 @@
                                     <%
                                       List<Object[]> productosPrecio = (List)request.getAttribute("productos");
                                       
-                                      List<Categoria> categorias = (List) request.getAttribute("categorias");
+                                      List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
                                       String filtroCategoria = (String) request.getAttribute("selected");
                                      %>
                                      <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
                                      <%
-                                      for (Categoria c:categorias){
+                                      for (CategoriaDTO c:categorias){
 
                                     %>     
                                         <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
@@ -83,16 +82,13 @@
 
                 <%
                     
-                    Usuario user = (Usuario) session.getAttribute("usuario");
+                    UsuarioDTO user = (UsuarioDTO) request.getAttribute("usuario");
 
                     for (Object[] prodPrecio : productosPrecio) {
-                            Producto producto = (Producto) prodPrecio[0];
+                            ProductoDTO producto = (ProductoDTO) prodPrecio[0];
                             Double p = (Double) prodPrecio[1] == 0.0 ? producto.getPrecioSalida():(Double) prodPrecio[1];
                             String str = DateFormat.getDateInstance(DateFormat.SHORT).format(producto.getFinPuja());
-                            
-                    
-
-
+                                              
                 %>      
 
                 <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">

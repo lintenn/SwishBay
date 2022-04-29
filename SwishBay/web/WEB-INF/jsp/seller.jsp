@@ -80,7 +80,7 @@
                 //Collections.reverse (productos);
                 if(productos!=null)
                     System.out.println(productos.size());
-                if(user!=null && productos!=null){
+                
                 for(ProductoDTO producto : productos){
             %>      
 
@@ -92,20 +92,39 @@
                   </div>
                   <div class="col-sm-12 mt-0">
                     <div class="row justify-content-center">
-                      <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
+                      <h5 class="card-title text-dark mt-2"><%= producto.getComprador()==null ? producto.getPrecioSalida() : 200.0 %>€</h5>
                       <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
                       <div class="row justify-content-center pb-2 px-0">
-                        
-                        <a href="EnPujaNuevoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5" style="width: 100px"> <%= producto.getEnPuja()==0 ?  "Crear puja" : "Ver puja" %></a>
-                        
-                        <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
-                        <a href="ProductoBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2">
+            <%
+                    if(producto.getComprador()==null){
+            %>  
+                        <a href="EnPujaNuevoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mt-4" style="width: 100px"> <%= producto.getEnPuja()==0 ?  "Crear puja" : "Ver puja" %></a>
+                        <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2 mt-4">Modificar</a>
+                        <a href="ProductoBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2 mt-4">
                             <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                             <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>
                             </svg>
                         </a>
-       
+             <%
+                    }else{
+            %>           
+                        <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
+                        <a href="ProductoBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2 mx-4">
+                            <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>
+                            </svg>
+                        </a>
+            <%
+                    }
+            %> 
                       </div>
+            <%
+                    if(producto.getComprador()!=null){
+            %>  
+                    <p class="card-text text-dark pb-2 fw-bold">Vendido a: <%= producto.getComprador().getNombre() + " " + producto.getComprador().getApellidos() %></p>
+            <%
+                }
+            %>  
                     </div>
                     
                   </div>
@@ -113,7 +132,6 @@
               </div>
             
             <%
-                }
                 }
                 if(productos == null || productos.isEmpty()){
             %>

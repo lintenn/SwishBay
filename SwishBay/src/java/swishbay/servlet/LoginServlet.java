@@ -21,7 +21,7 @@ import swishbay.service.UsuarioService;
  * @author Luis
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends SwishBayServlet {
     
     @EJB UsuarioService usuarioService;
     

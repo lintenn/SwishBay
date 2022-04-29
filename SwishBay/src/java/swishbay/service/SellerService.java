@@ -47,6 +47,17 @@ public class SellerService {
         }
         return listaDTO;
     }
+    
+    private void listaEnPujaEntityADTO (List<Object[]> lista) {
+     
+        if (lista != null) {
+            for (Object[] p : lista) {
+                Producto pr = (Producto) p[0];
+                p[0]= pr.toDTO();
+            }
+        }
+        
+    }
 
     public List<CategoriaDTO> listarCategorias(){
         List<Categoria> list = cf.findAll();
@@ -67,7 +78,6 @@ public class SellerService {
         }else{
                 if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
                     productos = pf.findVendidosByNombre(user.getId(),filtroNombre);
-                    System.out.println("Productos: " + productos.size());
 
                 }else{
                     productos = pf.findVendidosByNombreFiltered(user.getId(),filtroNombre,filtroCategoria);
@@ -75,6 +85,57 @@ public class SellerService {
                 }   
         }
         return this.listaProductoEntityADTO(productos);
+    }
+    
+     public List<Object[]> listarEnPuja(UsuarioDTO user, String filtroNombre, String filtroCategoria){
+        
+        List<Object[]> productos = null;
+        
+        if(filtroNombre == null || filtroNombre.isEmpty()){
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                    productos = pf.findEnPuja(user.getId());
+
+                }else{
+                    productos= pf.findEnPujaFiltered(user.getId(),filtroCategoria);
+
+                }
+        }else{
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                    productos = pf.findEnPujaByNombre(user.getId(),filtroNombre);
+
+                }else{
+                    productos = pf.findEnPujaByNombreFiltered(user.getId(),filtroNombre,filtroCategoria);
+
+                }   
+           }
+        listaEnPujaEntityADTO(productos);
+        return productos;
+    }
+     
+    public List<Object[]> listarVendidos(UsuarioDTO user, String filtroNombre, String filtroCategoria){
+        
+        List<Object[]> productos = null;
+        
+        if(filtroNombre == null || filtroNombre.isEmpty()){
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                    productos = pf.findVendidosAUser(user.getId());
+
+                }else{
+                    productos= pf.findVendidosAUserFiltered(user.getId(), filtroCategoria);
+
+                }
+        }else{
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                    productos = pf.findVendidosAUserByNombre(user.getId(), filtroNombre);
+
+                }else{
+                    productos = pf.findVendidosAUserByNombreFiltered(user.getId(), filtroNombre,filtroCategoria);
+
+                }   
+        }
+        
+        listaEnPujaEntityADTO(productos);
+        return productos;
     }
     
 }

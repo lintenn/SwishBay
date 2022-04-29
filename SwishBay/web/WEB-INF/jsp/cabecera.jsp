@@ -9,6 +9,7 @@
 <!DOCTYPE html>
 <%
     UsuarioDTO usuario = (UsuarioDTO)session.getAttribute("usuario");
+   
     if(usuario == null){
         response.sendRedirect(request.getContextPath());
     }
