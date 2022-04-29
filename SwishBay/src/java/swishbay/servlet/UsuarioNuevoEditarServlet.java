@@ -48,8 +48,6 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
             if (str != null && !str.isEmpty()) {
                 UsuarioDTO usuario = this.usuarioService.buscarUsuario(Integer.parseInt(str));
                 request.setAttribute("usuario", usuario);
-                List<CategoriaDTO> categoriasPreferidas = this.categoriaService.listarCategoriasPreferidas(usuario.getId());
-                request.setAttribute("categoriasPreferidas", categoriasPreferidas);
             }
             
             request.getRequestDispatcher("WEB-INF/jsp/usuario.jsp").forward(request, response);

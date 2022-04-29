@@ -22,7 +22,6 @@
     </head>
     <%
         List<CategoriaDTO> categorias = (List)request.getAttribute("categorias");
-        List<CategoriaDTO> categoriasPreferidas = (List)request.getAttribute("categoriasPreferidas");
         
         UsuarioDTO usuario = (UsuarioDTO)request.getAttribute("usuario");
         String status = (String) request.getAttribute("status");
@@ -161,7 +160,7 @@
                     
                     for (CategoriaDTO categoria : categorias) {
                         String checked = "";
-                        if (usuario != null && categoriasPreferidas != null && categoriasPreferidas.contains(categoria)) { // && usuario.categoriaList != null && usuario.categoriaList.contains(categoria)) {
+                        if (usuario != null && usuario.getCategoriaList() != null && usuario.getCategoriaList().contains(categoria.getId())) { 
                             checked = "checked";
                         }
                 %>

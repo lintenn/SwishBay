@@ -24,7 +24,7 @@ public class UsuarioDTO {
     private String ciudad;
     private double saldo;
     private RolUsuarioDTO rol;
-    private List<CategoriaDTO> categoriaList;
+    private List<Integer> categoriaList;
     
     public UsuarioDTO() {
     }
@@ -183,11 +183,11 @@ public class UsuarioDTO {
         this.rol = rol;
     }
     
-    public List<CategoriaDTO> getCategoriaList() {
+    public List<Integer> getCategoriaList() {
         return categoriaList;
     }
     
-    public void setCategoriaList(List<CategoriaDTO> categoriaList) {
+    public void setCategoriaList(List<Integer> categoriaList) {
         this.categoriaList = categoriaList;
     }
     

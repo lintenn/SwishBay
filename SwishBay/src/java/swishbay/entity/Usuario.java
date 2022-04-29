@@ -354,15 +354,15 @@ public class Usuario implements Serializable {
         dto.setRol(rol.toDTO());
         dto.setSaldo(saldo);
         dto.setSexo(sexo);
-        /*List<CategoriaDTO> listaDTO = null;
+        List<Integer> listaDTO = null;
         if (categoriaList != null) {
             listaDTO = new ArrayList<>();
             for (Categoria categoria : categoriaList) {
-                listaDTO.add(categoria.toDTO());
+                listaDTO.add(categoria.getId());
             }
         }
         dto.setCategoriaList(listaDTO);
-          */      
+                
         return dto;        
     }  
 }
