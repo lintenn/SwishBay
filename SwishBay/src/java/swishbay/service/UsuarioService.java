@@ -209,7 +209,7 @@ public class UsuarioService {
         
         try {
             Usuario user = usuarioFacade.comprobarUsuario(correo, password);
-            userdto = user.toDTO();
+            if (user != null) userdto = user.toDTO();
         } catch(EJBException ex){
             userdto = null;
         }

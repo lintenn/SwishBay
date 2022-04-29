@@ -92,7 +92,7 @@
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputPassword" class="col-sm-1 col-form-label">Contraseña:</label>
                   <div class="col-sm-4">
-                    <input type="password" minlength="6" maxlength="45" class="form-control" id="inputPassword" name="password" required="" value="<%= usuario==null? "": usuario.getCorreo()%>" >
+                    <input type="password" minlength="6" maxlength="45" class="form-control" id="inputPassword" name="password" required="" value="<%= usuario==null? "": usuario.getPassword()%>" >
                   </div>
                   *
                 </div>
