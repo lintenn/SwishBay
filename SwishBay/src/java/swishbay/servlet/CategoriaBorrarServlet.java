@@ -6,15 +6,12 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.entity.Categoria;
+import swishbay.service.CategoriaService;
 
 /**
  *
@@ -23,7 +20,7 @@ import swishbay.entity.Categoria;
 @WebServlet(name = "CategoriaBorrarServlet", urlPatterns = {"/CategoriaBorrarServlet"})
 public class CategoriaBorrarServlet extends SwishBayServlet {
 
-    @EJB CategoriaFacade categoriaFacade;
+    @EJB CategoriaService categoriaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,9 +38,7 @@ public class CategoriaBorrarServlet extends SwishBayServlet {
                         
             String str = request.getParameter("id");
 
-            Categoria categoria = this.categoriaFacade.find(Integer.parseInt(str));
-
-            this.categoriaFacade.remove(categoria);
+            this.categoriaService.borrarCategoria(Integer.parseInt(str));
 
             response.sendRedirect(request.getContextPath() + "/CategoriaServlet");
         }
