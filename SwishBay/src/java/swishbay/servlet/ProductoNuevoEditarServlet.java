@@ -13,10 +13,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
+import swishbay.service.CategoriaService;
+import swishbay.service.ProductoService;
+
 
 /**
  *
@@ -25,8 +26,8 @@ import swishbay.entity.Producto;
 @WebServlet(name = "ProductoNuevoEditarServlet", urlPatterns = {"/ProductoNuevoEditarServlet"})
 public class ProductoNuevoEditarServlet extends HttpServlet {
 
-    @EJB ProductoFacade pf;
-    @EJB CategoriaFacade cf;
+    @EJB ProductoService ps;
+    @EJB CategoriaService cs;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,12 +41,13 @@ public class ProductoNuevoEditarServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String str = request.getParameter("id");
-        if(str !=null && !str.isEmpty()){
-            Producto p = this.pf.find(Integer.parseInt(str));
-            request.setAttribute("producto", p);
-        }
-        List<Categoria> categorias = this.cf.findAll();
+        
+        ProductoDTO p= ps.buscarProducto(str);
+        List<CategoriaDTO> categorias = cs.listarCategorias();
+        
         request.setAttribute("categorias",categorias );
+        if(p!=null)
+            request.setAttribute("producto", p);
         request.getRequestDispatcher("WEB-INF/jsp/producto.jsp").forward(request, response);
     }
 

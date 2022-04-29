@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.ProductoService;
+
 
 /**
  *
@@ -24,7 +24,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "PujaBorrarServlet", urlPatterns = {"/PujaBorrarServlet"})
 public class PujaBorrarServlet extends HttpServlet {
 
-    @EJB ProductoFacade pf;
+    @EJB ProductoService ps;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,10 +37,10 @@ public class PujaBorrarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        Usuario user=null;
+        UsuarioDTO user=null;
         try{
             HttpSession session = request.getSession();
-            user = (Usuario) session.getAttribute("usuario");
+            user = (UsuarioDTO) session.getAttribute("usuario");
 
         }catch(Exception e){
             System.err.println(e.getMessage());
@@ -48,10 +48,8 @@ public class PujaBorrarServlet extends HttpServlet {
         
         if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
             String str = request.getParameter("id");
-            Producto p = this.pf.find(Integer.parseInt(str));
-            
-            p.setEnPuja((short) 0);
-            pf.edit(p);
+            ps.quitarPuja(str);
+           
             response.sendRedirect(request.getContextPath() + "/PujasServlet");
         }
     }

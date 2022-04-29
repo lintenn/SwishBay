@@ -15,22 +15,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.ProductoService;
+
 
 /**
  *
  * @author galop
  */
 @WebServlet(name = "ProductoGuardarServlet", urlPatterns = {"/ProductoGuardarServlet"})
-public class ProductoGuardarServlet extends HttpServlet {
+public class ProductoGuardarServlet extends SwishBayServlet {
 
-    @EJB ProductoFacade pf;
-    @EJB CategoriaFacade cf;
+    @EJB ProductoService ps;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,78 +41,46 @@ public class ProductoGuardarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        Usuario user=null;
+        UsuarioDTO user=null;
         try{
             HttpSession session = request.getSession();
-            user = (Usuario) session.getAttribute("usuario");
+            user = (UsuarioDTO) session.getAttribute("usuario");
 
         }catch(Exception e){
             System.err.println(e.getMessage());
         }
         
-
+        
+        
         if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
-            Producto p;
-            String strId,str, status=null;
+            
+            String strId, status=null;
             strId= request.getParameter("id");
-
             
-            
-            if(strId == null || strId.isEmpty()){
-                p = new Producto();
-                java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
-                p.setFinPuja(date);
-            }else {
-                p = this.pf.find(Integer.parseInt(strId));
+            java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
+            String titulo = request.getParameter("nombre");
+            String desc = request.getParameter("descripcion");
+            String foto = request.getParameter("foto");
+            if(foto==null || foto.isEmpty()){
+                foto= "https://th.bing.com/th/id/OIP.KeKY2Y3R0HRBkPEmGWU3FwHaHa?pid=ImgDet&rs=1";
             }
-
-         
-            str = request.getParameter("nombre");
-            
-            p.setTitulo(str);  
-            
-            
-
-            str = request.getParameter("descripcion");
-            p.setDescripcion(str);
-
-            str = request.getParameter("foto");
-            if(str==null || str.isEmpty()){
-                str= "https://th.bing.com/th/id/OIP.KeKY2Y3R0HRBkPEmGWU3FwHaHa?pid=ImgDet&rs=1";
-            }
-            p.setFoto(str);
-
-            str = request.getParameter("categoria");
-            for(Categoria c : cf.findAll()){
-                if(c.getNombre().equals(str))
-                    p.setCategoria(c);
-            }
-            
-            str = request.getParameter("precio");
-            if(!str.matches("[-+]?\\d*\\.?\\d+")){
+            String categoria= request.getParameter("categoria");
+            String precio = request.getParameter("precio");
+            if(!precio.matches("[-+]?\\d*\\.?\\d+")){
                 status= "Formato de precio incorrecto.";
                 request.setAttribute("status", status);
-                
-                request.getRequestDispatcher("ProductoNuevoEditarServlet").forward(request, response);
-               
-            }
-            
-            p.setPrecioSalida(Double.parseDouble(str));
-                
-           
-           
-            
-            short n=0;
-            p.setEnPuja(n);
-            
-            p.setVendedor(user);
-            
 
-            if(strId == null || strId.isEmpty()){
-                pf.create(p);
-            }else {
-                pf.edit(p);
+                request.getRequestDispatcher("ProductoNuevoEditarServlet").forward(request, response);
+
             }
+            
+            if(strId == null || strId.isEmpty()){        
+                
+                ps.crearProducto(titulo, desc, foto, date, categoria, precio, user.getId());
+            }else {
+                ps.modificarProducto(strId, titulo, desc, foto, date, categoria, precio, user.getId());
+            }           
+            
             response.sendRedirect(request.getContextPath() + "/SellerServlet");
         }
     }
