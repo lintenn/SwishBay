@@ -92,7 +92,7 @@
                   </div>
                   <div class="col-sm-12 mt-0">
                     <div class="row justify-content-center">
-                      <h5 class="card-title text-dark mt-2"><%= producto.getComprador()==null ? producto.getPrecioSalida() : 200.0 %>€</h5>
+                      <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
                       <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
                       <div class="row justify-content-center pb-2 px-0">
             <%

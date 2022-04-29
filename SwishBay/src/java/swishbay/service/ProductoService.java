@@ -142,6 +142,9 @@ public class ProductoService {
             p.setComprador(puja.getUsuario());
 
             this.pf.edit(p);
+        }else{
+             p.setEnPuja((short) 0);
+             this.pf.edit(p);
         }
 
     }
