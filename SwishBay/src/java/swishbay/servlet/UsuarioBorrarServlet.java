@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.UsuarioFacade;
 import swishbay.entity.Usuario;
+import swishbay.service.UsuarioService;
 
 /**
  *
@@ -23,7 +24,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "UsuarioBorrarServlet", urlPatterns = {"/UsuarioBorrarServlet"})
 public class UsuarioBorrarServlet extends SwishBayServlet {
 
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +41,8 @@ public class UsuarioBorrarServlet extends SwishBayServlet {
                         
             String str = request.getParameter("id");
 
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(str));
-
-            this.usuarioFacade.remove(usuario);
-
+            this.usuarioService.borrarUsuario(Integer.parseInt(str));
+            
             response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
         }
     }
