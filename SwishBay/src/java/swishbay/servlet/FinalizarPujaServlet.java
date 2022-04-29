@@ -12,10 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Producto;
-import swishbay.entity.Puja;
-import swishbay.entity.Usuario;
+import swishbay.service.ProductoService;
 
 /**
  *
@@ -24,7 +21,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "FinalizarPujaServlet", urlPatterns = {"/FinalizarPujaServlet"})
 public class FinalizarPujaServlet extends HttpServlet {
 
-    @EJB ProductoFacade pf;
+    @EJB ProductoService ps;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,24 +36,8 @@ public class FinalizarPujaServlet extends HttpServlet {
         
         String str = request.getParameter("id");
         
-        Producto p = this.pf.find(Integer.parseInt(str));
-        Double d=p.getPrecioSalida();
-        Puja puja=null;
-        
-        
-        if(!p.getPujaList().isEmpty()){
-            for (Puja puj: p.getPujaList()){
-                if(puj.getPrecio()>=d){
-                    d=puj.getPrecio();
-                    puja=puj;
-                }
-            }
-
-            p.setEnPuja((short) 0);
-            p.setComprador(puja.getUsuario());
-
-            this.pf.edit(p);
-        }
+        ps.finalizarPuja(str);
+       
         response.sendRedirect(request.getContextPath() + "/PujasServlet");
         
         

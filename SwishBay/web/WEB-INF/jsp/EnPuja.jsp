@@ -4,12 +4,11 @@
     Author     : galop
 --%>
 
-<%@page import="swishbay.entity.Puja"%>
+<%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.text.Format"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.text.DateFormat"%>
-<%@page import="swishbay.entity.Producto"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,15 +20,13 @@
 
     </head>
     <%
-       Producto producto = (Producto) request.getAttribute("producto");
+       ProductoDTO producto = (ProductoDTO) request.getAttribute("producto");
        String status = (String) request.getAttribute("status");
        Format f = new SimpleDateFormat("yyyy-MM-dd");
        String str = f.format(producto.getFinPuja());
-       Double p= producto.getPrecioSalida();
-       for (Puja puja: producto.getPujaList()){
-            if(puja.getPrecio()>=p)
-                p=puja.getPrecio();
-        }
+       Double p= (Double) request.getAttribute("precio");
+       if(p==0.0)
+            p = producto.getPrecioSalida();
     %>
     
     <body class="d-flex h-100 text-center text-white bg-dark">
@@ -98,7 +95,7 @@
                 <div class="form-group row justify-content-md-center mt-2">
                   <div class="col-sm-10">
                     <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2">Confirmar</button>
-                    <a href="SellerServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
+                    <a href="PujasServlet" class="btn btn-lg btn-secondary fw-bold border-white mx-2">Cancelar</a>
                   </div>
                 </div>
             </form>                

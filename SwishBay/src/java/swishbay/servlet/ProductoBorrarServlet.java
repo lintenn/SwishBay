@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.ProductoService;
+
 
 /**
  *
@@ -24,7 +24,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "ProductoBorrarServlet", urlPatterns = {"/ProductoBorrarServlet"})
 public class ProductoBorrarServlet extends HttpServlet {
 
-    @EJB ProductoFacade pf;
+    @EJB ProductoService ps;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,10 +38,10 @@ public class ProductoBorrarServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        Usuario user=null;
+        UsuarioDTO user=null;
         try{
             HttpSession session = request.getSession();
-            user = (Usuario) session.getAttribute("usuario");
+            user = (UsuarioDTO) session.getAttribute("usuario");
 
         }catch(Exception e){
             System.err.println(e.getMessage());
@@ -49,9 +49,8 @@ public class ProductoBorrarServlet extends HttpServlet {
         
         if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
             String str = request.getParameter("id");
-            Producto p = this.pf.find(Integer.parseInt(str));
+            ps.borrarProducto(Integer.parseInt(str));
             
-            pf.remove(p);
             response.sendRedirect(request.getContextPath() + "/SellerServlet");
         }
         

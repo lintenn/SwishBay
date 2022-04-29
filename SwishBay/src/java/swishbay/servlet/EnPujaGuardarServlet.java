@@ -19,21 +19,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.ProductoFacade;
-import swishbay.dao.PujaFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
-import swishbay.entity.Puja;
-import swishbay.entity.Usuario;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.ProductoService;
+
 
 /**
  *
  * @author galop
  */
 @WebServlet(name = "EnPujaGuardarServlet", urlPatterns = {"/EnPujaGuardarServlet"})
-public class EnPujaGuardarServlet extends HttpServlet {
+public class EnPujaGuardarServlet extends SwishBayServlet {
 
-    @EJB ProductoFacade pf;
+    @EJB ProductoService ps;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,23 +44,24 @@ public class EnPujaGuardarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        Usuario user=null;
+        UsuarioDTO user=null;
         
         try{
             HttpSession session = request.getSession();
-            user = (Usuario) session.getAttribute("usuario");
+            user = (UsuarioDTO) session.getAttribute("usuario");
 
         }catch(Exception e){
             System.err.println(e.getMessage());
         }
         
+        
         if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
-            Producto p;
+            ProductoDTO p;
             
             String strId,str, status= null;
             strId= request.getParameter("id");
 
-            p = this.pf.find(Integer.parseInt(strId));
+            p = ps.buscarProducto(strId);
             
             str = request.getParameter("time");
             SimpleDateFormat dateParser = new SimpleDateFormat("yy-MM-dd");
@@ -80,11 +79,10 @@ public class EnPujaGuardarServlet extends HttpServlet {
                 if(p.getEnPuja()==0){
                     p.setEnPuja((short) 1);
                     str = request.getParameter("precio");
-                    p.setPrecioSalida(Double.parseDouble(str));
-
-                }
-                p.setFinPuja(d);            
-                pf.edit(p);
+                    ps.modificarPuja(strId,str,d);
+                }else{
+                    ps.modificarPuja(strId, d);
+                }             
 
                 response.sendRedirect(request.getContextPath() + "/PujasServlet");
             }else{
