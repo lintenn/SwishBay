@@ -4,9 +4,9 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
-<%@page import="swishbay.entity.Categoria"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,6 +56,15 @@
                     <a href="CategoriaNuevoEditarServlet" class="btn btn-lg btn-secondary fw-bold border-white">Crear nueva categoría</a>
                 </div>
                 
+            <%
+                List<CategoriaDTO> categorias = (List)request.getAttribute("categorias");
+                if (categorias == null || categorias.isEmpty()) {
+            %>
+            <h2>No hay categorías.</h2>
+            <%
+                } else {
+            %>
+                
             <table class="table table-dark table-striped">
                 <tr>
                     <th>NOMBRE</th>
@@ -64,9 +73,7 @@
                     <th></th>
                 </tr>
             <%
-                List<Categoria> categorias = (List)request.getAttribute("categorias");
-                for (Categoria categoria : categorias) {
-                    
+                    for (CategoriaDTO categoria : categorias) {
             %>    
             <tr>
                 <td><%= categoria.getNombre()%></td>
@@ -88,13 +95,16 @@
             </tr>
 
             <%
-                }
+                    }
             %>
             </table>
+            <%
+                }
+            %>
             
             </main>
             
-            <footer class="text-white-50 fixed-bottom">
+            <footer class="text-white-50">
             <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>

@@ -4,16 +4,16 @@
     Author     : Luis
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="java.util.List"%>
-<%@page import="swishbay.entity.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
 <%
-    Usuario user = (Usuario) session.getAttribute("usuario");
-    List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
-    String goTo = "UsuarioGuardarServlet", nombre = "", apellidos = "", email = "", sexo = "", fechaNacimiento = "";
+    UsuarioDTO user = (UsuarioDTO) session.getAttribute("usuario");
+    List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
+    String goTo = "UsuarioGuardarServlet";
     
     String status = (String) request.getAttribute("status");
     
@@ -125,7 +125,6 @@
         <form method="POST" class="border border-dark p-5" action="<%= goTo %>">
             <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_white.png" alt="" width="120" height="50">
             
-            <% if (user == null) { %>
             <h1 class="h3 mb-3 fw-normal">Registrarse</h1>
                 <% if (status != null) {%>
                     <div class="alert alert-danger"><%=status%></div>
@@ -178,7 +177,7 @@
             <br/>
             <label for="inputCategory" class="form-label">Categorías preferidas:</label>
             <%
-                for (Categoria categoria : categorias) {
+                for (CategoriaDTO categoria : categorias) {
             %>
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="categoria<%=categoria.getId()%>" name="categoria" value="<%= categoria.getId() %>"/>
@@ -202,9 +201,6 @@
                 <a href="./" target="_blank">términos de servicio</a>.
             </p>
             </div>
-            <% } else { %>
-            <p> Ya has iniciado sesión. Cierra sesión primero. </p>
-            <% } %>
             
             <p class="mt-5 mb-3 text-muted">© 2022, SwishBay</p>
         </form>

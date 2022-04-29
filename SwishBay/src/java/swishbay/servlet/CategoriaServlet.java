@@ -6,16 +6,14 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.entity.Categoria;
+import swishbay.dto.CategoriaDTO;
+import swishbay.service.CategoriaService;
 
 /**
  *
@@ -23,8 +21,8 @@ import swishbay.entity.Categoria;
  */
 @WebServlet(name = "CategoriaServlet", urlPatterns = {"/CategoriaServlet"})
 public class CategoriaServlet extends SwishBayServlet {
-
-    @EJB CategoriaFacade categoriaFacade;
+    
+    @EJB CategoriaService categoriaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,13 +38,8 @@ public class CategoriaServlet extends SwishBayServlet {
         if (super.comprobarAdminSession(request, response)) {
             
             String filtroNombre = request.getParameter("filtro");
-            List<Categoria> categorias = null;
-
-            if (filtroNombre == null || filtroNombre.isEmpty()) {
-                categorias = this.categoriaFacade.findAll();        
-            } else {
-                categorias = this.categoriaFacade.findByNombre(filtroNombre);
-            }
+            
+            List<CategoriaDTO> categorias = this.categoriaService.listarCategorias(filtroNombre);
 
             request.setAttribute("categorias", categorias);
             request.getRequestDispatcher("WEB-INF/jsp/categorias.jsp").forward(request, response);   

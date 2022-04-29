@@ -6,17 +6,12 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import swishbay.dao.CategoriaFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Usuario;
+import swishbay.service.CategoriaService;
 
 /**
  *
@@ -25,7 +20,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "CategoriaGuardarServlet", urlPatterns = {"/CategoriaGuardarServlet"})
 public class CategoriaGuardarServlet extends SwishBayServlet {
 
-    @EJB CategoriaFacade categoriaFacade;
+    @EJB CategoriaService categoriaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,26 +38,18 @@ public class CategoriaGuardarServlet extends SwishBayServlet {
             
             String strId;
             String nombre, descripcion, goTo = "CategoriaServlet";
-            Categoria newCategoria;
             
             strId = request.getParameter("id");
             nombre = request.getParameter("nombre");
             descripcion = request.getParameter("descripcion");
             
             if (strId == null || strId.isEmpty()) { // Crear nueva categoria
-                newCategoria = new Categoria();
-            } else {                             // Editar categoria
-                newCategoria = this.categoriaFacade.find(Integer.parseInt(strId));
+                this.categoriaService.crearCategoria(nombre, descripcion);
+                
+            } else {                                // Editar categoria
+                this.categoriaService.modificarCategoria(Integer.parseInt(strId), nombre, descripcion);
+                
             }
-            
-            newCategoria.setNombre(nombre);
-            newCategoria.setDescripcion(descripcion);
-            
-            if (strId == null || strId.isEmpty()) {    // Crear nueva categoría
-                categoriaFacade.create(newCategoria);
-            } else {                                   // Editar categoría
-                categoriaFacade.edit(newCategoria);
-            }  
             
             response.sendRedirect(request.getContextPath() + "/" + goTo); 
             
