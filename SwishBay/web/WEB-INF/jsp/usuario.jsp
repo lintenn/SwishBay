@@ -4,6 +4,7 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.dto.RolUsuarioDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -22,6 +23,7 @@
     </head>
     <%
         List<CategoriaDTO> categorias = (List)request.getAttribute("categorias");
+        List<RolUsuarioDTO> roles = (List)request.getAttribute("roles");
         
         UsuarioDTO usuario = (UsuarioDTO)request.getAttribute("usuario");
         String status = (String) request.getAttribute("status");
@@ -140,18 +142,14 @@
                 <br/>
                 <label for="inputTipo" class="form-label">Tipo de usuario:</label>
                 <div class="d-flex align-center justify-content-center">
+                    
+                    <% for (RolUsuarioDTO rol : roles) { %>
                     <div class="form-check mx-1">
-                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getRol().getNombre().equals("administrador")? "checked":"") %> required=""/>
-                      <label class="form-check-label" for="administrador">Administrador</label>
+                        <input id="<%= rol.getNombre() %>" name="tipo" value="<%= rol.getNombre() %>" type="radio" class="form-check-input" <%= usuario==null? (rol.getNombre().equals("administrador")? "checked":"") 
+                                                                                                                                                            : (usuario.getRol().getNombre().equals(rol.getNombre())? "checked":"") %> required=""/>
+                        <label class="form-check-label" for="<%= rol.getNombre() %>"><%= rol.getNombre().equals("compradorvendedor")? "comprador/vendedor" : rol.getNombre() %></label>
                     </div>
-                    <div class="form-check mx-1">
-                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getRol().getNombre().equals("compradorvendedor")? "checked":"") %> required=""/>
-                      <label class="form-check-label" for="compradorvendedor">Comprador/Vendedor</label>
-                    </div>
-                    <div class="form-check mx-1">
-                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getRol().getNombre().equals("marketing")? "checked":"") %> required=""/>
-                      <label class="form-check-label" for="marketing">Marketing</label>
-                    </div>
+                    <% } %>
                 </div>
                 
                 <br/>

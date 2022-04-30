@@ -65,4 +65,19 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return q.getResultList();
     }
     
+    public List<Usuario> findAll (String filtroRol) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like :filtroRol");
+        q.setParameter("filtroRol",  filtroRol);
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByNombre (String filtroNombre, String filtroRol) {
+        Query q;   
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.nombre like :nombre and u.rol.nombre like :filtroRol");
+        q.setParameter("nombre", '%' + filtroNombre + '%');
+        q.setParameter("filtroRol",  filtroRol);
+        return q.getResultList(); 
+    }
+    
 }

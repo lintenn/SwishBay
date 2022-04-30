@@ -4,6 +4,7 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.dto.RolUsuarioDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
@@ -42,7 +43,27 @@
                     
                   </ul>
                   <form method="post" class="d-flex" action="UsuarioServlet">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <div class="col-sm-5">
+                        <select class="form-select px-2" id="filtroRol" name="filtroRol">
+                            
+                            <%
+                              UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
+                              List<UsuarioDTO> usuarios = (List)request.getAttribute("usuarios");
+                              List<RolUsuarioDTO> roles = (List) request.getAttribute("roles");
+                              String filtroRol = (String) request.getAttribute("selected");
+                             %>
+                             <option <%= (filtroRol==null || filtroRol.equals("Tipo")) ? "selected":"" %> value="Tipo">Seleccionar tipo</option>
+                             <%
+                              for (RolUsuarioDTO rol : roles){
+                                
+                            %>     
+                                <option <%= (filtroRol != null && filtroRol.equals(rol.getNombre())) ? "selected":"" %> value="<%=rol.getNombre()%>"><%= (rol.getNombre().equals("compradorvendedor") ? "comprador/vendedor":rol.getNombre()) %> </option>
+                           <%  
+                              }
+                           %>
+                        </select>
+                    </div>
+                    <input class="form-control me-2 mx-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>
@@ -57,8 +78,6 @@
                 </div>
                 
             <%
-                UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
-                List<UsuarioDTO> usuarios = (List)request.getAttribute("usuarios");
                 if (usuarios == null || usuarios.isEmpty() ) {
             %>    
             <div class="py-5 mb-5">    

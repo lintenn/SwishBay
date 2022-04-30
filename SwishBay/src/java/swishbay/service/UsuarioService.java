@@ -58,6 +58,30 @@ public class UsuarioService {
         return this.listaEntityADTO(usuarios);
     }
     
+    public List<UsuarioDTO> listarUsuarios (String filtroNombre, String filtroRol) { 
+        List<Usuario> usuarios = null;
+        
+        if (filtroNombre == null || filtroNombre.isEmpty()) {
+                if (filtroRol == null || filtroRol.equals("Tipo")) {
+                    usuarios = this.usuarioFacade.findAll();
+                    
+                } else {
+                    usuarios = this.usuarioFacade.findAll(filtroRol);
+
+                }
+        } else {
+                if (filtroRol == null || filtroRol.equals("Tipo")) {
+                    usuarios = this.usuarioFacade.findByNombre(filtroNombre);
+
+                } else {
+                    usuarios = this.usuarioFacade.findByNombre(filtroNombre, filtroRol);
+
+                }   
+        }
+        
+        return this.listaEntityADTO(usuarios);
+    }
+    
     public UsuarioDTO buscarUsuario (Integer id) {
         Usuario usuario = this.usuarioFacade.find(id);
         return usuario.toDTO();
