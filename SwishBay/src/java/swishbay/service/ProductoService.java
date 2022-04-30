@@ -5,6 +5,8 @@
 package swishbay.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import swishbay.dao.CategoriaFacade;
@@ -27,6 +29,41 @@ public class ProductoService {
     @EJB CategoriaFacade cf;
     @EJB UsuarioFacade uf;
     @EJB PujaFacade puf;
+    
+    private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { //Luis
+        List<ProductoDTO> listaDTO = null;
+        if (lista != null) {
+            listaDTO = new ArrayList<>();
+            for (Producto producto : lista) {
+                listaDTO.add(producto.toDTO());
+            }
+        }
+        return listaDTO;
+    }
+    
+    public List<ProductoDTO> listarProductos (String filtroNombre, String filtroCategoria) { //Luis
+        List<Producto> productos = null;
+        
+        if (filtroNombre == null || filtroNombre.isEmpty()) {
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findAll();
+                    
+                } else {
+                    productos= this.pf.findAll(filtroCategoria);
+
+                }
+        } else {
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findByNombre(filtroNombre);
+
+                } else {
+                    productos = pf.findByNombre(filtroNombre,filtroCategoria);
+
+                }   
+        }
+        
+        return this.listaEntityADTO(productos);
+    }
     
     public ProductoDTO buscarProducto(String strId){
         Producto p=null;

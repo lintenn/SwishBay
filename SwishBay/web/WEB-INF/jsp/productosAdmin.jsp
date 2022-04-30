@@ -4,10 +4,9 @@
     Author     : Luis
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
+<%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.util.Collections"%>
-<%@page import="swishbay.entity.Usuario"%>
-<%@page import="swishbay.entity.Producto"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -36,25 +35,25 @@
                       <a class="nav-link" href="UsuarioServlet"> Usuarios</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="SellerServlet">Productos</a>
+                      <a class="nav-link active" aria-current="page" href="ProductoAdminServlet">Productos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="CategoriaServlet">Categorías</a>
                     </li>
                     
                   </ul>
-                  <form method="post" class="d-flex" action="SellerServlet">
+                  <form method="post" class="d-flex" action="ProductoAdminServlet">
                     <div class="col-sm-4">
                         <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">
                             
                             <%
-                              List<Producto> productos = (List)request.getAttribute("productos");
-                              List<Categoria> categorias = (List) request.getAttribute("categorias");
+                              List<ProductoDTO> productos = (List)request.getAttribute("productos");
+                              List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
                               String filtroCategoria = (String) request.getAttribute("selected");
                              %>
                              <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
                              <%
-                              for (Categoria c:categorias){
+                              for (CategoriaDTO c:categorias){
                                 
                             %>     
                                 <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
@@ -71,34 +70,47 @@
             </nav>
 
             <main class="row d-flex justify-content-center mt-4">
+                
+                <h1>Listado de productos: </h1>
 
-              <%
-                int i=0;
-                //Usuario user = (Usuario) session.getAttribute("usuario");
-                Collections.reverse (productos);
-                for(Producto producto : productos){
-                    
-                    i++;
+            <%
+                if (productos == null || productos.isEmpty()) {
             %>      
-
+                <div class="py-5 mb-5">    
+                    <h2>Sin productos que mostrar.</h2>
+                </div>
+                
+            <% 
+                } else {
+                    for (ProductoDTO producto : productos) {
+            %>
+                
               <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
                 <div class="row g-4">
                     <h5 class="card-header bg-secondary pt-2"><%= producto.getTitulo() %></h5>
                   <div class="col-sm-12 mt-2">
-                    <img src="<%= producto.getFoto() %>" class="card-img-top" style="max-width: 200px;height: 170px" >
+                    <img src="<%= producto.getFoto() %>" class="card-img-top" style="max-width: 165px;height: 140px" >
                   </div>
                   <div class="col-sm-12 mt-0">
                     <div class="row justify-content-center">
-                      <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
-                      <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
+                      <h5 class="card-title text-dark mt-2">Precio de salida: <%= producto.getPrecioSalida() %>€</h5>
+                      <p class="card-text text-dark text-center" style="height: 72px">Descripción: <%= producto.getDescripcion() %></p>
+                      <p class="card-text text-dark text-center mb-0" >Vendido por: <%= producto.getVendedor().getNombre() + " " + producto.getVendedor().getApellidos() %></p>
+                      <%
+                            if(producto.getComprador()!=null){
+                      %>  
+                      <p class="card-text text-dark text-center mb-0">Vendido a: <%= producto.getComprador().getNombre() + " " + producto.getComprador().getApellidos() %></p>
+                      <%
+                            }
+                      %> 
                       <div class="row justify-content-center pb-2 px-0">
-                        <% if(producto.getEnPuja()==0){
+                        <% if(producto.getEnPuja()!=0){
                         %>
-                        <a href="EnPujaNuevoServlet?id=<%=producto.getId()%>" class="btn btn-primary col-5" style="width: 100px">Crear puja</a>
+                        <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= producto.getFinPuja().toGMTString().substring(0, 12) %> </p>
                         <% }
                         %>
-                        <a href="ProductoNuevoEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
-                        <a href="ProductoBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2">
+                        <a href="ProductoAdminEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
+                        <a href="ProductoAdminBorrarServlet?id=<%=producto.getId() %>" class="btn btn-danger col-2">
                             <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                             <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>
                             </svg>
@@ -111,29 +123,14 @@
                 </div>
               </div>
             
-            <%
-                    
+            <%    
+                    }
                 }
-                if(i==0){
-            %>
-            <div class="py-5">    
-                Lista de productos vacía.
-            </div>
-            </main>
-
-            <footer class="text-white-50 fixed-bottom">
-            <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
-
-            <%
-                }else{
             %>
             </main>
 
             <footer class="mt-5 text-white-50">
             <p class="pt-5">© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
-            <%
-                }
-            %>
             </footer>
         </div>
         

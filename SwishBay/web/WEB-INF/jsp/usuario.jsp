@@ -42,7 +42,7 @@
                       <a class="nav-link active" aria-current="page" href="UsuarioServlet"> Usuarios</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductoServlet">Productos</a>
+                      <a class="nav-link" href="ProductoAdminServlet">Productos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="CategoriaServlet">Categorías</a>
