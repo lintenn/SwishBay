@@ -12,7 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dto.RolUsuarioDTO;
 import swishbay.dto.UsuarioDTO;
+import swishbay.service.RolUsuarioService;
 import swishbay.service.UsuarioService;
 
 /**
@@ -23,6 +25,7 @@ import swishbay.service.UsuarioService;
 public class UsuarioServlet extends SwishBayServlet {
     
     @EJB UsuarioService usuarioService;
+    @EJB RolUsuarioService rolUsuarioService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +42,15 @@ public class UsuarioServlet extends SwishBayServlet {
         if (super.comprobarAdminSession(request, response)) {
             
             String filtroNombre = request.getParameter("filtro");
+            String filtroRol = request.getParameter("filtroRol");
             
-            List<UsuarioDTO> usuarios = this.usuarioService.listarUsuarios(filtroNombre);
+            List<RolUsuarioDTO> roles = this.rolUsuarioService.listarRoles();
+            
+            List<UsuarioDTO> usuarios = this.usuarioService.listarUsuarios(filtroNombre, filtroRol);
 
             request.setAttribute("usuarios", usuarios);
+            request.setAttribute("roles", roles);
+            request.setAttribute("selected", filtroRol);
             request.getRequestDispatcher("WEB-INF/jsp/usuarios.jsp").forward(request, response);   
         }
            

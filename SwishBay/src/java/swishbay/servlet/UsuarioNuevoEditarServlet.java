@@ -13,8 +13,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dto.CategoriaDTO;
+import swishbay.dto.RolUsuarioDTO;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.CategoriaService;
+import swishbay.service.RolUsuarioService;
 import swishbay.service.UsuarioService;
 
 /**
@@ -26,6 +28,7 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
     
     @EJB CategoriaService categoriaService;
     @EJB UsuarioService usuarioService;
+    @EJB RolUsuarioService rolUsuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,8 +44,10 @@ public class UsuarioNuevoEditarServlet extends SwishBayServlet {
 
         if (super.comprobarAdminSession(request, response)) {
             List<CategoriaDTO> categorias = this.categoriaService.listarCategorias();
+            List<RolUsuarioDTO> roles = this.rolUsuarioService.listarRoles();
             
             request.setAttribute("categorias", categorias);
+            request.setAttribute("roles", roles);
             
             String str = request.getParameter("id");
             if (str != null && !str.isEmpty()) {
