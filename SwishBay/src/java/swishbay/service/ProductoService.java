@@ -85,7 +85,7 @@ public class ProductoService {
         return p;
     }
     
-    public void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){
         p.setTitulo(titulo);
         p.setDescripcion(desc);
         p.setFoto(foto);
@@ -111,6 +111,27 @@ public class ProductoService {
         Producto p = pf.find(Integer.parseInt(strId));
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
+        
+        pf.edit(p);
+
+    }
+    
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, String categoria, String precio){ //Luis
+        p.setTitulo(titulo);
+        p.setDescripcion(desc);
+        p.setFoto(foto);
+        //p.setFinPuja(date);
+        p.setCategoria(cf.findByNombre(categoria).get(0));
+        p.setPrecioSalida(Double.parseDouble(precio));
+        //short n=0;
+        //p.setEnPuja(n);
+    }
+    
+    public void modificarProducto(String strId, String titulo, String desc, String foto, String categoria, String precio) { //Luis
+
+        Producto p = pf.find(Integer.parseInt(strId));
+        
+        rellenarProducto(p,titulo,desc,foto,categoria,precio);
         
         pf.edit(p);
 

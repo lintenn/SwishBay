@@ -66,7 +66,7 @@
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-1 col-form-label">Nombre:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputNombre" name="nombre" value="<%= producto==null? "": producto.getTitulo() %>" required >
+                    <input type="text" class="form-control" id="inputNombre" name="nombre" maxlength="45" value="<%= producto==null? "": producto.getTitulo() %>" required >
                   </div>
                   *
                 </div>
