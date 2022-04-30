@@ -1,3 +1,5 @@
+![](img/SwishBay_logo_white.png) 
+***
 # SwishBay
 Repository for the subject Web Application Technologies. SwishBay is a web application for managing the sale (auctions) of products between users, similar to Ebay.
 
