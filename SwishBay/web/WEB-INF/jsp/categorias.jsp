@@ -34,7 +34,7 @@
                       <a class="nav-link" href="UsuarioServlet"> Usuarios</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="SellerServlet">Productos</a>
+                      <a class="nav-link" href="ProductoAdminServlet">Productos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="CategoriaServlet">Categorías</a>
@@ -60,7 +60,9 @@
                 List<CategoriaDTO> categorias = (List)request.getAttribute("categorias");
                 if (categorias == null || categorias.isEmpty()) {
             %>
-            <h2>No hay categorías.</h2>
+            <div class="py-5 mb-5">    
+                <h2>Sin categorías que mostrar.</h2>
+            </div>
             <%
                 } else {
             %>
@@ -104,7 +106,7 @@
             
             </main>
             
-            <footer class="text-white-50">
+            <footer class="mt-5 text-white-50">
             <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>
