@@ -1,3 +1,5 @@
+![](img/SwishBay_logo_white.png) 
+***
 # SwishBay
 Repository for the subject Web Application Technologies. SwishBay is a web application for managing the sale (auctions) of products between users, similar to Ebay.
 
@@ -37,7 +39,7 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un administrador debe poder ver en un listado los usuarios del sistema. :heavy_check_mark:
 - Un administrador debe poder añadir usuarios al sistema. :heavy_check_mark:
 - _Un administrador debe poder modificar los usuarios del sistema_. :heavy_check_mark:
-- Un administrador debe poder eliminar usuarios del sistema. :heavy_check_mark: ❓
+- Un administrador debe poder eliminar usuarios del sistema (menos a sí mismo). :heavy_check_mark:
 - Un administrador debe poder realizar **filtrados y búsquedas** sobre los usuarios. :heavy_check_mark: ❓
 - Un administrador debe poder ver en un listado los productos del sistema. :heavy_check_mark:
 - ~~Un administrador debe poder añadir productos al sistema.~~
@@ -58,7 +60,7 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un personal de marketing debe poder eliminar sus grupos creados. :heavy_check_mark:
 - Un personal de marketing debe poder consultar los mensajes de grupos de usuarios. :heavy_check_mark:
 - Un personal de marketing debe poder enviar mensajes a sus grupos de usuarios. :heavy_check_mark:
-- Un personal de marketing debe poder modificar mensajes de sus grupos de usuarios_. :heavy_check_mark:
-- Un personal de marketing debe poder eliminar mensajes enviados a sus grupos de usuarios_. :heavy_check_mark:
+- Un personal de marketing debe poder modificar mensajes de sus grupos de usuarios. :heavy_check_mark:
+- Un personal de marketing debe poder eliminar mensajes enviados a sus grupos de usuarios. :heavy_check_mark:
 - Un personal de marketing debe poder gestionar la recepción de los mensajes en la bandeja de entrada de mensajes de los usuarios compradores. ❓
 - Un personal de marketing debe poder notificar a los usuarios de que sus productos favoritos se han abierto para puja.
