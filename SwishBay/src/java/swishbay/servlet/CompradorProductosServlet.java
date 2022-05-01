@@ -10,12 +10,12 @@ import swishbay.dto.ProductoDTO;
 import swishbay.dto.UsuarioDTO;
 
 /**
- * Recupera todos lo productos registrados.
+ * Recupera todos los productos existentes en la tienda que no sean vendidos por el usuario.
  * 
- * @author Miguel
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends CompradorServlet {
+@WebServlet(name = "CompradorProductosServlet", urlPatterns = {"/CompradorProductosServlet"})
+public class CompradorProductosServlet extends CompradorServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -46,7 +46,7 @@ public class UsuarioGuardarServlet extends HttpServlet {
         if (user == null || user.getRol().getNombre().equals("administrador")) {
             
             String strId, strTipoUsuario, strSaldo;
-            String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "ProductoServlet";
+            String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "CompradorProductosServlet";
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaNacimiento = null;
             double saldo = 0;
@@ -92,7 +92,7 @@ public class UsuarioGuardarServlet extends HttpServlet {
                    UsuarioDTO usuario = this.usuarioService.crearUsuario(nombre, apellidos, correo, password, domicilio, ciudad, sexo, fechaNacimiento, saldo, strTipoUsuario, categorias);
                    
                    session.setAttribute("usuario", usuario);
-                   goTo = "ProductoServlet";
+                   goTo = "CompradorProductosServlet";
                } else if (strId == null || strId.isEmpty()) {   // Creación desde administrador
                    
                    saldo = Double.parseDouble(strSaldo);
@@ -118,9 +118,9 @@ public class UsuarioGuardarServlet extends HttpServlet {
             
         } else {
             
-            String redirectTo = "ProductoServlet";
+            String redirectTo = "CompradorProductosServlet";
             if (user.getRol().getNombre().equals("compradorvendedor")) {
-                redirectTo = "ProductoServlet";
+                redirectTo = "CompradorProductosServlet";
             } else if (user.getRol().getNombre().equals("marketing")) {
                 redirectTo = "UsuarioCompradorServlet";
             }

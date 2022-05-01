@@ -37,7 +37,7 @@ public class LoginServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String correo, status = null, goTo = "ProductoServlet", password;
+        String correo, status = null, goTo = "CompradorProductosServlet", password;
         correo = request.getParameter("correo");
         password = request.getParameter("password");
         //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);

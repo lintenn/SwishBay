@@ -45,7 +45,7 @@ public class SaldoServlet extends SwishBayServlet {
             HttpSession session = request.getSession();
             session.setAttribute("usuario", usuario);
             
-            response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+            response.sendRedirect(request.getContextPath() + "/CompradorProductosServlet");
         }
     }
 

@@ -16,7 +16,7 @@
         if (user.getRol().getNombre().equals("administrador")) {
             home = "UsuarioServlet";
         } else if (user.getRol().getNombre().equals("compradorvendedor")) {
-            home = "ProductoServlet";
+            home = "CompradorProductosServlet";
         } else if (user.getRol().getNombre().equals("marketing")) {
             home = "UsuarioCompradorServlet";
         }

@@ -59,7 +59,7 @@ public class ManejoFavoritoServlet extends SwishBayServlet {
                 
                 session.setAttribute("usuario", usuario);
                 
-                response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+                response.sendRedirect(request.getContextPath() + "/CompradorProductosServlet");
                 //request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
             }
         }
