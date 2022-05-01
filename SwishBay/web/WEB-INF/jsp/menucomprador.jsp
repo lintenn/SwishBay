@@ -27,7 +27,7 @@
                         <a class="nav-link <%=(servlet.equals("CompradorEnPujaServlet")) ? "active" : "" %>" href="CompradorEnPujaServlet">Pujas Abiertas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <%=(servlet.equals("CompradorFavoritosServlet")) ? "active" : "" %>" href="CompradoFavoritosServlet">Favoritos</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorFavoritosServlet")) ? "active" : "" %>" href="CompradorFavoritosServlet">Favoritos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <%=(servlet.equals("CompradorCompradosServlet")) ? "active" : "" %>" href="CompradorCompradosServlet">Comprados</a>
