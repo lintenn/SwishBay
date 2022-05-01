@@ -44,4 +44,10 @@ public class CompradorService {
         
         return this.listaProductoEntityADTO(productos);
     }
+    
+    public List<ProductoDTO> listarProductosComprados(String filtroTitulo, String filtroCategoria, int usuario){
+        List<Producto> productos = productoFacade.findCompradosByFiltro(filtroTitulo, filtroCategoria, usuario);
+        
+        return this.listaProductoEntityADTO(productos);
+    }
 }

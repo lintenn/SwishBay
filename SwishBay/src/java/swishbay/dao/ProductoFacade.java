@@ -174,7 +174,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
     }
     
     
-    
+    /*
     public List<Producto> findCompradosByFiltro(String filtroNombre, String filtroCategoria, int usuario) {
         Query q;
         q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.comprador.id = :id");
@@ -182,7 +182,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
         return q.getResultList(); 
-    }
+    }*/
     
     public Producto findByID(int id) {
         Query q;
@@ -220,16 +220,29 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
+        
         return q.getResultList(); 
     }
     
-        public List<Producto> findFavoritosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+    public List<Producto> findFavoritosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
         Query q;
         q = this.getEntityManager().createQuery("select p from Producto p join p.usuarioList u where u.id = :id"
                 + " and p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
         q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
+        
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findCompradosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo "
+                + "and p.categoria.nombre like :filtroCategoria and p.comprador.id = :id");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("id", usuario);
+        
         return q.getResultList(); 
     }
 }

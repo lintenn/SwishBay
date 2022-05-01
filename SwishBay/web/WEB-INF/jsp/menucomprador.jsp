@@ -27,7 +27,7 @@
                       <a class="nav-link" href="CompradoFavoritosServlet">Favoritos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductoCompradoServlet">Comprados</a>
+                      <a class="nav-link" href="CompradorCompradosServlet">Comprados</a>
                     </li>
                   </ul>
                   <%
