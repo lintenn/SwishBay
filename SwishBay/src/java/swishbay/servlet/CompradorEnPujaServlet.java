@@ -14,8 +14,8 @@ import swishbay.dto.UsuarioDTO;
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoEnPujaServlet", urlPatterns = {"/ProductoEnPujaServlet"})
-public class ProductoEnPujaServlet extends CompradorServlet {
+@WebServlet(name = "CompradorEnPujaServlet", urlPatterns = {"/CompradorEnPujaServlet"})
+public class CompradorEnPujaServlet extends CompradorServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
