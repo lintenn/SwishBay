@@ -213,19 +213,20 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }*/
     
-    public List<Producto> findFavoritosByFiltro(String filtroNombre, String filtroCategoria, int usuario) {
+    public List<Producto> findExistentesByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p"
-                + " JOIN p.usuarioList u where p. = u.id and u.id = :id");
-        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo "
+                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
         return q.getResultList(); 
     }
     
-    public List<Producto> findExistentesByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+        public List<Producto> findFavoritosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
+        q = this.getEntityManager().createQuery("select p from Producto p join p.usuarioList u where u.id = :id"
+                + " and p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
         q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);

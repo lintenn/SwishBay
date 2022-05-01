@@ -14,8 +14,8 @@ import swishbay.dto.UsuarioDTO;
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoFavoritoServlet", urlPatterns = {"/ProductoFavoritoServlet"})
-public class ProductoFavoritoServlet extends CompradorServlet {
+@WebServlet(name = "CompradoFavoritosServlet", urlPatterns = {"/CompradoFavoritosServlet"})
+public class CompradoFavoritosServlet extends CompradorServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -59,7 +59,7 @@ public class ProductoFavoritoServlet extends CompradorServlet {
     @Override
     protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
         //return usuario.getProductoList();
-        return compradorService.listarProductosExistentes(filtroTitulo, filtroCategoria, 0);
+        return compradorService.listarProductosFavoritos(filtroTitulo, filtroCategoria, usuario.getId());
     }
     
     @Override
