@@ -1,6 +1,7 @@
 package swishbay.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -9,9 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dto.CategoriaDTO;
 import swishbay.dto.ProductoDTO;
+import swishbay.dto.PujaDTO;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.CategoriaService;
 import swishbay.service.CompradorService;
+import swishbay.service.PujaService;
 
 /**
  * Servlet abstracto que recupera y muestra los productos aplicando un filtro específico.
@@ -23,6 +26,7 @@ public abstract class CompradorServlet extends SwishBayServlet {
     
     @EJB CategoriaService categoriaService;
     @EJB CompradorService compradorService;
+    @EJB PujaService pujaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,7 +56,13 @@ public abstract class CompradorServlet extends SwishBayServlet {
             
             List<ProductoDTO> productos = this.getProductos(filtroTitulo, filtroCategoria, usuario);   
             List<CategoriaDTO> categorias = categoriaService.listarCategorias();
-
+            
+            List<PujaDTO> mayoresPujas = new ArrayList<>();
+            for(ProductoDTO producto : productos){
+                mayoresPujas.add(pujaService.mayorPuja(producto.getId()));
+            }
+            request.setAttribute("mayoresPujas", mayoresPujas);
+            
             request.setAttribute("productos", productos);
             request.setAttribute("categorias", categorias);
             request.setAttribute("selected", filtroCategoria);

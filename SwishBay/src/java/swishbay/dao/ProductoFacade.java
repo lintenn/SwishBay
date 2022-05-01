@@ -245,4 +245,15 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         
         return q.getResultList(); 
     }
+    
+        public List<Producto> findEnPujaByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.enPuja = 1 "
+                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("id", usuario);
+        
+        return q.getResultList(); 
+    }
 }

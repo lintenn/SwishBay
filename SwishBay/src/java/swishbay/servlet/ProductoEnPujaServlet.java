@@ -10,7 +10,7 @@ import swishbay.dto.ProductoDTO;
 import swishbay.dto.UsuarioDTO;
 
 /**
- * Recupera todos los productos en puja.
+ * Recupera todos los productos en puja que no sean vendidos por el usuario.
  * 
  * @author Miguel Oña Guerrero
  */
@@ -58,7 +58,9 @@ public class ProductoEnPujaServlet extends CompradorServlet {
     
     @Override
     protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
-        return compradorService.listarProductosExistentes(filtroTitulo, filtroCategoria, 0);
+        List<ProductoDTO> productos = compradorService.listarProductosEnPuja(filtroTitulo, filtroCategoria, usuario.getId());
+        
+        return productos;
     }
     
     @Override

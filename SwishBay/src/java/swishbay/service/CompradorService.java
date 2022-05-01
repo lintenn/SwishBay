@@ -50,4 +50,12 @@ public class CompradorService {
         
         return this.listaProductoEntityADTO(productos);
     }
+    
+    public List<ProductoDTO> listarProductosEnPuja(String filtroTitulo, String filtroCategoria, int usuario){
+        List<Producto> productos = productoFacade.findEnPujaByFiltro(filtroTitulo, filtroCategoria, usuario);
+        
+        return this.listaProductoEntityADTO(productos);
+    }
+    
+    
 }
