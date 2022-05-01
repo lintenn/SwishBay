@@ -4,6 +4,7 @@
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="swishbay.entity.Categoria"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -30,7 +31,7 @@
                     </li>
                   </ul>
                   <%
-                    List<Categoria> categorias = (List) request.getAttribute("categorias");
+                    List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
                         if(categorias != null){                    
                   %>
                   <jsp:include page="productofiltro.jsp"/>

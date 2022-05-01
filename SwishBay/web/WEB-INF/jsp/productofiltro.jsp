@@ -4,6 +4,7 @@
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="swishbay.entity.Categoria"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -15,12 +16,12 @@
                     <div class="col-sm-4">
                         <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">         
                             <%
-                              List<Categoria> categorias = (List) request.getAttribute("categorias");
+                              List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
                               String filtroCategoria = (String) request.getAttribute("selected");
                              %>
                              <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
                              <%
-                              for (Categoria c:categorias){
+                              for (CategoriaDTO c : categorias){
                                 
                             %>     
                                 <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>

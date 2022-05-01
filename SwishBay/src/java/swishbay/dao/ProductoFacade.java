@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
 
 /**
  *
@@ -134,14 +133,6 @@ public class ProductoFacade extends AbstractFacade<Producto> {
     }
     */
     
-    public List<Producto> findAllByFiltro(String filtroNombre, String filtroCategoria) {
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria");
-        q.setParameter("titulo", '%' + filtroNombre + '%');
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        return q.getResultList(); 
-    }
-    
     public List<Object[]> findEnPuja(int user) {
         Query q;
         q = this.getEntityManager().createQuery("select p, MAX(pu.precio) from Producto p LEFT JOIN p.pujaList pu where p.enPuja=1 and p.vendedor.id= :user GROUP BY p");
@@ -227,6 +218,15 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q = this.getEntityManager().createQuery("select p from Producto p"
                 + " JOIN p.usuarioList u where p. = u.id and u.id = :id");
         q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("id", usuario);
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findExistentesByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
         return q.getResultList(); 

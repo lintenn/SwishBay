@@ -6,8 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
 
 /**
  * Recupera todos lo productos registrados.
@@ -15,7 +15,7 @@ import swishbay.entity.Usuario;
  * @author Miguel
  */
 @WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends ProductosServlet {
+public class ProductoServlet extends CompradorServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -57,8 +57,8 @@ public class ProductoServlet extends ProductosServlet {
     }// </editor-fold>
     
     @Override
-    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
-        return productoFacade.findAllByFiltro(filtroTitulo, filtroCategoria);
+    protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
+        return compradorService.listarProductosExistentes(filtroTitulo, filtroCategoria, usuario.getId());
     }
     
     @Override

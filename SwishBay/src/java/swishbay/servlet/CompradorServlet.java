@@ -7,22 +7,22 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.CategoriaService;
+import swishbay.service.CompradorService;
 
 /**
  * Servlet abstracto que recupera y muestra los productos aplicando un filtro específico.
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductosServlet", urlPatterns = {"/ProductosServlet"})
-public abstract class ProductosServlet extends SwishBayServlet {
+@WebServlet(name = "CompradorServlet", urlPatterns = {"/CompradorServlet"})
+public abstract class CompradorServlet extends SwishBayServlet {
     
-    @EJB ProductoFacade productoFacade;
-    @EJB CategoriaFacade categoriaFacade;
+    @EJB CategoriaService categoriaService;
+    @EJB CompradorService compradorService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,7 +38,7 @@ public abstract class ProductosServlet extends SwishBayServlet {
         
         if (super.comprobarSession(request, response)) {
             
-            Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
+            UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
             String filtroTitulo = request.getParameter("filtro");
             String filtroCategoria = request.getParameter("filtroCategoria");
             
@@ -48,10 +48,10 @@ public abstract class ProductosServlet extends SwishBayServlet {
             
             if(filtroCategoria == null || filtroCategoria.equals("Categoria")){
                 filtroCategoria = "";
-            } 
+            }
             
-            List<Producto> productos = this.getProductos(filtroTitulo, filtroCategoria, usuario);   
-            List<Categoria> categorias = categoriaFacade.findAll();
+            List<ProductoDTO> productos = this.getProductos(filtroTitulo, filtroCategoria, usuario);   
+            List<CategoriaDTO> categorias = categoriaService.listarCategorias();
 
             request.setAttribute("productos", productos);
             request.setAttribute("categorias", categorias);
@@ -62,7 +62,7 @@ public abstract class ProductosServlet extends SwishBayServlet {
         }
     }
     
-    abstract protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario);
+    abstract protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario);
     
     abstract protected String getServlet();
     
