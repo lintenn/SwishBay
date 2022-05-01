@@ -8,6 +8,9 @@
 <%@page import="swishbay.entity.Categoria"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    String servlet = (String)request.getAttribute("servlet");
+%>
 <!DOCTYPE html>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
@@ -18,16 +21,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="CompradorProductosServlet">Productos</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorProductosServlet")) ? "active" : "" %>" href="CompradorProductosServlet">Productos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="ProductoEnPujaServlet">Pujas Abiertas</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorEnPujaServlet")) ? "active" : "" %>" href="ProductoEnPujaServlet">Pujas Abiertas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="CompradoFavoritosServlet">Favoritos</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorFavoritosServlet")) ? "active" : "" %>" href="CompradoFavoritosServlet">Favoritos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="CompradorCompradosServlet">Comprados</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorCompradosServlet")) ? "active" : "" %>" href="CompradorCompradosServlet">Comprados</a>
                     </li>
                   </ul>
                   <%

@@ -10,7 +10,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
                   <%
-                      String action = (String)request.getAttribute("action");
+                      String action = (String)request.getAttribute("servlet");
                   %>
                   <form action="<%=action %>" method="POST" class="d-flex">
                     <div class="col-sm-4">
