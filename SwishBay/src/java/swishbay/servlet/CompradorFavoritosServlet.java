@@ -58,7 +58,6 @@ public class CompradorFavoritosServlet extends CompradorServlet {
 
     @Override
     protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
-        //return usuario.getProductoList();
         return compradorService.listarProductosFavoritos(filtroTitulo, filtroCategoria, usuario.getId());
     }
     

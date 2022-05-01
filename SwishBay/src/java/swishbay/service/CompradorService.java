@@ -6,14 +6,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import swishbay.dao.CategoriaFacade;
 import swishbay.dao.ProductoFacade;
-import swishbay.dto.CategoriaDTO;
 import swishbay.dto.ProductoDTO;
-import swishbay.dto.UsuarioDTO;
-import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
 
 /**
- *
+ * Service para mostrar productos al comprador
+ * 
  * @author Miguel Oña Guerrero
  */
 @Stateless

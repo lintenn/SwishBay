@@ -58,9 +58,7 @@ public class CompradorEnPujaServlet extends CompradorServlet {
     
     @Override
     protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
-        List<ProductoDTO> productos = compradorService.listarProductosEnPuja(filtroTitulo, filtroCategoria, usuario.getId());
-        
-        return productos;
+        return compradorService.listarProductosEnPuja(filtroTitulo, filtroCategoria, usuario.getId());
     }
     
     @Override

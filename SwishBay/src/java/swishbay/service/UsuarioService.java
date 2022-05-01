@@ -17,10 +17,12 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import swishbay.dao.CategoriaFacade;
+import swishbay.dao.ProductoFacade;
 import swishbay.dao.RolUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
 import swishbay.dto.UsuarioDTO;
 import swishbay.entity.Categoria;
+import swishbay.entity.Producto;
 import swishbay.entity.RolUsuario;
 import swishbay.entity.Usuario;
 
@@ -34,6 +36,7 @@ public class UsuarioService {
     @EJB UsuarioFacade usuarioFacade;
     @EJB CategoriaFacade categoriaFacade;
     @EJB RolUsuarioFacade rolUsuarioFacade;
+    @EJB ProductoFacade productoFacade;
     
     private List<UsuarioDTO> listaEntityADTO (List<Usuario> lista) {
         List<UsuarioDTO> listaDTO = null;
@@ -257,5 +260,21 @@ public class UsuarioService {
         } finally{
             return hash;
         }
+    }
+    
+    public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){
+        
+        Usuario usuario = this.usuarioFacade.find(idUsuario);
+        Producto producto = this.productoFacade.findByID(idProducto);
+        
+        if(usuario.getProductoList().contains(producto)){
+            usuario.getProductoList().remove(producto);
+        }else{
+            usuario.getProductoList().add(producto);
+        }
+        
+        this.usuarioFacade.edit(usuario);
+        
+        return usuario.toDTO();
     }
 }

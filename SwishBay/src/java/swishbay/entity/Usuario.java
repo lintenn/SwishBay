@@ -31,6 +31,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
 import swishbay.dto.UsuarioDTO;
 
 /**
@@ -362,7 +363,16 @@ public class Usuario implements Serializable {
             }
         }
         dto.setCategoriaList(listaDTO);
-                
+        
+        List<Integer> favoritos = null;
+        if(productoList != null){
+            favoritos = new ArrayList<>();
+            for(Producto producto : productoList){
+                favoritos.add(producto.getId());
+            }
+        }
+        dto.setFavoritos(favoritos);
+       
         return dto;        
     }  
 }

@@ -67,6 +67,7 @@ public abstract class CompradorServlet extends SwishBayServlet {
             request.setAttribute("categorias", categorias);
             request.setAttribute("selected", filtroCategoria);
             request.setAttribute("servlet", this.getServlet());
+            request.getSession().setAttribute("servlet", this.getServlet());
             
             forward(request, response);
         }
