@@ -16,6 +16,7 @@ import swishbay.dao.UsuarioFacade;
 import swishbay.dto.ProductoDTO;
 import swishbay.entity.Producto;
 import swishbay.entity.Puja;
+import swishbay.entity.Usuario;
 
 /**
  *
@@ -198,13 +199,30 @@ public class ProductoService {
 
             p.setEnPuja((short) 0);
             p.setComprador(puja.getUsuario());
-
+            System.out.println("Vendido");
             this.pf.edit(p);
+            
+            for(Puja pu : p.getPujaList()){
+                 if(!pu.equals(puja)){
+                     sumarSaldo(pu.getPrecio(),pu.getUsuario());
+                 }
+             }       
+            
         }else{
              p.setEnPuja((short) 0);
              this.pf.edit(p);
+             
         }
 
+    }
+    
+    private void sumarSaldo(double cantidad, Usuario user){
+        
+        double saldo = user.getSaldo();
+        saldo += cantidad;
+        user.setSaldo(saldo);
+        
+        uf.edit(user);
     }
     
 }
