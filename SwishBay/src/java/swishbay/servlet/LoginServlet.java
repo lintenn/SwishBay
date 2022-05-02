@@ -55,7 +55,7 @@ public class LoginServlet extends SwishBayServlet {
             if (user.getRol().getNombre().equals("administrador")) {
                 goTo = "UsuarioServlet";
             } else if (user.getRol().getNombre().equals("compradorvendedor")) {
-                goTo = "SellerServlet";
+                goTo = "CompradorProductosServlet";
             } else if (user.getRol().getNombre().equals("marketing")) {
                 goTo = "UsuarioCompradorServlet";
             }
