@@ -11,16 +11,16 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.service.CategoriaService;
+import swishbay.service.ProductoService;
 
 /**
  *
  * @author Luis
  */
-@WebServlet(name = "CategoriaGuardarServlet", urlPatterns = {"/CategoriaGuardarServlet"})
-public class CategoriaGuardarServlet extends SwishBayServlet {
+@WebServlet(name = "ProductoAdminGuardarServlet", urlPatterns = {"/ProductoAdminGuardarServlet"})
+public class ProductoAdminGuardarServlet extends SwishBayServlet {
 
-    @EJB CategoriaService categoriaService;
+    @EJB ProductoService productoService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,24 +36,32 @@ public class CategoriaGuardarServlet extends SwishBayServlet {
         
         if (super.comprobarAdminSession(request, response)) {
             
-            String strId;
-            String nombre, descripcion, goTo = "CategoriaServlet";
+            String strId, status=null;
+            strId= request.getParameter("id");
             
-            strId = request.getParameter("id");
-            nombre = request.getParameter("nombre");
-            descripcion = request.getParameter("descripcion");
-            
-            if (strId == null || strId.isEmpty()) { // Crear nueva categoria
-                this.categoriaService.crearCategoria(nombre, descripcion);
-                
-            } else {                                // Editar categoria
-                this.categoriaService.modificarCategoria(Integer.parseInt(strId), nombre, descripcion);
-                
+            //java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
+            String titulo = request.getParameter("nombre");
+            String desc = request.getParameter("descripcion");
+            String foto = request.getParameter("foto");
+            if(foto==null || foto.isEmpty()){
+                foto= "https://th.bing.com/th/id/OIP.KeKY2Y3R0HRBkPEmGWU3FwHaHa?pid=ImgDet&rs=1";
             }
+            String categoria= request.getParameter("categoria");
+            String precio = request.getParameter("precio");
+            if(!precio.matches("[-+]?\\d*\\.?\\d+")){
+                status= "Formato de precio incorrecto.";
+                request.setAttribute("status", status);
+
+                request.getRequestDispatcher("ProductoAdminEditarServlet").forward(request, response);
+
+            }
+
+            this.productoService.modificarProducto(strId, titulo, desc, foto, categoria, precio);
+                   
+            response.sendRedirect(request.getContextPath() + "/ProductoAdminServlet");
             
-            response.sendRedirect(request.getContextPath() + "/" + goTo); 
-            
-        } 
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

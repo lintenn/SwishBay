@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package swishbay.servlet;
 
 import java.io.IOException;
@@ -7,22 +12,20 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import swishbay.dao.ProductoFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
+import swishbay.service.CategoriaService;
+import swishbay.service.ProductoService;
 
 /**
- * Añade y elimina productos favoritos de un comprador.
- * 
- * @author Miguel Oña Guerrero
+ *
+ * @author Luis
  */
-@WebServlet(name = "ManejoFavoritoServlet", urlPatterns = {"/ManejoFavoritoServlet"})
-public class ManejoFavoritoServlet extends SwishBayServlet {
-    
-    @EJB ProductoFacade productoFacade;
-    @EJB UsuarioFacade usuarioFacade;
+@WebServlet(name = "ProductoAdminEditarServlet", urlPatterns = {"/ProductoAdminEditarServlet"})
+public class ProductoAdminEditarServlet extends SwishBayServlet {
+
+    @EJB ProductoService productoService;
+    @EJB CategoriaService categoriaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,33 +38,16 @@ public class ManejoFavoritoServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        if(super.comprobarSession(request, response)){
+        if (super.comprobarAdminSession(request, response)) {
             
             String str = request.getParameter("id");
             
-            if(str != null){
-                Producto producto = productoFacade.find(Integer.parseInt(str));
-                
-                HttpSession session = request.getSession();
-                Usuario usuario = (Usuario)session.getAttribute("usuario");
-                List<Producto> favoritos = usuario.getProductoList();
-                
-                if(favoritos.contains(producto)){
-                    favoritos.remove(producto);
-                }else{
-                    favoritos.add(producto);
-                }
-                
-                usuario.setProductoList(favoritos);
-                
-                usuarioFacade.edit(usuario);
-                
-                session.setAttribute("usuario", usuario);
-                
-                response.sendRedirect(request.getContextPath() + "/ProductoServlet");
-                //request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
-            }
+            ProductoDTO producto = this.productoService.buscarProducto(str);
+            List<CategoriaDTO> categorias = this.categoriaService.listarCategorias();
+            
+            request.setAttribute("categorias", categorias);
+            request.setAttribute("producto", producto);
+            request.getRequestDispatcher("WEB-INF/jsp/productoAdmin.jsp").forward(request, response);
         }
     }
 

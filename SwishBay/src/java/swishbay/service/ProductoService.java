@@ -5,6 +5,8 @@
 package swishbay.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import swishbay.dao.CategoriaFacade;
@@ -28,6 +30,41 @@ public class ProductoService {
     @EJB UsuarioFacade uf;
     @EJB PujaFacade puf;
     
+    private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { //Luis
+        List<ProductoDTO> listaDTO = null;
+        if (lista != null) {
+            listaDTO = new ArrayList<>();
+            for (Producto producto : lista) {
+                listaDTO.add(producto.toDTO());
+            }
+        }
+        return listaDTO;
+    }
+    
+    public List<ProductoDTO> listarProductos (String filtroNombre, String filtroCategoria) { //Luis
+        List<Producto> productos = null;
+        
+        if (filtroNombre == null || filtroNombre.isEmpty()) {
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findAll();
+                    
+                } else {
+                    productos= this.pf.findAll(filtroCategoria);
+
+                }
+        } else {
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findByNombre(filtroNombre);
+
+                } else {
+                    productos = pf.findByNombre(filtroNombre,filtroCategoria);
+
+                }   
+        }
+        
+        return this.listaEntityADTO(productos);
+    }
+    
     public ProductoDTO buscarProducto(String strId){
         Producto p=null;
         if(strId !=null && !strId.isEmpty()){
@@ -48,7 +85,7 @@ public class ProductoService {
         return p;
     }
     
-    public void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){
         p.setTitulo(titulo);
         p.setDescripcion(desc);
         p.setFoto(foto);
@@ -74,6 +111,27 @@ public class ProductoService {
         Producto p = pf.find(Integer.parseInt(strId));
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
+        
+        pf.edit(p);
+
+    }
+    
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, String categoria, String precio){ //Luis
+        p.setTitulo(titulo);
+        p.setDescripcion(desc);
+        p.setFoto(foto);
+        //p.setFinPuja(date);
+        p.setCategoria(cf.findByNombre(categoria).get(0));
+        p.setPrecioSalida(Double.parseDouble(precio));
+        //short n=0;
+        //p.setEnPuja(n);
+    }
+    
+    public void modificarProducto(String strId, String titulo, String desc, String foto, String categoria, String precio) { //Luis
+
+        Producto p = pf.find(Integer.parseInt(strId));
+        
+        rellenarProducto(p,titulo,desc,foto,categoria,precio);
         
         pf.edit(p);
 

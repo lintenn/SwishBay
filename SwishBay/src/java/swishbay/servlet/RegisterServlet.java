@@ -55,7 +55,7 @@ public class RegisterServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "ProductoServlet";
+        String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "CompradorProductosServlet";
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fechaNacimiento = null;
         double saldo = 0;

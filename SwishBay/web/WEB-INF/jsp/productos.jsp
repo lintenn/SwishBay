@@ -4,8 +4,8 @@
     Author     : Miguel Oña Guerrero
 --%>
 
-<%@page import="swishbay.entity.Usuario"%>
-<%@page import="swishbay.entity.Producto"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
+<%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -26,9 +26,8 @@
             <main class="row d-flex justify-content-center mt-4">
                 
             <%
-                List<Producto> productos = (List)request.getAttribute("productos");
-                Usuario usuario = (Usuario)session.getAttribute("usuario");
-                List<Producto> favoritos = usuario.getProductoList();
+                List<ProductoDTO> productos = (List)request.getAttribute("productos");
+                UsuarioDTO usuario = (UsuarioDTO)session.getAttribute("usuario");
                 
                 if(productos.isEmpty()){
             %>
@@ -41,7 +40,7 @@
             <%
                 }else{
 
-                    for(Producto producto : productos){
+                    for(ProductoDTO producto : productos){
             %> 
 
                 <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
@@ -56,9 +55,9 @@
                                 <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
                                 <div class="row justify-content-center pb-2 px-0">
                                     <a href="ProductoVerServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Ver producto</a>
-                                    <a href="ManejoFavoritoServlet?id=<%=producto.getId() %>" class="col-2">
+                                    <a href="CompradorManejoFavoritoServlet?id=<%=producto.getId() %>" class="col-2">
                                         <%
-                                            if(favoritos.contains(producto)){
+                                            if(usuario.getFavoritos().contains(producto.getId())){
                                         %>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="orange" class="bi bi-star-fill" viewBox="0 0 16 16">
                                             <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>

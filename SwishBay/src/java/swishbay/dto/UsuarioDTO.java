@@ -25,6 +25,7 @@ public class UsuarioDTO {
     private double saldo;
     private RolUsuarioDTO rol;
     private List<Integer> categoriaList;
+    private List<Integer> favoritos;
     
     public UsuarioDTO() {
     }
@@ -191,4 +192,11 @@ public class UsuarioDTO {
         this.categoriaList = categoriaList;
     }
     
+    public List<Integer> getFavoritos() {
+        return favoritos;
+    }
+    
+    public void setFavoritos(List<Integer> favoritos) {
+        this.favoritos = favoritos;
+    }
 }

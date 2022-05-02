@@ -4,6 +4,7 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.dto.RolUsuarioDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -22,6 +23,7 @@
     </head>
     <%
         List<CategoriaDTO> categorias = (List)request.getAttribute("categorias");
+        List<RolUsuarioDTO> roles = (List)request.getAttribute("roles");
         
         UsuarioDTO usuario = (UsuarioDTO)request.getAttribute("usuario");
         String status = (String) request.getAttribute("status");
@@ -42,7 +44,7 @@
                       <a class="nav-link active" aria-current="page" href="UsuarioServlet"> Usuarios</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductoServlet">Productos</a>
+                      <a class="nav-link" href="ProductoAdminServlet">Productos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="CategoriaServlet">Categorías</a>
@@ -92,7 +94,7 @@
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputPassword" class="col-sm-1 col-form-label">Contraseña:</label>
                   <div class="col-sm-4">
-                    <input type="password" minlength="6" maxlength="45" class="form-control" id="inputPassword" name="password" required="" value="<%= usuario==null? "": usuario.getCorreo()%>" >
+                    <input type="password" minlength="6" maxlength="45" class="form-control" id="inputPassword" name="password" required="" value="<%= usuario==null? "": usuario.getPassword()%>" >
                   </div>
                   *
                 </div>
@@ -140,18 +142,14 @@
                 <br/>
                 <label for="inputTipo" class="form-label">Tipo de usuario:</label>
                 <div class="d-flex align-center justify-content-center">
+                    
+                    <% for (RolUsuarioDTO rol : roles) { %>
                     <div class="form-check mx-1">
-                        <input id="administrador" name="tipo" value="administrador" type="radio" class="form-check-input" <%= usuario==null? "checked":(usuario.getRol().getNombre().equals("administrador")? "checked":"") %> required=""/>
-                      <label class="form-check-label" for="administrador">Administrador</label>
+                        <input id="<%= rol.getNombre() %>" name="tipo" value="<%= rol.getNombre() %>" type="radio" class="form-check-input" <%= usuario==null? (rol.getNombre().equals("administrador")? "checked":"") 
+                                                                                                                                                            : (usuario.getRol().getNombre().equals(rol.getNombre())? "checked":"") %> required=""/>
+                        <label class="form-check-label" for="<%= rol.getNombre() %>"><%= rol.getNombre().equals("compradorvendedor")? "comprador/vendedor" : rol.getNombre() %></label>
                     </div>
-                    <div class="form-check mx-1">
-                      <input id="compradorvendedor" name="tipo" value="compradorvendedor" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getRol().getNombre().equals("compradorvendedor")? "checked":"") %> required=""/>
-                      <label class="form-check-label" for="compradorvendedor">Comprador/Vendedor</label>
-                    </div>
-                    <div class="form-check mx-1">
-                      <input id="marketing" name="tipo" value="marketing" type="radio" class="form-check-input" <%= usuario==null? "":(usuario.getRol().getNombre().equals("marketing")? "checked":"") %> required=""/>
-                      <label class="form-check-label" for="marketing">Marketing</label>
-                    </div>
+                    <% } %>
                 </div>
                 
                 <br/>
@@ -183,7 +181,7 @@
             
             
             
-            <footer class="text-white-50 fixed-bottom">
+            <footer class="text-white-50">
             <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>

@@ -1,21 +1,47 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.service.ProductoService;
 
 /**
- * Recupera todos lo productos registrados.
- * 
- * @author Miguel
+ *
+ * @author Luis
  */
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends ProductosServlet {
+@WebServlet(name = "ProductoAdminBorrarServlet", urlPatterns = {"/ProductoAdminBorrarServlet"})
+public class ProductoAdminBorrarServlet extends SwishBayServlet {
+
+    @EJB ProductoService productoService;
+    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (super.comprobarAdminSession(request, response)) {
+            
+            String str = request.getParameter("id");
+            
+            this.productoService.borrarProducto(Integer.parseInt(str));
+            
+            response.sendRedirect(request.getContextPath() + "/ProductoAdminServlet");
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -55,14 +81,5 @@ public class ProductoServlet extends ProductosServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    @Override
-    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
-        return productoFacade.findAllByFiltro(filtroTitulo, filtroCategoria);
-    }
-    
-    @Override
-    protected String getServlet() {
-        return this.getServletName();
-    }
+
 }

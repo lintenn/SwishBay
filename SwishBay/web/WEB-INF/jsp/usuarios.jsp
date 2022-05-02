@@ -4,6 +4,7 @@
     Author     : Luis
 --%>
 
+<%@page import="swishbay.dto.RolUsuarioDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
@@ -34,7 +35,7 @@
                       <a class="nav-link active" aria-current="page" href="UsuarioServlet"> Usuarios</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="SellerServlet">Productos</a>
+                      <a class="nav-link" href="ProductoAdminServlet">Productos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="CategoriaServlet">Categorías</a>
@@ -42,7 +43,27 @@
                     
                   </ul>
                   <form method="post" class="d-flex" action="UsuarioServlet">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <div class="col-sm-5">
+                        <select class="form-select px-2" id="filtroRol" name="filtroRol">
+                            
+                            <%
+                              UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
+                              List<UsuarioDTO> usuarios = (List)request.getAttribute("usuarios");
+                              List<RolUsuarioDTO> roles = (List) request.getAttribute("roles");
+                              String filtroRol = (String) request.getAttribute("selected");
+                             %>
+                             <option <%= (filtroRol==null || filtroRol.equals("Tipo")) ? "selected":"" %> value="Tipo">Seleccionar tipo</option>
+                             <%
+                              for (RolUsuarioDTO rol : roles){
+                                
+                            %>     
+                                <option <%= (filtroRol != null && filtroRol.equals(rol.getNombre())) ? "selected":"" %> value="<%=rol.getNombre()%>"><%= (rol.getNombre().equals("compradorvendedor") ? "comprador/vendedor":rol.getNombre()) %> </option>
+                           <%  
+                              }
+                           %>
+                        </select>
+                    </div>
+                    <input class="form-control me-2 mx-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>
@@ -57,10 +78,11 @@
                 </div>
                 
             <%
-                List<UsuarioDTO> usuarios = (List)request.getAttribute("usuarios");
                 if (usuarios == null || usuarios.isEmpty() ) {
             %>    
-            <h2>No hay usuarios.</h2>
+            <div class="py-5 mb-5">    
+                <h2>Sin usuarios que mostrar.</h2>
+            </div>
             <%
                 } else { 
             %> 
@@ -100,12 +122,14 @@
                     </a>
                 </td>
                 <td>
+                    <% if (usuario.getId() != user.getId()) { %>
                     <a href="UsuarioBorrarServlet?id=<%= usuario.getId() %>" class="btn btn-danger">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                     </a>
+                    <% } %>
                 </td>
             </tr>
 
@@ -120,7 +144,7 @@
             
             </main>
             
-            <footer class="text-white-50 fixed-bottom">
+            <footer class="mt-5 text-white-50">
             <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>

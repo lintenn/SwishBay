@@ -1,21 +1,52 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.UsuarioService;
 
 /**
- * Recupera todos los productos comprados por un comprador.
+ * Añade y elimina productos favoritos de un comprador.
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoCompradoServlet", urlPatterns = {"/ProductoCompradoServlet"})
-public class ProductoCompradoServlet extends ProductosServlet {
+@WebServlet(name = "CompradorManejoFavoritoServlet", urlPatterns = {"/CompradorManejoFavoritoServlet"})
+public class CompradorManejoFavoritoServlet extends SwishBayServlet {
+    
+    @EJB UsuarioService usuarioService;
+    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        if(super.comprobarSession(request, response)){
+            
+            String str = request.getParameter("id");
+            
+            if(str != null){
+                UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
+                
+                usuario = usuarioService.manejoFavoritos(Integer.parseInt(str), usuario.getId());    
+                
+                request.getSession().setAttribute("usuario", usuario);
+                
+                String servlet = (String) request.getSession().getAttribute("servlet");
+                response.sendRedirect(request.getContextPath() + "/" + servlet);
+            }
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -56,13 +87,4 @@ public class ProductoCompradoServlet extends ProductosServlet {
         return "Short description";
     }// </editor-fold>
 
-    @Override
-    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
-        return productoFacade.findCompradosByFiltro(filtroTitulo, filtroCategoria, usuario.getId());
-    }
-
-    @Override
-    protected String getServlet() {
-        return this.getServletName();
-    }
 }

@@ -6,16 +6,16 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
 
 /**
- * Recupera todos los productos en puja.
+ * Recupera todos los productos en puja que no sean vendidos por el usuario.
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ProductoEnPujaServlet", urlPatterns = {"/ProductoEnPujaServlet"})
-public class ProductoEnPujaServlet extends ProductosServlet {
+@WebServlet(name = "CompradorEnPujaServlet", urlPatterns = {"/CompradorEnPujaServlet"})
+public class CompradorEnPujaServlet extends CompradorServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -57,8 +57,8 @@ public class ProductoEnPujaServlet extends ProductosServlet {
     }// </editor-fold>
     
     @Override
-    protected List<Producto> getProductos(String filtroTitulo, String filtroCategoria, Usuario usuario) {
-        return productoFacade.findEnPujaByFiltro(filtroTitulo, filtroCategoria);
+    protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
+        return compradorService.listarProductosEnPuja(filtroTitulo, filtroCategoria, usuario.getId());
     }
     
     @Override

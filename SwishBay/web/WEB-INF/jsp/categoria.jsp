@@ -4,7 +4,7 @@
     Author     : Luis
 --%>
 
-<%@page import="swishbay.entity.Categoria"%>
+<%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@
     </head>
     <%
         
-        Categoria categoria = (Categoria)request.getAttribute("categoria");
+        CategoriaDTO categoria = (CategoriaDTO)request.getAttribute("categoria");
         String status = (String) request.getAttribute("status");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
@@ -38,7 +38,7 @@
                       <a class="nav-link" href="UsuarioServlet"> Usuarios</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductoServlet">Productos</a>
+                      <a class="nav-link" href="ProductoAdminServlet">Productos</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="CategoriaServlet">Categorías</a>
@@ -92,7 +92,7 @@
             
             
             
-            <footer class="text-white-50 fixed-bottom">
+            <footer class="text-white-50">
             <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>

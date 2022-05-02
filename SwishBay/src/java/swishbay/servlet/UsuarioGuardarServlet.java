@@ -9,21 +9,15 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.CategoriaFacade;
-import swishbay.dao.RolUsuarioFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Categoria;
-import swishbay.entity.RolUsuario;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.UsuarioService;
 
 /**
  *
@@ -32,9 +26,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "UsuarioGuardarServlet", urlPatterns = {"/UsuarioGuardarServlet"})
 public class UsuarioGuardarServlet extends HttpServlet {
 
-    @EJB UsuarioFacade usuarioFacade;
-    @EJB CategoriaFacade categoriaFacade;
-    @EJB RolUsuarioFacade rolUsuarioFacade;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,49 +41,18 @@ public class UsuarioGuardarServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        Usuario user = (Usuario)session.getAttribute("usuario");
+        UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
         
         if (user == null || user.getRol().getNombre().equals("administrador")) {
             
             String strId, strTipoUsuario, strSaldo;
-            String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "ProductoServlet";
+            String nombre, apellidos, correo, password, domicilio, ciudad, sexo, status = null, goTo = "CompradorProductosServlet";
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaNacimiento = null;
             double saldo = 0;
-
-            try {
-                fechaNacimiento = formato.parse(request.getParameter("fechaNacimiento"));
-            } catch (ParseException ex) {
-                System.out.println(ex);
-            }
-
-            Date fechaSistema = new Date();
-            int edad = fechaSistema.getYear() - fechaNacimiento.getYear();
-            Usuario newUser = null, posibleUser = null;
-            //byte[] contrasenaCifrada;
-            boolean esMenor = edad < 18;
-            int mes, dia;
-            if (edad == 18) {
-                mes = fechaSistema.getMonth() - fechaNacimiento.getMonth();
-                if (mes == 0) {
-                    dia = fechaSistema.getDay() - fechaNacimiento.getDay();
-                    esMenor = dia < 0;
-                } else {
-                    esMenor = mes < 0;
-                }
-            }
-
+            
             strId = request.getParameter("id");
             correo = request.getParameter("correo");
-            
-            if (strId == null || strId.isEmpty()) { // si estamos añadiendo
-                try {
-                    posibleUser = usuarioFacade.findByCorreo(correo);
-                } catch (EJBException e) {
-                    posibleUser = null;
-                }
-            }
-            
             nombre = request.getParameter("nombre");
             apellidos = request.getParameter("apellidos");
             password = request.getParameter("password");
@@ -101,17 +62,19 @@ public class UsuarioGuardarServlet extends HttpServlet {
             sexo = request.getParameter("sexo");
             strTipoUsuario = request.getParameter("tipo");
             String[] categorias = request.getParameterValues("categoria");
-
             strSaldo = request.getParameter("saldo");
-            if(strSaldo != null && !strSaldo.isEmpty() && !strSaldo.matches("[-+]?\\d*\\.?\\d+")){
-                status= "Formato de saldo incorrecto.";
+            
+            try {
+                fechaNacimiento = formato.parse(request.getParameter("fechaNacimiento"));
+                status = this.usuarioService.comprobarInformacionUsuario(fechaNacimiento, strId, correo, strSaldo);
+            } catch (ParseException ex) {
+                status = "Formato de fecha de nacimiento incorrecto.";
+                System.out.println(ex);
+            }
+            
+            if (status != null) {
+                
                 request.setAttribute("status", status);
-                
-                request.getRequestDispatcher("UsuarioNuevoEditarServlet").forward(request, response);
-                
-            } else if (posibleUser != null) {
-               status = "El correo introducido ya existe en el sistema";
-               request.setAttribute("status", status);
                
                if (user == null) {
                    goTo = "CargarRegisterServlet";
@@ -120,95 +83,32 @@ public class UsuarioGuardarServlet extends HttpServlet {
                }
                
                request.getRequestDispatcher(goTo).forward(request, response);
-            } else if (esMenor) {
-               status = "No se permiten usuarios menores de edad";
-               request.setAttribute("status", status);
-               
-               if (user == null) {
-                   goTo = "CargarRegisterServlet";
-               } else {
-                   goTo = "UsuarioNuevoEditarServlet";
-               }
-               
-               request.getRequestDispatcher(goTo).forward(request, response);
-            } else {
                 
-               if (strId == null || strId.isEmpty()) { // Crear nuevo usuario
-                   newUser = new Usuario();
-               } else {                             // Editar usuario
-                   newUser = this.usuarioFacade.find(Integer.parseInt(strId));
-               }
+            } else {               
                
-               newUser.setNombre(nombre);
-               newUser.setApellidos(apellidos);
-               newUser.setCorreo(correo);
-               newUser.setPassword(password);
-               newUser.setDomicilio(domicilio);
-               newUser.setCiudad(ciudad);
-               newUser.setSexo(sexo);
-               newUser.setFechaNacimiento(fechaNacimiento);
-               
-               if (strSaldo != null && !strSaldo.isEmpty()) saldo = Double.parseDouble(strSaldo);
-               newUser.setSaldo(saldo);
-               
-               RolUsuario rol;
-               if (strTipoUsuario == null || strTipoUsuario.isEmpty()) { // Crear usuario a registrar
-                   //TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),"compradorvendedor");
-                   //tipoUsuarioFacade.create(tipoUsuario);
-                   rol = rolUsuarioFacade.findByNombre("compradorvendedor");
+               if (user == null) {                          // Registro de compradorvendedor
                    
-               } else {                                 // Crear/editar usuario desde panel administrador
-                   //TipoUsuario tipoUsuario = new TipoUsuario(newUser.getId(),strTipoUsuario);
-                   //tipoUsuarioFacade.create(tipoUsuario);
-                   rol = rolUsuarioFacade.findByNombre(strTipoUsuario);
+                   strTipoUsuario = "compradorvendedor";
+                   UsuarioDTO usuario = this.usuarioService.crearUsuario(nombre, apellidos, correo, password, domicilio, ciudad, sexo, fechaNacimiento, saldo, strTipoUsuario, categorias);
                    
-               } 
-               newUser.setRol(rol);
-               
-               // Faltarían las categorias...
-
-               if (strId == null || strId.isEmpty()) {    // Crear nuevo usuario
-                   usuarioFacade.create(newUser);
-               } else {                                   // Editar usuario
-                   usuarioFacade.edit(newUser);
-               }  
-               
-               // Cargamos las categorías...
-               if (categorias != null && categorias.length > 0) {
-                    List<Categoria> categoriaList = newUser.getCategoriaList();
-                    //System.out.println(categoriaList.toString());
-                    // Borramos las categorias anteriores
-                    for (Categoria categoria : categoriaList) {
-                        //System.out.println(categoria.toString());
-                        List<Usuario> usuariosCategoria = categoria.getUsuarioList();
-                        
-                        usuariosCategoria.remove(newUser);
-                        
-                        categoria.setUsuarioList(usuariosCategoria);
-
-                        categoriaFacade.edit(categoria);
-                    }
-                    // Añadimos al usuario en las nuevas categorías
-                    for (String categoriaId : categorias) {
-                        Categoria categoria = categoriaFacade.find(Integer.parseInt(categoriaId));
-
-                        List<Usuario> usuariosCategoria = categoria.getUsuarioList();
-
-                        if (!usuariosCategoria.contains(newUser)) usuariosCategoria.add(newUser);
-
-                        categoria.setUsuarioList(usuariosCategoria);
-
-                        categoriaFacade.edit(categoria);
-                    }
-
-                    //newUser.setCategoriaList(categoriaList); // no actualiza la bd
-
-               }
-               
-               if (user == null) {              // Registro de compradorvendedor
-                   session.setAttribute("usuario", newUser);
-                   goTo = "ProductoServlet";
-               } else {                         // Creación/modificación de administrador
+                   session.setAttribute("usuario", usuario);
+                   goTo = "CompradorProductosServlet";
+               } else if (strId == null || strId.isEmpty()) {   // Creación desde administrador
+                   
+                   saldo = Double.parseDouble(strSaldo);
+                   this.usuarioService.crearUsuario(nombre, apellidos, correo, password, domicilio, ciudad, sexo, fechaNacimiento, saldo, strTipoUsuario, categorias);
+                   
+                   goTo = "UsuarioServlet";
+               } else {                                     // Modificación desde administrador
+                   
+                   saldo = Double.parseDouble(strSaldo);
+                   int id = Integer.parseInt(strId);
+                   UsuarioDTO usuario = this.usuarioService.modificarUsuario(id, nombre, apellidos, correo, password, domicilio, ciudad, sexo, fechaNacimiento, saldo, strTipoUsuario, categorias);
+                   
+                   if (user.getId() == id) {    // si se modifica al propio administrador, hay que actualizar el usuario de la sesión
+                       session.setAttribute("usuario", usuario);
+                   }
+                   
                    goTo = "UsuarioServlet";
                }
 
@@ -218,9 +118,9 @@ public class UsuarioGuardarServlet extends HttpServlet {
             
         } else {
             
-            String redirectTo = "ProductoServlet";
+            String redirectTo = "CompradorProductosServlet";
             if (user.getRol().getNombre().equals("compradorvendedor")) {
-                redirectTo = "ProductoServlet";
+                redirectTo = "CompradorProductosServlet";
             } else if (user.getRol().getNombre().equals("marketing")) {
                 redirectTo = "UsuarioCompradorServlet";
             }

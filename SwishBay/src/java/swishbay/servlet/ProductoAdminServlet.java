@@ -6,20 +6,25 @@
 package swishbay.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
 import swishbay.service.CategoriaService;
+import swishbay.service.ProductoService;
 
 /**
  *
  * @author Luis
  */
-@WebServlet(name = "CategoriaGuardarServlet", urlPatterns = {"/CategoriaGuardarServlet"})
-public class CategoriaGuardarServlet extends SwishBayServlet {
+@WebServlet(name = "ProductoAdminServlet", urlPatterns = {"/ProductoAdminServlet"})
+public class ProductoAdminServlet extends SwishBayServlet {
 
+    @EJB ProductoService productoService;
     @EJB CategoriaService categoriaService;
     
     /**
@@ -33,27 +38,20 @@ public class CategoriaGuardarServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         if (super.comprobarAdminSession(request, response)) {
             
-            String strId;
-            String nombre, descripcion, goTo = "CategoriaServlet";
+            String filtroNombre = request.getParameter("filtro");
+            String filtroCategoria = request.getParameter("filtroCategoria");
             
-            strId = request.getParameter("id");
-            nombre = request.getParameter("nombre");
-            descripcion = request.getParameter("descripcion");
+            List<CategoriaDTO> categorias = this.categoriaService.listarCategorias();
             
-            if (strId == null || strId.isEmpty()) { // Crear nueva categoria
-                this.categoriaService.crearCategoria(nombre, descripcion);
-                
-            } else {                                // Editar categoria
-                this.categoriaService.modificarCategoria(Integer.parseInt(strId), nombre, descripcion);
-                
-            }
+            List<ProductoDTO> productos = this.productoService.listarProductos(filtroNombre, filtroCategoria);
             
-            response.sendRedirect(request.getContextPath() + "/" + goTo); 
-            
-        } 
+            request.setAttribute("productos", productos);
+            request.setAttribute("categorias", categorias);
+            request.setAttribute("selected", filtroCategoria);
+            request.getRequestDispatcher("WEB-INF/jsp/productosAdmin.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

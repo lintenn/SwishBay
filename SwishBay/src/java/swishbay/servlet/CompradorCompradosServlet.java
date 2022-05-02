@@ -1,51 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package swishbay.servlet;
 
 import java.io.IOException;
-import javax.ejb.EJB;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dto.CategoriaDTO;
-import swishbay.service.CategoriaService;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
 
 /**
- *
- * @author Luis
+ * Recupera todos los productos comprados por un comprador.
+ * 
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "CategoriaNuevoEditarServlet", urlPatterns = {"/CategoriaNuevoEditarServlet"})
-public class CategoriaNuevoEditarServlet extends SwishBayServlet {
-
-    @EJB CategoriaService categoriaService;
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (super.comprobarAdminSession(request, response)) {
-            
-            String str = request.getParameter("id");
-            if (str != null && !str.isEmpty()) {
-                CategoriaDTO categoria = this.categoriaService.buscarCategoria(Integer.parseInt(str));
-                request.setAttribute("categoria", categoria);
-            }
-            
-            request.getRequestDispatcher("WEB-INF/jsp/categoria.jsp").forward(request, response);
-            
-        }
-    }
+@WebServlet(name = "CompradorCompradosServlet", urlPatterns = {"/CompradorCompradosServlet"})
+public class CompradorCompradosServlet extends CompradorServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -86,4 +56,13 @@ public class CategoriaNuevoEditarServlet extends SwishBayServlet {
         return "Short description";
     }// </editor-fold>
 
+    @Override
+    protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
+        return compradorService.listarProductosComprados(filtroTitulo, filtroCategoria, usuario.getId());
+    }
+
+    @Override
+    protected String getServlet() {
+        return this.getServletName();
+    }
 }

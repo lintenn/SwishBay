@@ -30,7 +30,7 @@
 
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
-                <a class="navbar-brand" href="ProductoServlet">Comprar</a>
+                <a class="navbar-brand" href="CompradorProductosServlet">Comprar</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -66,7 +66,7 @@
                 <div class="form-group row justify-content-md-center mb-4">
                   <label for="inputNombre" class="col-sm-1 col-form-label">Nombre:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputNombre" name="nombre" value="<%= producto==null? "": producto.getTitulo() %>" required >
+                    <input type="text" class="form-control" id="inputNombre" name="nombre" maxlength="45" value="<%= producto==null? "": producto.getTitulo() %>" required >
                   </div>
                   *
                 </div>

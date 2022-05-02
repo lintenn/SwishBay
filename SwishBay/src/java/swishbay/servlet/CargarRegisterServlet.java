@@ -6,7 +6,6 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -14,17 +13,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.CategoriaFacade;
-import swishbay.entity.Categoria;
+import swishbay.dto.CategoriaDTO;
+import swishbay.service.CategoriaService;
 
 /**
  *
- * @author Linten
+ * @author Luis
  */
 @WebServlet(name = "CargarRegisterServlet", urlPatterns = {"/CargarRegisterServlet"})
 public class CargarRegisterServlet extends HttpServlet {
 
-    @EJB CategoriaFacade categoriaFacade;
+    @EJB CategoriaService categoriaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +36,8 @@ public class CargarRegisterServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        List<Categoria> categorias = categoriaFacade.findAll();
         
-        System.out.println(categorias.toString());
+        List<CategoriaDTO> categorias = this.categoriaService.listarCategorias();
         
         request.setAttribute("categorias", categorias);
         request.getRequestDispatcher("register.jsp").forward(request, response); 
