@@ -277,4 +277,16 @@ public class UsuarioService {
         
         return usuario.toDTO();
     }
+    
+    public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){
+        Usuario usuario = this.usuarioFacade.find(idUsuario);
+        
+        double saldo = usuario.getSaldo();
+        saldo += cantidad;
+        usuario.setSaldo(saldo);
+        
+        usuarioFacade.edit(usuario);
+        
+        return usuario.toDTO();
+    }
 }

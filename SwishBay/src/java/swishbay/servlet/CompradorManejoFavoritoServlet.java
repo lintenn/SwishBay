@@ -42,7 +42,7 @@ public class CompradorManejoFavoritoServlet extends SwishBayServlet {
                 
                 request.getSession().setAttribute("usuario", usuario);
                 
-                String servlet = (String) request.getSession().getAttribute("servlet");
+                String servlet = (String) request.getSession().getAttribute("servlet"); 
                 response.sendRedirect(request.getContextPath() + "/" + servlet);
             }
         }
