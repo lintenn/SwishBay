@@ -6,25 +6,26 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Usuario;
+import swishbay.dto.RolUsuarioDTO;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.RolUsuarioService;
+import swishbay.service.UsuarioService;
 
 /**
  *
- * @author migue
+ * @author Luis, migue
  */
 @WebServlet(name = "UsuarioServlet", urlPatterns = {"/UsuarioServlet"})
-public class UsuarioServlet extends HttpServlet {
+public class UsuarioServlet extends SwishBayServlet {
     
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB UsuarioService usuarioService;
+    @EJB RolUsuarioService rolUsuarioService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,11 +39,20 @@ public class UsuarioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        List<Usuario> usuarios = usuarioFacade.findAll();
-        
-        request.setAttribute("usuarios", usuarios);
-        request.getRequestDispatcher("usuarios.jsp").forward(request, response);        
+        if (super.comprobarAdminSession(request, response)) {
+            
+            String filtroNombre = request.getParameter("filtro");
+            String filtroRol = request.getParameter("filtroRol");
+            
+            List<RolUsuarioDTO> roles = this.rolUsuarioService.listarRoles();
+            
+            List<UsuarioDTO> usuarios = this.usuarioService.listarUsuarios(filtroNombre, filtroRol);
 
+            request.setAttribute("usuarios", usuarios);
+            request.setAttribute("roles", roles);
+            request.setAttribute("selected", filtroRol);
+            request.getRequestDispatcher("WEB-INF/jsp/usuarios.jsp").forward(request, response);   
+        }
            
     }
 

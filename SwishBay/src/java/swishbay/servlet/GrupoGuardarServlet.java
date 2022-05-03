@@ -1,30 +1,36 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Producto;
+import javax.servlet.http.HttpSession;
+import swishbay.dao.GrupoFacade;
+import swishbay.entity.Grupo;
+import swishbay.entity.Usuario;
 
 /**
  *
- * @author Miguel
+ * @author angel
  */
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet"})
-public class ProductoServlet extends HttpServlet {
+@WebServlet(name = "GrupoGuardarServlet", urlPatterns = {"/GrupoGuardarServlet"})
+public class GrupoGuardarServlet extends HttpServlet {
     
-    @EJB ProductoFacade productoFacade;
+    @EJB GrupoFacade grupoFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,12 +42,33 @@ public class ProductoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        List<Producto> productos = productoFacade.findAll();
-        
-        request.setAttribute("productos", productos);
-        request.getRequestDispatcher("productos.jsp").forward(request, response);
-        
+
+            HttpSession session = request.getSession();
+            Usuario user = (Usuario)session.getAttribute("usuario");
+            String nombre, goTo = "GrupoServlet", strId;
+
+            strId = request.getParameter("id");
+            Grupo newGroup = null;
+            
+            nombre = request.getParameter("nombre");
+            
+            if(strId == null || strId.isEmpty()){
+                newGroup = new Grupo();
+            } else {
+                newGroup = this.grupoFacade.find(Integer.parseInt(strId));
+            }
+               
+            newGroup.setNombre(nombre);
+            newGroup.setMarketing(user);
+               
+            if(strId == null || strId.isEmpty()){
+                grupoFacade.create(newGroup);
+            } else {
+                grupoFacade.edit(newGroup);   
+            }
+
+            response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

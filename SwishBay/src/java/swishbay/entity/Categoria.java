@@ -26,10 +26,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.CategoriaDTO;
 
 /**
  *
- * @author migue
+ * @author Luis
  */
 @Entity
 @Table(name = "CATEGORIA")
@@ -140,6 +141,16 @@ public class Categoria implements Serializable {
     @Override
     public String toString() {
         return "swishbay.entity.Categoria[ id=" + id + " ]";
+    }
+    
+    public CategoriaDTO toDTO () {
+        CategoriaDTO dto = new CategoriaDTO();
+        
+        dto.setDescripcion(descripcion);
+        dto.setId(id);
+        dto.setNombre(nombre);
+        
+        return dto;
     }
     
 }

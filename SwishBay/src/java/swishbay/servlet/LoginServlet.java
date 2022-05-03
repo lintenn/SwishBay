@@ -6,20 +6,14 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.TipoUsuarioFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.TipoUsuario;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
 import swishbay.service.UsuarioService;
 
 /**
@@ -27,10 +21,8 @@ import swishbay.service.UsuarioService;
  * @author Luis
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-
-    @EJB UsuarioFacade usuarioFacade;
-    @EJB TipoUsuarioFacade tipoUsuarioFacade;
+public class LoginServlet extends SwishBayServlet {
+    
     @EJB UsuarioService usuarioService;
     
     /**
@@ -45,48 +37,32 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String correo, status = null, goTo = "ProductoServlet", password, contrasenaDelUsuario = "";
+        String correo, status = null, goTo = "CompradorProductosServlet", password;
         correo = request.getParameter("correo");
         password = request.getParameter("password");
         //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);
         
-        Usuario user = null;
-        //TipoUsuario tipoUsuario = null;
-        
-        try{
-            List<Usuario> users = usuarioFacade.findAll();
-            
-            for (Usuario u : users) {
-                if ((u.getCorreo()).equals(correo)) {
-                    user = u;
-                    //tipoUsuario = tipoUsuarioFacade.find(u.getId());
-                    contrasenaDelUsuario = user.getPassword();
-                }
-            }
-        }
-        catch(EJBException ex){
-            user = null;
-        }
+        UsuarioDTO user = this.usuarioService.comprobarCredenciales(correo, password);
         
         HttpSession session = request.getSession();
-        if(user == null){
-           status = "El correo es incorrecto.";
-           //request.setAttribute("status", status);
-           goTo = "login.jsp";
-        }else if(!password.equals(contrasenaDelUsuario)){
-           status = "La contraseña es incorrecta";
-           //request.setAttribute("status", status);
-           goTo = "login.jsp";
-        }else{
-            //request.getSession().setAttribute("usuario", user);
+        if (user == null) {
+           status = "El correo o la clave son incorrectos";
+           request.setAttribute("status", status);
+           request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
             session.setAttribute("usuario", user);
-            //session.setAttribute("tipoUsuario", tipoUsuario);
+            
+            if (user.getRol().getNombre().equals("administrador")) {
+                goTo = "UsuarioServlet";
+            } else if (user.getRol().getNombre().equals("compradorvendedor")) {
+                goTo = "CompradorProductosServlet";
+            } else if (user.getRol().getNombre().equals("marketing")) {
+                goTo = "UsuarioCompradorServlet";
+            }
+            
+            response.sendRedirect(request.getContextPath() + "/" + goTo);
         }
-        session.setAttribute("status", status);
-        //System.out.println(status);
         
-        //request.getRequestDispatcher(goTo).forward(request, response); 
-        response.sendRedirect(request.getContextPath() + "/" + goTo);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -6,6 +6,7 @@
 package swishbay.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -18,10 +19,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,10 +30,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
 
 /**
  *
- * @author migue
+ * @author Luis
  */
 @Entity
 @Table(name = "USUARIO")
@@ -47,12 +51,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByDomicilio", query = "SELECT u FROM Usuario u WHERE u.domicilio = :domicilio")
     , @NamedQuery(name = "Usuario.findByFechaNacimiento", query = "SELECT u FROM Usuario u WHERE u.fechaNacimiento = :fechaNacimiento")
     , @NamedQuery(name = "Usuario.findBySexo", query = "SELECT u FROM Usuario u WHERE u.sexo = :sexo")
-    , @NamedQuery(name = "Usuario.findByCiudad", query = "SELECT u FROM Usuario u WHERE u.ciudad = :ciudad")})
+    , @NamedQuery(name = "Usuario.findByCiudad", query = "SELECT u FROM Usuario u WHERE u.ciudad = :ciudad")
+    , @NamedQuery(name = "Usuario.findBySaldo", query = "SELECT u FROM Usuario u WHERE u.saldo = :saldo")})
 public class Usuario implements Serializable {
-
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "SALDO")
-    private Double saldo;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -94,6 +95,10 @@ public class Usuario implements Serializable {
     @Size(max = 45)
     @Column(name = "CIUDAD")
     private String ciudad;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "SALDO")
+    private double saldo;
     @JoinTable(name = "FAVORITO", joinColumns = {
         @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
         @JoinColumn(name = "PRODUCTO", referencedColumnName = "ID")})
@@ -104,20 +109,26 @@ public class Usuario implements Serializable {
         @JoinColumn(name = "GRUPO", referencedColumnName = "ID")})
     @ManyToMany
     private List<Grupo> grupoList;
+    @JoinTable(name = "MENSAJECOMPRADOR", joinColumns = {
+        @JoinColumn(name = "COMPRADOR", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "MENSAJE", referencedColumnName = "ID")})
+    @ManyToMany
+    private List<Mensaje> mensajeList;
     @ManyToMany(mappedBy = "usuarioList")
     private List<Categoria> categoriaList;
     @OneToMany(mappedBy = "comprador")
     private List<Producto> productoList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vendedor")
     private List<Producto> productoList2;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private TipoUsuario tipoUsuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "marketing")
     private List<Grupo> grupoList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<Puja> pujaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<Mensaje> mensajeList;
+    @JoinColumn(name = "ROL", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private RolUsuario rol;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marketing")
+    private List<Mensaje> mensajeList1;
 
     public Usuario() {
     }
@@ -126,13 +137,14 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String correo, String password, String nombre, String apellidos, Date fechaNacimiento) {
+    public Usuario(Integer id, String correo, String password, String nombre, String apellidos, Date fechaNacimiento, double saldo) {
         this.id = id;
         this.correo = correo;
         this.password = password;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
+        this.saldo = saldo;
     }
 
     public Integer getId() {
@@ -207,6 +219,14 @@ public class Usuario implements Serializable {
         this.ciudad = ciudad;
     }
 
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
     @XmlTransient
     public List<Producto> getProductoList() {
         return productoList;
@@ -223,6 +243,15 @@ public class Usuario implements Serializable {
 
     public void setGrupoList(List<Grupo> grupoList) {
         this.grupoList = grupoList;
+    }
+
+    @XmlTransient
+    public List<Mensaje> getMensajeList() {
+        return mensajeList;
+    }
+
+    public void setMensajeList(List<Mensaje> mensajeList) {
+        this.mensajeList = mensajeList;
     }
 
     @XmlTransient
@@ -252,14 +281,6 @@ public class Usuario implements Serializable {
         this.productoList2 = productoList2;
     }
 
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
     @XmlTransient
     public List<Grupo> getGrupoList1() {
         return grupoList1;
@@ -278,13 +299,21 @@ public class Usuario implements Serializable {
         this.pujaList = pujaList;
     }
 
-    @XmlTransient
-    public List<Mensaje> getMensajeList() {
-        return mensajeList;
+    public RolUsuario getRol() {
+        return rol;
     }
 
-    public void setMensajeList(List<Mensaje> mensajeList) {
-        this.mensajeList = mensajeList;
+    public void setRol(RolUsuario rol) {
+        this.rol = rol;
+    }
+
+    @XmlTransient
+    public List<Mensaje> getMensajeList1() {
+        return mensajeList1;
+    }
+
+    public void setMensajeList1(List<Mensaje> mensajeList1) {
+        this.mensajeList1 = mensajeList1;
     }
 
     @Override
@@ -311,13 +340,39 @@ public class Usuario implements Serializable {
     public String toString() {
         return "swishbay.entity.Usuario[ id=" + id + " ]";
     }
-
-    public Double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
     
+    public UsuarioDTO toDTO () {    
+        UsuarioDTO dto = new UsuarioDTO();
+        
+        dto.setApellidos(apellidos);
+        dto.setCiudad(ciudad);
+        dto.setCorreo(correo);
+        dto.setDomicilio(domicilio);
+        dto.setFechaNacimiento(fechaNacimiento);
+        dto.setId(id);
+        dto.setNombre(nombre);
+        dto.setPassword(password);
+        dto.setRol(rol.toDTO());
+        dto.setSaldo(saldo);
+        dto.setSexo(sexo);
+        List<Integer> listaDTO = null;
+        if (categoriaList != null) {
+            listaDTO = new ArrayList<>();
+            for (Categoria categoria : categoriaList) {
+                listaDTO.add(categoria.getId());
+            }
+        }
+        dto.setCategoriaList(listaDTO);
+        
+        List<Integer> favoritos = null;
+        if(productoList != null){
+            favoritos = new ArrayList<>();
+            for(Producto producto : productoList){
+                favoritos.add(producto.getId());
+            }
+        }
+        dto.setFavoritos(favoritos);
+       
+        return dto;        
+    }  
 }

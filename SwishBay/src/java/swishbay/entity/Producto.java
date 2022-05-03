@@ -6,6 +6,7 @@
 package swishbay.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -29,10 +30,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.PujaDTO;
 
 /**
  *
- * @author migue
+ * @author Linten
  */
 @Entity
 @Table(name = "PRODUCTO")
@@ -43,7 +46,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Producto.findByTitulo", query = "SELECT p FROM Producto p WHERE p.titulo = :titulo")
     , @NamedQuery(name = "Producto.findByPrecioSalida", query = "SELECT p FROM Producto p WHERE p.precioSalida = :precioSalida")
     , @NamedQuery(name = "Producto.findByFinPuja", query = "SELECT p FROM Producto p WHERE p.finPuja = :finPuja")
-    , @NamedQuery(name = "Producto.findByFoto", query = "SELECT p FROM Producto p WHERE p.foto = :foto")
     , @NamedQuery(name = "Producto.findByEnPuja", query = "SELECT p FROM Producto p WHERE p.enPuja = :enPuja")})
 public class Producto implements Serializable {
 
@@ -66,12 +68,11 @@ public class Producto implements Serializable {
     @NotNull
     @Column(name = "PRECIO_SALIDA")
     private double precioSalida;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "FIN_PUJA")
     @Temporal(TemporalType.DATE)
     private Date finPuja;
-    @Size(max = 150)
+    @Lob
+    @Size(max = 2147483647)
     @Column(name = "FOTO")
     private String foto;
     @Basic(optional = false)
@@ -99,11 +100,10 @@ public class Producto implements Serializable {
         this.id = id;
     }
 
-    public Producto(Integer id, String titulo, double precioSalida, Date finPuja, short enPuja) {
+    public Producto(Integer id, String titulo, double precioSalida, short enPuja) {
         this.id = id;
         this.titulo = titulo;
         this.precioSalida = precioSalida;
-        this.finPuja = finPuja;
         this.enPuja = enPuja;
     }
 
@@ -228,6 +228,32 @@ public class Producto implements Serializable {
     @Override
     public String toString() {
         return "swishbay.entity.Producto[ id=" + id + " ]";
+    }
+    
+    public ProductoDTO toDTO () {
+        ProductoDTO dto = new ProductoDTO();
+        
+        dto.setId(id);
+        dto.setTitulo(titulo);
+        dto.setDescripcion(descripcion);
+        dto.setFinPuja(finPuja);
+        dto.setPrecioSalida(precioSalida);
+        dto.setFoto(foto);
+        dto.setEnPuja(enPuja);
+        dto.setCategoria(categoria.toDTO());
+        if(comprador!=null)
+            dto.setComprador(comprador.toDTO());
+        dto.setVendedor(vendedor.toDTO());
+        List<PujaDTO> listaDTO = null;
+        if (pujaList != null) {
+            listaDTO = new ArrayList<>();
+            for (Puja puja : pujaList) {
+                listaDTO.add(puja.toDTO());
+            }
+        }
+        dto.setPujaList(listaDTO);
+        
+        return dto;
     }
     
 }

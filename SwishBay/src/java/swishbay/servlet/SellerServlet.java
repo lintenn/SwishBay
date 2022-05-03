@@ -13,17 +13,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.ProductoFacade;
-import swishbay.entity.Producto;
+import swishbay.dto.CategoriaDTO;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.CategoriaService;
+import swishbay.service.SellerService;
+
 
 /**
  *
  * @author galop
  */
 @WebServlet(name = "SellerServlet", urlPatterns = {"/SellerServlet"})
-public class SellerServlet extends HttpServlet {
+public class SellerServlet extends SwishBayServlet {
 
-    @EJB ProductoFacade productoFacade;
+    @EJB SellerService ss;
+    @EJB CategoriaService cs;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,10 +41,27 @@ public class SellerServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        List<Producto> productos = productoFacade.findAll();
+        if (super.comprobarSession(request, response)) {
+            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
         
-        request.setAttribute("productos", productos);
-        request.getRequestDispatcher("seller.jsp").forward(request, response);
+            String filtroNombre = request.getParameter("filtro");
+            String filtroCategoria = request.getParameter("filtroCategoria");
+            
+            List<CategoriaDTO> categorias = cs.listarCategorias();
+
+            List<ProductoDTO> productos = ss.listarProductos(user, filtroNombre, filtroCategoria);
+
+            request.setAttribute("productos", productos);
+            request.setAttribute("categorias", categorias);
+            request.setAttribute("selected", filtroCategoria);
+            request.setAttribute("usuario", user);
+            
+            if (user.getRol().getNombre().equals("administrador")) {
+                request.getRequestDispatcher("WEB-INF/jsp/productosAdmin.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("WEB-INF/jsp/seller.jsp").forward(request, response);
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

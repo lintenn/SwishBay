@@ -5,14 +5,16 @@
  */
 package swishbay.dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import swishbay.entity.Usuario;
 
 /**
  *
- * @author migue
+ * @author Luis
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
@@ -27,6 +29,55 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
 
     public UsuarioFacade() {
         super(Usuario.class);
+    }
+    
+    public Usuario findByCorreo (String correo) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.correo like :correo");
+        q.setParameter("correo", correo );
+        List<Usuario> lista = q.getResultList();
+        if (lista == null || lista.isEmpty()) {
+            return null;
+        } else {
+            return lista.get(0);
+        }    
+    }
+    
+    public Usuario comprobarUsuario (String strcorreo, String strclave) {
+        Query q;
+        
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.correo = :correo and"
+                + " u.password = :clave");
+        q.setParameter("correo", strcorreo);
+        q.setParameter("clave", strclave);
+        List<Usuario> lista = q.getResultList();
+        if (lista == null || lista.isEmpty()) {
+            return null;
+        } else {
+            return lista.get(0);
+        }        
+    }
+    
+    public List<Usuario> findByNombre (String nombre) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.nombre like :nombre");
+        q.setParameter("nombre", '%' + nombre +'%');
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findAll (String filtroRol) {
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like :filtroRol");
+        q.setParameter("filtroRol",  filtroRol);
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByNombre (String filtroNombre, String filtroRol) {
+        Query q;   
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.nombre like :nombre and u.rol.nombre like :filtroRol");
+        q.setParameter("nombre", '%' + filtroNombre + '%');
+        q.setParameter("filtroRol",  filtroRol);
+        return q.getResultList(); 
     }
     
 }

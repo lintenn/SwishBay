@@ -4,18 +4,24 @@
     Author     : Luis
 --%>
 
-<%@page import="swishbay.entity.Usuario"%>
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    String status = (String) session.getAttribute("status");
-    session.removeAttribute("status");
-    Usuario user = (Usuario) session.getAttribute("usuario");
+    String status = (String) request.getAttribute("status");
+    UsuarioDTO user = (UsuarioDTO) session.getAttribute("usuario");
     
     if (user != null) {
-        response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+        String goTo = "CompradorProductosServlet";
+        if (user.getRol().getNombre().equals("administrador")) {
+            goTo = "UsuarioServlet";
+        } else if (user.getRol().getNombre().equals("compradorvendedor")) {
+            goTo = "CompradorProductosServlet";
+        } else if (user.getRol().getNombre().equals("marketing")) {
+            goTo = "UsuarioCompradorServlet";
+        }
+        response.sendRedirect(request.getContextPath() + "/" + goTo);
     }
-
 %>
 
 <!DOCTYPE html>
@@ -24,7 +30,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Log in</title>
+    <title>Iniciar sesión</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
 
@@ -66,7 +72,7 @@
           align-items: center;
           padding-top: 40px;
           padding-bottom: 40px;
-          background-color: #f5f5f5;
+          /*background-color: #f5f5f5;*/
         }
         .form-signin {
           width: 100%;
@@ -108,11 +114,11 @@
     <!-- Custom styles for this template -->    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   </head>
-  <body class="text-center">
+  <body class="text-center bg-dark text-white">
       <main class="form-signin">
-        <form action="LoginServlet">
-            <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_black.png" alt="" width="120" height="50">
-            <h1 class="h3 mb-3 fw-normal">Log in</h1>
+        <form method="POST" action="LoginServlet">
+            <img class="mb-4" src="https://raw.githubusercontent.com/lintenn/SwishBay/main/img/SwishBay_logo_white.png" alt="" width="120" height="50">
+            <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
             
             <%
                 if(status != null){
@@ -123,21 +129,21 @@
             
             <div class="form-floating">
                 <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required="" autofocus=""/>
-                <label for="inputEmail" class="sr-only">Email address</label>
+                <label for="inputEmail" class="sr-only text-dark">Email</label>
             </div>
             <div class="form-floating">
                 <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required=""/>
-                <label for="inputPassword" class="sr-only">Password</label>
+                <label for="inputPassword" class="sr-only text-dark">Contraseña</label>
             </div>
 
             <div class="checkbox mb-3">
               <label>
-                <input type="checkbox" value="remember-me"/> Remember me
+                <input type="checkbox" value="remember-me"/> Recuérdame
               </label>
             </div>
             <nav class="botones" >
-                <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Log in"/>
-                <a href="CargarRegisterServlet" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Register</a>
+                <input type="submit" style="margin-right: 10px" class="w-100 btn btn-lg btn-primary" value="Entrar"/>
+                <a href="CargarRegisterServlet" style="margin-left: 10px" class="w-100 btn btn-lg btn-primary">Registrarse</a>
             </nav>
             
             <p class="mt-5 mb-3 text-muted">© 2022, SwishBay</p>
