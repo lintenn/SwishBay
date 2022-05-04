@@ -10,6 +10,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String servlet = (String)request.getAttribute("servlet");
+    if(servlet == null){
+        servlet = "";
+    }
 %>
 <!DOCTYPE html>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

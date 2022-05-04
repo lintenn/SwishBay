@@ -54,7 +54,7 @@
                                 <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
                                 <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
                                 <div class="row justify-content-center pb-2 px-0">
-                                    <a href="ProductoVerServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Ver producto</a>
+                                    <a href="CompradorVerProductoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Ver producto</a>
                                     <a href="CompradorManejoFavoritoServlet?id=<%=producto.getId() %>" class="col-2">
                                         <%
                                             if(usuario.getFavoritos().contains(producto.getId())){

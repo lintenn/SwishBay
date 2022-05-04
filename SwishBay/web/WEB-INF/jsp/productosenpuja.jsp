@@ -73,8 +73,7 @@
                                     <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= producto.getFinPuja().toGMTString().substring(0, 12) %> </p>
                                 </div>
                                 <div class="row justify-content-center pb-2 px-0">
-                                    <a href="ProductoVerServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Ver producto</a>
-                                    <a href="ProductoVerServlet?id=<%=producto.getId() %>" class="btn btn-primary col-3 mx-2">Pujar</a>
+                                    <a href="CompradorVerProductoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-8 mx-2">Ver producto y pujar</a>                                 
                                     <a href="CompradorManejoFavoritoServlet?id=<%=producto.getId() %>" class="col-2">
                                         <%
                                             if(usuario.getFavoritos().contains(producto.getId())){
