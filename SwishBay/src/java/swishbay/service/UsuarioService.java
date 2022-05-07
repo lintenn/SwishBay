@@ -278,7 +278,7 @@ public class UsuarioService {
         return usuario.toDTO();
     }
     
-    public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){
+    public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){ //Miguel
         Usuario usuario = this.usuarioFacade.find(idUsuario);
         
         double saldo = usuario.getSaldo();

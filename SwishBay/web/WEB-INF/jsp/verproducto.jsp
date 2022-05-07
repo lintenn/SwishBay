@@ -4,6 +4,7 @@
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="swishbay.dto.PujaDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.util.List"%>
@@ -52,15 +53,45 @@
                             <p class="fs-4">Vendido por <%= producto.getVendedor().getNombre() + " " + producto.getVendedor().getApellidos()%></p>
                         </div>
                     </div>
-
+                 
                 </div>
+                        
+                <%
+                    if(producto.getEnPuja() == 0 && producto.getComprador() == null){
+                %>
+                <div class="row col-9 d-flex justify-content-center mt-2">
+                    <h3>Subasta aún no disponible</h3>
+                </div>
+                <%
+                    }else if(producto.getComprador() != null){
+                        
+                %>
+                <div class="row col-9 d-flex justify-content-center mt-2">
+                    <h3>Subasta finalizada</h3>
+                </div>
+                <%
+                    }else{
+                        List<PujaDTO> pujas = (List) request.getAttribute("pujas");
+                %>
+                        
                 <div class="row col-9 d-flex justify-content-center"> 
+                    
                     <div class="mt-2 col-8 d-flex justify-content-between">
+                        <%
+                            if(pujas.isEmpty()){
+                        %>
+                        <h2>¡Realiza la primera puja!</h2>
+                        <%
+                            }else{
+                        %>
                         <h2>Pujas: </h2>
+                        <%
+                            }
+                        %>
                         <form action="CompradorPujarServlet" method="POST" class="col-4 d-flex justify-content-center">
-             
+                            <input type="hidden" name="productoid" value="<%= producto.getId() %>" />
                             <div class="col-8 d-flex justify-content-center">
-                                <input type="text" class="form-control" name="cantidad" value="31.0">
+                                <input type="text" class="form-control" name="cantidad" placeholder="Cantidad a pujar">
                             </div>
                             <div class="col-4">
                                 <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2">Pujar</button>
@@ -68,8 +99,36 @@
 
                         </form>
                     </div>
+                    <div class="mt-2 col-8 d-flex justify-content-between">
+                        <table class="table table-striped table-dark">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Pujador</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    for(PujaDTO puja : pujas){
+                                %>
+                                <tr>     
+                                    <td><%= puja.getComprador().getNombre() + puja.getComprador().getApellidos() %></td>
+                                    <td><%= puja.getPrecio() %></td>
+                                    <td><%= puja.getFecha().toGMTString().substring(0, 12) %></td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
                     
-                <div>
+                </div>
+                
+                <%
+                    }
+                %>
 
             </main>
             <footer class="mt-auto fixed-bottom text-white-50">
