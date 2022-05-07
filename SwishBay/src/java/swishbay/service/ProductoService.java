@@ -225,4 +225,15 @@ public class ProductoService {
         uf.edit(user);
     }
     
+    public void realizarPuja(int idproducto, double cantidad, Usuario usuario){
+        Producto producto = pf.findByID(idproducto);
+        
+        Puja puja = new Puja();
+        
+        puja.setFecha(null);
+        puja.setPrecio(cantidad);
+        puja.setUsuario(usuario);
+        
+        
+    }
 }

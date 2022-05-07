@@ -1,26 +1,26 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dto.ProductoDTO;
-import swishbay.dto.PujaDTO;
+import swishbay.dto.UsuarioDTO;
 import swishbay.service.ProductoService;
+import swishbay.service.UsuarioService;
 
 /**
- * Este servlet muestra la información y las pujas de un producto
+ * Este servlet efectua las pujas por parte del comprador
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "CompradorVerProductoServlet", urlPatterns = {"/CompradorVerProductoServlet"})
-public class CompradorVerProductoServlet extends HttpServlet {
+@WebServlet(name = "CompradorPujarServlet", urlPatterns = {"/CompradorPujarServlet"})
+public class CompradorPujarServlet extends SwishBayServlet {
     
     @EJB ProductoService productoService;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,18 +34,14 @@ public class CompradorVerProductoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String id = request.getParameter("id");
+        if(super.comprobarSession(request, response)){
+            Double cantidad = Double.parseDouble(request.getParameter("cantidad"));
+            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
         
-        ProductoDTO producto = productoService.buscarProducto(id);
-        
-        if(producto.getEnPuja() == 1){
-            List<PujaDTO> pujas = producto.getPujaList();
-            request.setAttribute("pujas", pujas);
+            usuarioService.sumarSaldo(-cantidad, user.getId());
+            //productoService.
         }
         
-        request.setAttribute("producto", producto);
-        
-        request.getRequestDispatcher("WEB-INF/jsp/verproducto.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
