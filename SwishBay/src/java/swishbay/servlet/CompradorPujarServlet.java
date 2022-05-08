@@ -35,11 +35,17 @@ public class CompradorPujarServlet extends SwishBayServlet {
             throws ServletException, IOException {
         
         if(super.comprobarSession(request, response)){
+            
             Double cantidad = Double.parseDouble(request.getParameter("cantidad"));
-            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
+            UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
+            String productoid = request.getParameter("productoid");
         
-            usuarioService.sumarSaldo(-cantidad, user.getId());
+            usuario = usuarioService.sumarSaldo(-cantidad, usuario.getId());
             //productoService.
+            
+            request.getSession().setAttribute("usuario", usuario);
+            
+            response.sendRedirect(request.getContextPath() + "/CompradorVerProductoServlet?id=" + productoid);
         }
         
     }

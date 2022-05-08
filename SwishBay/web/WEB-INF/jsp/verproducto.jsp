@@ -99,13 +99,13 @@
 
                         </form>
                     </div>
-                    <div class="mt-2 col-8 d-flex justify-content-between">
+                    <div class="mt-3 col-8 d-flex justify-content-between">
                         <table class="table table-striped table-dark">
                             <thead>
                                 <tr>
-                                    <th scope="col">Pujador</th>
-                                    <th scope="col">Cantidad</th>
-                                    <th scope="col">Fecha</th>
+                                    <th scope="col"><p class="fs-4">Pujador</p></th>
+                                    <th scope="col"><p class="fs-4">Cantidad</p></th>
+                                    <th scope="col"><p class="fs-4">Fecha</p></th>
                                 </tr>
                             </thead>
                             <tbody>
