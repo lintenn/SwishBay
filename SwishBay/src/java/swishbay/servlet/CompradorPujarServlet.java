@@ -1,11 +1,13 @@
 package swishbay.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dto.ProductoDTO;
 import swishbay.dto.PujaDTO;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.ProductoService;
@@ -43,21 +45,36 @@ public class CompradorPujarServlet extends SwishBayServlet {
             int productoid = Integer.parseInt(request.getParameter("productoid"));
             String error = "";
             
-            if(usuario.getSaldo() >= cantidad){
-                usuario = usuarioService.sumarSaldo(-cantidad, usuario.getId());
-            }else{
-                error = "¡No tienes suficiente saldo!";
-            }
-            
+            ProductoDTO producto = productoService.buscarProducto(productoid + "");
             PujaDTO mayorPuja = pujaService.mayorPuja(productoid);
             
-            if(mayorPuja.getPrecio() < cantidad){
+            boolean saldoSuficiente = usuario.getSaldo() >= cantidad;
+            boolean cantidadSuficiente;
+            if(mayorPuja == null){
+                cantidadSuficiente = cantidad >= producto.getPrecioSalida();
+            }else{
+                cantidadSuficiente = mayorPuja.getPrecio() < cantidad;
+            }
+            
+            if(saldoSuficiente && cantidadSuficiente){
+                usuario = usuarioService.sumarSaldo(-cantidad, usuario.getId());
                 productoService.realizarPuja(productoid, cantidad, usuario.getId());
             }else{
-                error = "¡La puja debe ser mayor que la última realizada!";
+                if(!saldoSuficiente){
+                    error = "¡No tienes suficiente saldo!";
+                }
+                if(!cantidadSuficiente){
+                    error = "¡Cantidad insuficinete para realizar la puja!";
+                }        
+                List<PujaDTO> pujas = producto.getPujaList();
+                
+                request.setAttribute("pujas", pujas);
+                request.setAttribute("error", error);
+                request.setAttribute("producto", producto);
+                
+                request.getRequestDispatcher("WEB-INF/jsp/verproducto.jsp").forward(request, response);
             }
              
-            request.setAttribute("error", error);
             request.getSession().setAttribute("usuario", usuario);
             
             response.sendRedirect(request.getContextPath() + "/CompradorVerProductoServlet?id=" + productoid);

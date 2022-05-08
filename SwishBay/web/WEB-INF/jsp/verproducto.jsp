@@ -4,6 +4,7 @@
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="swishbay.dto.PujaDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="swishbay.dto.ProductoDTO"%>
@@ -21,6 +22,9 @@
     </head>
     <%
         ProductoDTO producto = (ProductoDTO) request.getAttribute("producto");
+        String error = (String) request.getAttribute("error");
+        error = (error == null) ? "" : error;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
@@ -88,8 +92,9 @@
                         <%
                             }
                         %>
+                        <p class="mt-2"><%= error %></p>
                         <form action="CompradorPujarServlet" method="POST" class="col-4 d-flex justify-content-center">
-                            <input type="hidden" name="productoid" value="<%= producto.getId() %>" />
+                            <input type="hidden" name="productoid" value="<%= producto.getId() %>" />                            
                             <div class="col-8 d-flex justify-content-center">
                                 <input type="text" class="form-control" name="cantidad" placeholder="Cantidad a pujar">
                             </div>
@@ -113,9 +118,9 @@
                                     for(PujaDTO puja : pujas){
                                 %>
                                 <tr>     
-                                    <td><%= puja.getComprador().getNombre() + puja.getComprador().getApellidos() %></td>
-                                    <td><%= puja.getPrecio() %></td>
-                                    <td><%= puja.getFecha().toGMTString().substring(0, 12) %></td>
+                                    <td><%= puja.getComprador().getNombre() + " " + puja.getComprador().getApellidos() %></td>
+                                    <td><%= puja.getPrecio() %>€</td>
+                                    <td><%= format.format(puja.getFecha()) %></td>
                                 </tr>
                                 <%
                                     }
