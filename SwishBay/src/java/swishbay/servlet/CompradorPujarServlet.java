@@ -4,11 +4,12 @@ import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import swishbay.dto.PujaDTO;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.ProductoService;
+import swishbay.service.PujaService;
 import swishbay.service.UsuarioService;
 
 /**
@@ -21,6 +22,7 @@ public class CompradorPujarServlet extends SwishBayServlet {
     
     @EJB ProductoService productoService;
     @EJB UsuarioService usuarioService;
+    @EJB PujaService pujaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,11 +40,24 @@ public class CompradorPujarServlet extends SwishBayServlet {
             
             Double cantidad = Double.parseDouble(request.getParameter("cantidad"));
             UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
-            String productoid = request.getParameter("productoid");
-        
-            usuario = usuarioService.sumarSaldo(-cantidad, usuario.getId());
-            //productoService.
+            int productoid = Integer.parseInt(request.getParameter("productoid"));
+            String error = "";
             
+            if(usuario.getSaldo() >= cantidad){
+                usuario = usuarioService.sumarSaldo(-cantidad, usuario.getId());
+            }else{
+                error = "¡No tienes suficiente saldo!";
+            }
+            
+            PujaDTO mayorPuja = pujaService.mayorPuja(productoid);
+            
+            if(mayorPuja.getPrecio() < cantidad){
+                productoService.realizarPuja(productoid, cantidad, usuario.getId());
+            }else{
+                error = "¡La puja debe ser mayor que la última realizada!";
+            }
+             
+            request.setAttribute("error", error);
             request.getSession().setAttribute("usuario", usuario);
             
             response.sendRedirect(request.getContextPath() + "/CompradorVerProductoServlet?id=" + productoid);
