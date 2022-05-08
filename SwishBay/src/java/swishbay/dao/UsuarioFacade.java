@@ -80,4 +80,12 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return q.getResultList(); 
     }
     
+    public Usuario findByID(int id){
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.id = :id");
+        q.setParameter("id", id);
+        
+        return (Usuario) q.getResultList().get(0);
+    }
+    
 }

@@ -4,7 +4,7 @@
  */
 package swishbay.service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -16,6 +16,7 @@ import swishbay.dao.UsuarioFacade;
 import swishbay.dto.ProductoDTO;
 import swishbay.entity.Producto;
 import swishbay.entity.Puja;
+import swishbay.entity.PujaPK;
 import swishbay.entity.Usuario;
 
 /**
@@ -225,15 +226,26 @@ public class ProductoService {
         uf.edit(user);
     }
     
-    public void realizarPuja(int idproducto, double cantidad, Usuario usuario){
+    public void realizarPuja(int idproducto, double cantidad, int idusuario){
         Producto producto = pf.findByID(idproducto);
+        Usuario usuario = uf.findByID(idusuario);
         
         Puja puja = new Puja();
         
-        puja.setFecha(null);
+        puja.setFecha(new Date());
         puja.setPrecio(cantidad);
         puja.setUsuario(usuario);
+        puja.setProducto1(producto);
         
+        PujaPK pujapk = new PujaPK();
+        pujapk.setComprador(idusuario);
+        pujapk.setProducto(idproducto);
         
+        puja.setPujaPK(pujapk);
+        puf.create(puja);
+        
+        producto.getPujaList().add(puja);
+        
+        pf.edit(producto);
     }
 }
