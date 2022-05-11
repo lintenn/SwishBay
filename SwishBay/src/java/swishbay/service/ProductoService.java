@@ -120,7 +120,7 @@ public class ProductoService {
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
         c.getProductoList().add(p);
-        seller.getProductoList1().add(p);
+        seller.getProductoList2().add(p);
         
         pf.create(p);
         cf.edit(c);
@@ -130,10 +130,16 @@ public class ProductoService {
     public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio) {
 
         Producto p = pf.find(Integer.parseInt(strId));
+        Categoria anteriorCategoria = p.getCategoria();
         Categoria c = cf.findByName(categoria);
-   
-        rellenarProducto(p,titulo,desc,foto,date,categoria,precio);
         
+        anteriorCategoria.getProductoList().remove(p);
+        cf.edit(anteriorCategoria);
+        
+        rellenarProducto(p,titulo,desc,foto,date,categoria,precio);
+        c.getProductoList().add(p);
+        
+        cf.edit(c);
         pf.edit(p);
 
     }
@@ -217,16 +223,19 @@ public class ProductoService {
         if(!p.getPujaList().isEmpty()){
             
             puja = puf.findMax(p.getId());
-
+            Usuario comprador =puja.getUsuario();
+            List<Puja> pujasPerdedoras = pf.findLosers(id, puja.getPujaPK());
+            
+            
             p.setEnPuja((short) 0);
             p.setComprador(puja.getUsuario());
-            System.out.println("Vendido");
+            comprador.getProductoList1().add(p);
+            
+            this.uf.edit(comprador);
             this.pf.edit(p);
             
-            for(Puja pu : p.getPujaList()){
-                 if(!pu.equals(puja)){
-                     sumarSaldo(pu.getPrecio(),pu.getUsuario());
-                 }
+            for(Puja pu : pujasPerdedoras){                 
+                sumarSaldo(pu.getPrecio(),pu.getUsuario());                
              }       
             
         }else{
