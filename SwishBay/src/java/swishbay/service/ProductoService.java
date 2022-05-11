@@ -14,6 +14,7 @@ import swishbay.dao.ProductoFacade;
 import swishbay.dao.PujaFacade;
 import swishbay.dao.UsuarioFacade;
 import swishbay.dto.ProductoDTO;
+import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
 import swishbay.entity.Puja;
 import swishbay.entity.PujaPK;
@@ -92,7 +93,7 @@ public class ProductoService {
         p.setDescripcion(desc);
         p.setFoto(foto);
         p.setFinPuja(date);
-        p.setCategoria(cf.findByNombre(categoria).get(0));
+        p.setCategoria(cf.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
         short n=0;
         p.setEnPuja(n);
@@ -104,7 +105,7 @@ public class ProductoService {
         p.setDescripcion(desc);
         p.setFoto(foto);
         p.setFinPuja(date);
-        p.setCategoria(cf.findByNombre(categoria).get(0));
+        p.setCategoria(cf.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
         short n=0;
         p.setEnPuja(n);
@@ -114,16 +115,23 @@ public class ProductoService {
     public void crearProducto(String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) {
 
         Producto p = new Producto();
+        Categoria c = cf.findByName(categoria);
+        Usuario seller = uf.find(vendedor);
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
+        c.getProductoList().add(p);
+        seller.getProductoList1().add(p);
         
         pf.create(p);
+        cf.edit(c);
+        uf.edit(seller);
     }
 
     public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio) {
 
         Producto p = pf.find(Integer.parseInt(strId));
-        
+        Categoria c = cf.findByName(categoria);
+   
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio);
         
         pf.edit(p);
@@ -135,7 +143,7 @@ public class ProductoService {
         p.setDescripcion(desc);
         p.setFoto(foto);
         //p.setFinPuja(date);
-        p.setCategoria(cf.findByNombre(categoria).get(0));
+        p.setCategoria(cf.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
         //short n=0;
         //p.setEnPuja(n);
