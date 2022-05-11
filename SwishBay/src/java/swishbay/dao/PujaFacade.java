@@ -5,14 +5,11 @@
  */
 package swishbay.dao;
 
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import swishbay.entity.Producto;
 import swishbay.entity.Puja;
-import swishbay.entity.Usuario;
 
 /**
  *
@@ -43,9 +40,9 @@ public class PujaFacade extends AbstractFacade<Puja> {
 
     public Puja findMax(Integer pId) {
         Query q;   
-        q= this.getEntityManager().createQuery("select p from Puja p JOIN Puja pu where p.producto1.id = :producto and pu.producto1.id!= :producto and p.precio>pu.precio");
+        q= this.getEntityManager().createQuery("select pu from Producto p JOIN p.pujaList pu WHERE p.id = :producto ORDER BY pu.precio DESC ");
         q.setParameter("producto", pId );
-        return (Puja) q.getSingleResult();
+        return (q.getResultList().isEmpty()) ? null : (Puja)q.getResultList().get(0);
 
     }
 

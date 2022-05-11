@@ -4,9 +4,16 @@
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="swishbay.entity.Categoria"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    String servlet = (String)request.getAttribute("servlet");
+    if(servlet == null){
+        servlet = "";
+    }
+%>
 <!DOCTYPE html>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
@@ -17,20 +24,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="ProductoServlet">Productos</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorProductosServlet")) ? "active" : "" %>" href="CompradorProductosServlet">Productos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="ProductoEnPujaServlet">Pujas Abiertas</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorEnPujaServlet")) ? "active" : "" %>" href="CompradorEnPujaServlet">Pujas Abiertas</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductoFavoritoServlet">Favoritos</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorFavoritosServlet")) ? "active" : "" %>" href="CompradorFavoritosServlet">Favoritos</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="ProductoCompradoServlet">Comprados</a>
+                        <a class="nav-link <%=(servlet.equals("CompradorCompradosServlet")) ? "active" : "" %>" href="CompradorCompradosServlet">Comprados</a>
                     </li>
                   </ul>
                   <%
-                    List<Categoria> categorias = (List) request.getAttribute("categorias");
+                    List<CategoriaDTO> categorias = (List) request.getAttribute("categorias");
                         if(categorias != null){                    
                   %>
                   <jsp:include page="productofiltro.jsp"/>

@@ -6,19 +6,19 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.UsuarioService;
 
 /**
- * Este servlet añade fondos al saldo actual.
+ * Añade y elimina productos favoritos de un comprador.
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "SaldoServlet", urlPatterns = {"/SaldoServlet"})
-public class SaldoServlet extends SwishBayServlet {
+@WebServlet(name = "CompradorManejoFavoritoServlet", urlPatterns = {"/CompradorManejoFavoritoServlet"})
+public class CompradorManejoFavoritoServlet extends SwishBayServlet {
     
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB UsuarioService usuarioService;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,20 +32,19 @@ public class SaldoServlet extends SwishBayServlet {
             throws ServletException, IOException {
         
         if(super.comprobarSession(request, response)){
-            int id = Integer.parseInt(request.getParameter("id")); 
-            Usuario usuario = usuarioFacade.find(id);
             
-            double saldo = usuario.getSaldo();
-            saldo += Integer.parseInt(request.getParameter("saldo"));
+            String str = request.getParameter("id");
             
-            usuario.setSaldo(saldo);
-            
-            usuarioFacade.edit(usuario);
-            
-            HttpSession session = request.getSession();
-            session.setAttribute("usuario", usuario);
-            
-            response.sendRedirect(request.getContextPath() + "/ProductoServlet");
+            if(str != null){
+                UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
+                
+                usuario = usuarioService.manejoFavoritos(Integer.parseInt(str), usuario.getId());    
+                
+                request.getSession().setAttribute("usuario", usuario);
+                
+                String servlet = (String) request.getSession().getAttribute("servlet"); 
+                response.sendRedirect(request.getContextPath() + "/" + servlet);
+            }
         }
     }
 

@@ -1,29 +1,24 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.ProductoFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Producto;
-import swishbay.entity.Usuario;
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.UsuarioService;
 
 /**
- * Añade y elimina productos favoritos de un comprador.
+ * Este servlet añade fondos al saldo actual.
  * 
  * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "ManejoFavoritoServlet", urlPatterns = {"/ManejoFavoritoServlet"})
-public class ManejoFavoritoServlet extends SwishBayServlet {
+@WebServlet(name = "CompradorSaldoServlet", urlPatterns = {"/CompradorSaldoServlet"})
+public class CompradorSaldoServlet extends SwishBayServlet {
     
-    @EJB ProductoFacade productoFacade;
-    @EJB UsuarioFacade usuarioFacade;
-    
+    @EJB UsuarioService usuarioService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,31 +32,18 @@ public class ManejoFavoritoServlet extends SwishBayServlet {
             throws ServletException, IOException {
         
         if(super.comprobarSession(request, response)){
+            int id = Integer.parseInt(request.getParameter("id")); 
+            double saldo = Double.parseDouble(request.getParameter("saldo"));
             
-            String str = request.getParameter("id");
+            UsuarioDTO usuario = usuarioService.sumarSaldo(saldo, id);
+
+            request.getSession().setAttribute("usuario", usuario);
             
-            if(str != null){
-                Producto producto = productoFacade.find(Integer.parseInt(str));
-                
-                HttpSession session = request.getSession();
-                Usuario usuario = (Usuario)session.getAttribute("usuario");
-                List<Producto> favoritos = usuario.getProductoList();
-                
-                if(favoritos.contains(producto)){
-                    favoritos.remove(producto);
-                }else{
-                    favoritos.add(producto);
-                }
-                
-                usuario.setProductoList(favoritos);
-                
-                usuarioFacade.edit(usuario);
-                
-                session.setAttribute("usuario", usuario);
-                
-                response.sendRedirect(request.getContextPath() + "/ProductoServlet");
-                //request.getRequestDispatcher("WEB-INF/jsp/productos.jsp").forward(request, response);
+            String servlet = (String) request.getSession().getAttribute("servlet");
+            if(servlet == null){
+                    servlet = "CompradorProductosServlet";
             }
+            response.sendRedirect(request.getContextPath() + "/" + servlet);
         }
     }
 

@@ -1,29 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package swishbay.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import swishbay.dto.UsuarioDTO;
-import swishbay.service.UsuarioService;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.PujaDTO;
+import swishbay.service.ProductoService;
 
 /**
- *
- * @author Luis
+ * Este servlet muestra la información y las pujas de un producto
+ * 
+ * @author Miguel Oña Guerrero
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends SwishBayServlet {
+@WebServlet(name = "CompradorVerProductoServlet", urlPatterns = {"/CompradorVerProductoServlet"})
+public class CompradorVerProductoServlet extends HttpServlet {
     
-    @EJB UsuarioService usuarioService;
+    @EJB ProductoService productoService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,33 +33,19 @@ public class LoginServlet extends SwishBayServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String correo, status = null, goTo = "CompradorProductosServlet", password;
-        correo = request.getParameter("correo");
-        password = request.getParameter("password");
-        //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);
         
-        UsuarioDTO user = this.usuarioService.comprobarCredenciales(correo, password);
+        String id = request.getParameter("id");
         
-        HttpSession session = request.getSession();
-        if (user == null) {
-           status = "El correo o la clave son incorrectos";
-           request.setAttribute("status", status);
-           request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            session.setAttribute("usuario", user);
-            
-            if (user.getRol().getNombre().equals("administrador")) {
-                goTo = "UsuarioServlet";
-            } else if (user.getRol().getNombre().equals("compradorvendedor")) {
-                goTo = "CompradorProductosServlet";
-            } else if (user.getRol().getNombre().equals("marketing")) {
-                goTo = "UsuarioCompradorServlet";
-            }
-            
-            response.sendRedirect(request.getContextPath() + "/" + goTo);
+        ProductoDTO producto = productoService.buscarProducto(id);
+        
+        if(producto.getEnPuja() == 1){
+            List<PujaDTO> pujas = producto.getPujaList();
+            request.setAttribute("pujas", pujas);
         }
         
+        request.setAttribute("producto", producto);
+        
+        request.getRequestDispatcher("WEB-INF/jsp/verproducto.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

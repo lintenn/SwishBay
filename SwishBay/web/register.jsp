@@ -18,11 +18,11 @@
     String status = (String) request.getAttribute("status");
     
     if (user != null) {
-        String redirectTo = "ProductoServlet";
+        String redirectTo = "CompradorProductosServlet";
         if (user.getRol().getNombre().equals("administrador")) {
             redirectTo = "UsuarioServlet";
         } else if (user.getRol().getNombre().equals("compradorvendedor")) {
-            redirectTo = "ProductoServlet";
+            redirectTo = "CompradorProductosServlet";
         } else if (user.getRol().getNombre().equals("marketing")) {
             redirectTo = "UsuarioCompradorServlet";
         }

@@ -12,11 +12,11 @@
     UsuarioDTO user = (UsuarioDTO) session.getAttribute("usuario");
     
     if (user != null) {
-        String goTo = "ProductoServlet";
+        String goTo = "CompradorProductosServlet";
         if (user.getRol().getNombre().equals("administrador")) {
             goTo = "UsuarioServlet";
         } else if (user.getRol().getNombre().equals("compradorvendedor")) {
-            goTo = "ProductoServlet";
+            goTo = "CompradorProductosServlet";
         } else if (user.getRol().getNombre().equals("marketing")) {
             goTo = "UsuarioCompradorServlet";
         }

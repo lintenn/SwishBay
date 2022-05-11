@@ -27,4 +27,10 @@ public class PujaService {
         return p.toDTO();
     }
     
+    public PujaDTO mayorPuja(Integer id){
+        Puja puja = pf.findMax(id);
+        
+        return (puja == null) ? null : puja.toDTO();
+    }
+    
 }

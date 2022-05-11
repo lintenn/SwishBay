@@ -38,11 +38,21 @@ public class CategoriaFacade extends AbstractFacade<Categoria> {
         return q.getResultList();
     }
     
+    public Categoria findByName(String nombre) {
+        Query q;
+        q = this.getEntityManager().createQuery("select c from Categoria c where c.nombre like :nombre");
+        q.setParameter("nombre",  nombre );
+        
+        return (q.getResultList()==null || q.getResultList().isEmpty()) ? null: (Categoria) q.getResultList().get(0);
+    }
+    
     /*public List<Categoria> findByUsuario (Integer id) {
         Query q;
         q = this.getEntityManager().createQuery("select c from Categoria c JOIN c.usuarioList u WHERE u.id = :id");
         q.setParameter("id", id);
         return q.getResultList();
     }*/
+
+    
     
 }
