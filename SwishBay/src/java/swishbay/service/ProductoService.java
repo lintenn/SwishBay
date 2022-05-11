@@ -4,7 +4,7 @@
  */
 package swishbay.service;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -98,6 +98,18 @@ public class ProductoService {
         p.setEnPuja(n);
         p.setVendedor(uf.find(vendedor));
     }
+    
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio){
+        p.setTitulo(titulo);
+        p.setDescripcion(desc);
+        p.setFoto(foto);
+        p.setFinPuja(date);
+        p.setCategoria(cf.findByNombre(categoria).get(0));
+        p.setPrecioSalida(Double.parseDouble(precio));
+        short n=0;
+        p.setEnPuja(n);
+       
+    }
 
     public void crearProducto(String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) {
 
@@ -108,11 +120,11 @@ public class ProductoService {
         pf.create(p);
     }
 
-    public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) {
+    public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio) {
 
         Producto p = pf.find(Integer.parseInt(strId));
         
-        rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
+        rellenarProducto(p,titulo,desc,foto,date,categoria,precio);
         
         pf.edit(p);
 
@@ -232,7 +244,10 @@ public class ProductoService {
         
         Puja puja = new Puja();
         
-        puja.setFecha(new Date());
+        java.util.Date date = new java.util.Date();
+        Date sqlDate = new Date(date.getTime());
+        
+        puja.setFecha(sqlDate);
         puja.setPrecio(cantidad);
         puja.setUsuario(usuario);
         puja.setProducto1(producto);
