@@ -120,7 +120,7 @@ public class ProductoService {
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
         c.getProductoList().add(p);
-        seller.getProductoList1().add(p);
+        seller.getProductoList2().add(p);
         
         pf.create(p);
         cf.edit(c);
@@ -223,16 +223,19 @@ public class ProductoService {
         if(!p.getPujaList().isEmpty()){
             
             puja = puf.findMax(p.getId());
-            //List<Puja> pujasPerdedoras = pf.findLosers(id, puja.getPujaPK());
+            Usuario comprador =puja.getUsuario();
+            List<Puja> pujasPerdedoras = pf.findLosers(id, puja.getPujaPK());
+            
             
             p.setEnPuja((short) 0);
             p.setComprador(puja.getUsuario());
+            comprador.getProductoList1().add(p);
+            
+            this.uf.edit(comprador);
             this.pf.edit(p);
             
-            for(Puja pu : p.getPujaList()){
-                 if(!pu.equals(puja)){
-                     sumarSaldo(pu.getPrecio(),pu.getUsuario());
-                 }
+            for(Puja pu : pujasPerdedoras){                 
+                sumarSaldo(pu.getPrecio(),pu.getUsuario());                
              }       
             
         }else{
