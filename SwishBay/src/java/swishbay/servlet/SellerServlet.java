@@ -6,6 +6,7 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -51,6 +52,7 @@ public class SellerServlet extends SwishBayServlet {
 
             List<ProductoDTO> productos = ss.listarProductos(user, filtroNombre, filtroCategoria);
 
+            Collections.reverse(productos);
             request.setAttribute("productos", productos);
             request.setAttribute("categorias", categorias);
             request.setAttribute("selected", filtroCategoria);
