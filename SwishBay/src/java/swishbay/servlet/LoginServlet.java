@@ -40,7 +40,6 @@ public class LoginServlet extends SwishBayServlet {
         String correo, status = null, goTo = "CompradorProductosServlet", password;
         correo = request.getParameter("correo");
         password = request.getParameter("password");
-        //byte[] contrasenaIntroducida = usuarioService.hashPassword(contrasena);
         
         UsuarioDTO user = this.usuarioService.comprobarCredenciales(correo, password);
         

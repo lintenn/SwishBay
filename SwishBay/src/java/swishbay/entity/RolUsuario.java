@@ -113,7 +113,7 @@ public class RolUsuario implements Serializable {
         return "swishbay.entity.RolUsuario[ id=" + id + " ]";
     }
 
-    public RolUsuarioDTO toDTO() {
+    public RolUsuarioDTO toDTO() { // Luis
         RolUsuarioDTO dto = new RolUsuarioDTO();
         
         dto.setId(id);

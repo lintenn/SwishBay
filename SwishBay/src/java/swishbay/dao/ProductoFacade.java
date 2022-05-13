@@ -11,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import swishbay.entity.Producto;
+import swishbay.entity.Puja;
+import swishbay.entity.PujaPK;
 
 /**
  *
@@ -193,8 +195,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return producto; 
     }
     
-    public Double findPrecioMax(String id){
-        
+    public Double findPrecioMax(String id){        
         Query q;
         q = this.getEntityManager().createQuery("select MAX(pu.precio) from Producto p LEFT JOIN p.pujaList pu where p.id=:id Group by p");
         q.setParameter("id", Integer.parseInt(id));
@@ -255,5 +256,14 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("id", usuario);
         
         return q.getResultList(); 
+    }
+
+    public List<Puja> findLosers(String productoId, PujaPK pujaPK) {
+        Query q;
+        q = this.getEntityManager().createQuery("select pu from Puja pu where pu.producto1.id= :pId and pu.pujaPK!=:pujaId");
+        q.setParameter("pId", Integer.parseInt(productoId));
+        q.setParameter("pujaId", pujaPK);
+        
+        return q.getResultList();
     }
 }
