@@ -25,7 +25,7 @@ public class RolUsuarioService {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    private List<RolUsuarioDTO> listaEntityADTO (List<RolUsuario> lista) {
+    private List<RolUsuarioDTO> listaEntityADTO (List<RolUsuario> lista) { // Luis
         List<RolUsuarioDTO> listaDTO = null;
         if (lista != null) {
             listaDTO = new ArrayList<>();
@@ -37,7 +37,7 @@ public class RolUsuarioService {
     }
     
     
-    public List<RolUsuarioDTO> listarRoles () {
+    public List<RolUsuarioDTO> listarRoles () { // Luis
         List<RolUsuario> lista = this.rolUsuarioFacade.findAll();
         return this.listaEntityADTO(lista);
     }

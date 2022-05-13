@@ -128,11 +128,11 @@
             %>
             
             <div class="form-floating">
-                <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required="" autofocus=""/>
+                <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="Email address" required="" autofocus="" maxlength="45"/>
                 <label for="inputEmail" class="sr-only text-dark">Email</label>
             </div>
             <div class="form-floating">
-                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required=""/>
+                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required="" maxlength="45"/>
                 <label for="inputPassword" class="sr-only text-dark">Contraseña</label>
             </div>
 

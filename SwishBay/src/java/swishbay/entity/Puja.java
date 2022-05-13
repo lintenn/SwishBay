@@ -24,7 +24,7 @@ import swishbay.dto.PujaDTO;
 
 /**
  *
- * @author Linten
+ * @author Luis
  */
 @Entity
 @Table(name = "PUJA")
@@ -138,7 +138,7 @@ public class Puja implements Serializable {
         return "swishbay.entity.Puja[ pujaPK=" + pujaPK + " ]";
     }
     
-    public PujaDTO toDTO () {    
+    public PujaDTO toDTO () {    // Galo
         PujaDTO dto = new PujaDTO();
         
         dto.setComprador(usuario.toDTO());

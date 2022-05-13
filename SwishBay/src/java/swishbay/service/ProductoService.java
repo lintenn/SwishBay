@@ -22,7 +22,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop
+ * @author galop, Luis
  */
 
 @Stateless
@@ -33,7 +33,7 @@ public class ProductoService {
     @EJB UsuarioFacade uf;
     @EJB PujaFacade puf;
     
-    private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { //Luis
+    private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { // Luis
         List<ProductoDTO> listaDTO = null;
         if (lista != null) {
             listaDTO = new ArrayList<>();
@@ -44,7 +44,7 @@ public class ProductoService {
         return listaDTO;
     }
     
-    public List<ProductoDTO> listarProductos (String filtroNombre, String filtroCategoria) { //Luis
+    public List<ProductoDTO> listarProductos (String filtroNombre, String filtroCategoria) { // Luis
         List<Producto> productos = null;
         
         if (filtroNombre == null || filtroNombre.isEmpty()) {
@@ -88,7 +88,7 @@ public class ProductoService {
         return p;
     }
     
-    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){ // Galo
         p.setTitulo(titulo);
         p.setDescripcion(desc);
         p.setFoto(foto);
@@ -100,7 +100,7 @@ public class ProductoService {
         p.setVendedor(uf.find(vendedor));
     }
     
-    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio){
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio){ // Galo
         p.setTitulo(titulo);
         p.setDescripcion(desc);
         p.setFoto(foto);
@@ -112,7 +112,7 @@ public class ProductoService {
        
     }
 
-    public void crearProducto(String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) {
+    public void crearProducto(String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) { // Galo
 
         Producto p = new Producto();
         Categoria c = cf.findByName(categoria);
@@ -127,7 +127,7 @@ public class ProductoService {
         uf.edit(seller);
     }
 
-    public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio) {
+    public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio) { // Galo
 
         Producto p = pf.find(Integer.parseInt(strId));
         Categoria anteriorCategoria = p.getCategoria();
@@ -148,11 +148,10 @@ public class ProductoService {
         p.setTitulo(titulo);
         p.setDescripcion(desc);
         p.setFoto(foto);
-        //p.setFinPuja(date);
+
         p.setCategoria(cf.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
-        //short n=0;
-        //p.setEnPuja(n);
+
     }
     
     public void modificarProducto(String strId, String titulo, String desc, String foto, String categoria, String precio) { //Luis
