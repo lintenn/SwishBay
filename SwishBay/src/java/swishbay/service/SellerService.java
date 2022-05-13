@@ -65,24 +65,43 @@ public class SellerService {
     }
     
     
-    public List<ProductoDTO> listarProductos(UsuarioDTO user, String filtroNombre, String filtroCategoria){
+    public List<ProductoDTO> listarProductos(UsuarioDTO user, String filtroNombre, String filtroCategoria, String filtroDesde, String filtroHasta){
         
         List<Producto> productos = null;    
         if(filtroNombre == null || filtroNombre.isEmpty()){
-                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+            
+            if(filtroDesde==null){   // En este caso filtroHasta también sería null         
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){                  
                     productos = pf.findVendidos(user.getId());
                 }else{
                     productos= pf.findVendidosFiltered(user.getId(), filtroCategoria);
-
                 }
+            }else{
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){                  
+                    productos = pf.findVendidosDesde(user.getId(), filtroDesde, filtroHasta);
+                }else{
+                    productos= pf.findVendidosFilteredDesde(user.getId(), filtroCategoria, filtroDesde, filtroHasta);
+                }
+            }
+            
         }else{
+            if(filtroDesde==null){   // En este caso filtroHasta también sería null 
                 if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
                     productos = pf.findVendidosByNombre(user.getId(),filtroNombre);
 
                 }else{
                     productos = pf.findVendidosByNombreFiltered(user.getId(),filtroNombre,filtroCategoria);
 
-                }   
+                } 
+            }else{
+                if(filtroCategoria==null || filtroCategoria.equals("Categoria")){
+                    productos = pf.findVendidosByNombreDesde(user.getId(),filtroNombre, filtroDesde, filtroHasta);
+
+                }else{
+                    productos = pf.findVendidosByNombreFilteredDesde(user.getId(),filtroNombre,filtroCategoria, filtroDesde, filtroHasta);
+
+                }
+            }
         }
         return this.listaProductoEntityADTO(productos);
     }
