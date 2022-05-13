@@ -51,6 +51,16 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         Query q;
         q = this.getEntityManager().createQuery("select p from Producto p where p.vendedor.id= :user");
         q.setParameter("user", user);
+
+        return q.getResultList();
+    }
+    
+    public List<Producto> findVendidosDesde(int user, String filtroDesde, String filtroHasta) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.vendedor.id= :user and p.precioSalida>=:desde and p.precioSalida<=:hasta");
+        q.setParameter("user", user);
+        q.setParameter("desde", Double.parseDouble(filtroDesde));
+        q.setParameter("hasta", Double.parseDouble(filtroHasta));
         return q.getResultList();
     }
     
@@ -66,6 +76,16 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroCategoria and p.vendedor.id=:user");
         q.setParameter("filtroCategoria",  filtroCategoria);
         q.setParameter("user", user);
+        return q.getResultList();
+    }
+    
+    public List<Producto> findVendidosFilteredDesde(int user, String filtroCategoria, String filtroDesde, String filtroHasta) {
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.categoria.nombre like :filtroCategoria and p.vendedor.id=:user and p.precioSalida>=:desde and p.precioSalida<=:hasta");
+        q.setParameter("filtroCategoria",  filtroCategoria);
+        q.setParameter("user", user);
+        q.setParameter("desde", Double.parseDouble(filtroDesde));
+        q.setParameter("hasta", Double.parseDouble(filtroHasta));
         return q.getResultList();
     }
     
@@ -93,6 +113,16 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
+    public List<Producto> findVendidosByNombreDesde(int user,String filtroNombre, String filtroDesde, String filtroHasta) {
+        Query q;   
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.vendedor.id=:user and p.precioSalida>=:desde and p.precioSalida<=:hasta");
+        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("user", user);
+        q.setParameter("desde", Double.parseDouble(filtroDesde));
+        q.setParameter("hasta", Double.parseDouble(filtroHasta));
+        return q.getResultList(); 
+    }
+    
     public List<Object[]> findVendidosAUserByNombre(int user,String filtroNombre) {
         Query q;   
         q = this.getEntityManager().createQuery("select p, MAX(pu.precio) from Producto p JOIN p.pujaList pu where p.vendedor.id=:user and p.titulo like :titulo and p.comprador is not null GROUP BY p");
@@ -107,6 +137,17 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("titulo", '%' + filtroNombre + '%');
         q.setParameter("filtroCategoria",  filtroCategoria);
         q.setParameter("user", user);
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findVendidosByNombreFilteredDesde(int user,String filtroNombre, String filtroCategoria, String filtroDesde, String filtroHasta) {
+        Query q;   
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id=:user and p.precioSalida>=:desde and p.precioSalida<=:hasta");
+        q.setParameter("titulo", '%' + filtroNombre + '%');
+        q.setParameter("filtroCategoria",  filtroCategoria);
+        q.setParameter("user", user);
+        q.setParameter("desde", Double.parseDouble(filtroDesde));
+        q.setParameter("hasta", Double.parseDouble(filtroHasta));
         return q.getResultList(); 
     }
     

@@ -47,15 +47,23 @@ public class SellerServlet extends SwishBayServlet {
         
             String filtroNombre = request.getParameter("filtro");
             String filtroCategoria = request.getParameter("filtroCategoria");
+            String filtroDesde = request.getParameter("desde");
+            String filtroHasta = request.getParameter("hasta");
+
             
             List<CategoriaDTO> categorias = cs.listarCategorias();
-
-            List<ProductoDTO> productos = ss.listarProductos(user, filtroNombre, filtroCategoria);
+        
+            if(filtroDesde!=null && (Double.parseDouble(filtroDesde)> Double.parseDouble(filtroHasta)))
+                filtroDesde="0";
+            
+            List<ProductoDTO> productos = ss.listarProductos(user, filtroNombre, filtroCategoria, filtroDesde, filtroHasta);
 
             Collections.reverse(productos);
             request.setAttribute("productos", productos);
             request.setAttribute("categorias", categorias);
             request.setAttribute("selected", filtroCategoria);
+            request.setAttribute("desdeSelected", filtroDesde);
+            request.setAttribute("hastaSelected", filtroHasta);
             request.setAttribute("usuario", user);
             
             if (user.getRol().getNombre().equals("administrador")) {

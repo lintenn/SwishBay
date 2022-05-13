@@ -47,7 +47,17 @@
                     
                   </ul>
                   <form method="post" class="d-flex" action="SellerServlet">
-                    <div class="col-sm-4">
+                      <%
+                        String filtroDesde = (String) request.getAttribute("desdeSelected");
+                        String filtroHasta = (String) request.getAttribute("hastaSelected");
+
+                      %>
+                      <input class="form-control mx-2" type="number" min="0"  style=" width:80px;" id="desde" name="desde" value=<%= filtroDesde==null ? "0":Integer.parseInt(filtroDesde)  %> ></>
+                                     
+                    <input class="form-control mx-2" type="number" min="0" style=" width:80px;" id="hasta" name="hasta" value=<%= filtroHasta==null ? "9999":Integer.parseInt(filtroHasta)  %> ></>
+                    
+                     
+                    <div class="col-sm-3">
                         <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">
                             
                             <%
@@ -76,9 +86,7 @@
             <main class="row d-flex justify-content-center mt-4">
 
               <%
-                UsuarioDTO user = (UsuarioDTO) request.getAttribute("usuario");
-                if(productos!=null)
-                    System.out.println(productos.size());
+                UsuarioDTO user = (UsuarioDTO) request.getAttribute("usuario");               
                 
                 for(ProductoDTO producto : productos){
             %>      
