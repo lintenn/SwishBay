@@ -56,7 +56,6 @@ public class UsuarioGuardarServlet extends HttpServlet {
             nombre = request.getParameter("nombre");
             apellidos = request.getParameter("apellidos");
             password = request.getParameter("password");
-            //contrasenaCifrada = usuarioService.hashPassword(contrasena);
             domicilio = request.getParameter("domicilio");
             ciudad = request.getParameter("ciudad");
             sexo = request.getParameter("sexo");

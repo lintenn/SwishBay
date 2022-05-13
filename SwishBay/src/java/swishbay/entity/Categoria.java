@@ -143,7 +143,7 @@ public class Categoria implements Serializable {
         return "swishbay.entity.Categoria[ id=" + id + " ]";
     }
     
-    public CategoriaDTO toDTO () {
+    public CategoriaDTO toDTO () { // Luis
         CategoriaDTO dto = new CategoriaDTO();
         
         dto.setDescripcion(descripcion);

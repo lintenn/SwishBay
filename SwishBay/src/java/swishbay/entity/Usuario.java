@@ -341,7 +341,7 @@ public class Usuario implements Serializable {
         return "swishbay.entity.Usuario[ id=" + id + " ]";
     }
     
-    public UsuarioDTO toDTO () {    
+    public UsuarioDTO toDTO () {    // Luis
         UsuarioDTO dto = new UsuarioDTO();
         
         dto.setApellidos(apellidos);

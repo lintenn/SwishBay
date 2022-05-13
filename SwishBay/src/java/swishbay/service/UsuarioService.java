@@ -5,14 +5,10 @@
  */
 package swishbay.service;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -38,7 +34,7 @@ public class UsuarioService {
     @EJB RolUsuarioFacade rolUsuarioFacade;
     @EJB ProductoFacade productoFacade;
     
-    private List<UsuarioDTO> listaEntityADTO (List<Usuario> lista) {
+    private List<UsuarioDTO> listaEntityADTO (List<Usuario> lista) { // Luis
         List<UsuarioDTO> listaDTO = null;
         if (lista != null) {
             listaDTO = new ArrayList<>();
@@ -49,7 +45,7 @@ public class UsuarioService {
         return listaDTO;
     }
     
-    public List<UsuarioDTO> listarUsuarios (String filtroNombre) {
+    public List<UsuarioDTO> listarUsuarios (String filtroNombre) { // Luis
         List<Usuario> usuarios = null;
 
         if (filtroNombre == null || filtroNombre.isEmpty()) {
@@ -61,7 +57,7 @@ public class UsuarioService {
         return this.listaEntityADTO(usuarios);
     }
     
-    public List<UsuarioDTO> listarUsuarios (String filtroNombre, String filtroRol) { 
+    public List<UsuarioDTO> listarUsuarios (String filtroNombre, String filtroRol) { // Luis
         List<Usuario> usuarios = null;
         
         if (filtroNombre == null || filtroNombre.isEmpty()) {
@@ -85,24 +81,24 @@ public class UsuarioService {
         return this.listaEntityADTO(usuarios);
     }
     
-    public UsuarioDTO buscarUsuario (Integer id) {
+    public UsuarioDTO buscarUsuario (Integer id) { // Luis
         Usuario usuario = this.usuarioFacade.find(id);
         return usuario.toDTO();
     }
     
-    public void borrarUsuario (Integer id) {
+    public void borrarUsuario (Integer id) { // Luis
         Usuario usuario = this.usuarioFacade.find(id);
         
         this.usuarioFacade.remove(usuario);
     }
     
-    public String comprobarInformacionUsuario (Date fechaNacimiento, String strId, String correo, String strSaldo) {
+    public String comprobarInformacionUsuario (Date fechaNacimiento, String strId, String correo, String strSaldo) { // Luis
         
         String status;
         Date fechaSistema = new Date();
         int edad = fechaSistema.getYear() - fechaNacimiento.getYear();
         Usuario posibleUser = null;
-        //byte[] contrasenaCifrada;
+
         boolean esMenor = edad < 18;
         int mes, dia;
         if (edad == 18) {
@@ -141,7 +137,7 @@ public class UsuarioService {
     
     private void rellenarUsuario (Usuario usuario, String nombre, String apellidos, String correo,
                                 String password, String domicilio, String ciudad, String sexo,
-                                Date fechaNacimiento, Double saldo, String strTipoUsuario) {
+                                Date fechaNacimiento, Double saldo, String strTipoUsuario) { // Luis
         usuario.setNombre(nombre);
         usuario.setApellidos(apellidos);
         usuario.setCorreo(correo);
@@ -151,55 +147,47 @@ public class UsuarioService {
         usuario.setSexo(sexo);
         usuario.setFechaNacimiento(fechaNacimiento);
         usuario.setSaldo(saldo);
-               
+        
         RolUsuario rol = this.rolUsuarioFacade.findByNombre(strTipoUsuario);
         usuario.setRol(rol);
                
         // Faltarían las categorias...
     }
     
+    private void actualizarRolUsuario (Usuario newUser) {
+        RolUsuario rol = newUser.getRol();
+        
+        rol.getUsuarioList().add(newUser);
+        this.rolUsuarioFacade.edit(rol);
+    }
+    
     private void rellenarCategoriasUsuario (String[] categorias, Usuario newUser) {
         // Cargamos las categorías...
-        if (categorias != null && categorias.length > 0) {
-            List<Categoria> categoriaList = newUser.getCategoriaList();
-            //System.out.println(categoriaList.toString());
-            // Borramos al usuario de las categorias anteriores
-            if (categoriaList != null) {
-                for (Categoria categoria : categoriaList) {
-                    //System.out.println(categoria.toString());
-                    List<Usuario> usuariosCategoria = categoria.getUsuarioList();
-                        
-                    usuariosCategoria.remove(newUser);
-                        
-                    categoria.setUsuarioList(usuariosCategoria);
-
-                    categoriaFacade.edit(categoria);
-                }
-            }
-      
-            // Añadimos al usuario en las nuevas categorías
+        
+        // Borramos al usuario de las categorias anteriores
+        for (Categoria categoria : newUser.getCategoriaList()) {
+            categoria.getUsuarioList().remove(newUser);
+                
+            this.categoriaFacade.edit(categoria);
+        } 
+        // Borramos las categorías anteriores del usuario
+        newUser.getCategoriaList().clear();
+        
+        if (categorias != null) {
             for (String categoriaId : categorias) {
-                Categoria categoria = categoriaFacade.find(Integer.parseInt(categoriaId));
-
-                List<Usuario> usuariosCategoria = categoria.getUsuarioList();
-
-                if (!usuariosCategoria.contains(newUser)) usuariosCategoria.add(newUser);
-
-                categoria.setUsuarioList(usuariosCategoria);
-
-                categoriaFacade.edit(categoria);
-            }
-            
-            // Añadimos las categorías al usuario
-            List<Categoria> listaCategorias = new ArrayList<>();
-            for (String categoriaId : categorias) {
+                // Añadimos al usuario en las nuevas categorías
                 Categoria categoria = categoriaFacade.find(Integer.parseInt(categoriaId));
                 
-                listaCategorias.add(categoria);
+                categoria.getUsuarioList().add(newUser);
+                
+                this.categoriaFacade.edit(categoria);
+                
+                // Añadimos las nuevas categorías al usuario
+                newUser.getCategoriaList().add(categoria);
             }
-
-            newUser.setCategoriaList(listaCategorias); // no actualiza la BD pero sí la entity
-            usuarioFacade.edit(newUser);
+            
+            this.usuarioFacade.edit(newUser);
+            
         }
     }
     
@@ -210,7 +198,11 @@ public class UsuarioService {
         
         this.rellenarUsuario(usuario, nombre, apellidos, correo, password, domicilio, ciudad, sexo, fechaNacimiento, saldo, strTipoUsuario);
         
+        //usuario.setCategoriaList(new ArrayList<>());
+        
         this.usuarioFacade.create(usuario);
+        
+        this.actualizarRolUsuario(usuario);
         
         this.rellenarCategoriasUsuario(categorias, usuario);
         
@@ -222,16 +214,22 @@ public class UsuarioService {
                                 Date fechaNacimiento, Double saldo, String strTipoUsuario, String[] categorias) {
         Usuario usuario = this.usuarioFacade.find(id);
         
+        RolUsuario rolAntiguo = usuario.getRol();
+        rolAntiguo.getUsuarioList().remove(usuario);
+        this.rolUsuarioFacade.edit(rolAntiguo);
+        
         this.rellenarUsuario(usuario, nombre, apellidos, correo, password, domicilio, ciudad, sexo, fechaNacimiento, saldo, strTipoUsuario);
         
         this.usuarioFacade.edit(usuario);
+        
+        this.actualizarRolUsuario(usuario);
         
         this.rellenarCategoriasUsuario(categorias, usuario);
         
         return usuario.toDTO();
     }
     
-    public UsuarioDTO comprobarCredenciales (String correo, String password) {
+    public UsuarioDTO comprobarCredenciales (String correo, String password) { // Luis
         UsuarioDTO userdto = null;
         
         try {
@@ -242,24 +240,6 @@ public class UsuarioService {
         }
         
         return userdto;
-    }
-    
-    public byte[] hashPassword(String password){
-        byte[] hash = null;
-        
-        try {
-            //Create Hash algorithm instance for SHA-256
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            
-            //Set text that's gonna be hashed in UTF-8 encoding
-            md.update(password.getBytes("UTF-8"));
-            //Apply hash function
-            hash = md.digest();
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            return hash;
-        }
     }
     
     public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){

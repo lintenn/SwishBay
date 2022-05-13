@@ -35,7 +35,7 @@ import swishbay.dto.PujaDTO;
 
 /**
  *
- * @author Linten
+ * @author Luis
  */
 @Entity
 @Table(name = "PRODUCTO")
@@ -230,7 +230,7 @@ public class Producto implements Serializable {
         return "swishbay.entity.Producto[ id=" + id + " ]";
     }
     
-    public ProductoDTO toDTO () {
+    public ProductoDTO toDTO () { // Galo
         ProductoDTO dto = new ProductoDTO();
         
         dto.setId(id);

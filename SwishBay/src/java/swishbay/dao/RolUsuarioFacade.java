@@ -31,7 +31,7 @@ public class RolUsuarioFacade extends AbstractFacade<RolUsuario> {
         super(RolUsuario.class);
     }
     
-    public RolUsuario findByNombre (String nombre) {
+    public RolUsuario findByNombre (String nombre) { // Luis
         Query q;
         q = this.getEntityManager().createQuery("select r from RolUsuario r where r.nombre like :nombre");
         q.setParameter("nombre", nombre );
