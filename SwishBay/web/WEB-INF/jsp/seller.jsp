@@ -77,7 +77,6 @@
 
               <%
                 UsuarioDTO user = (UsuarioDTO) request.getAttribute("usuario");
-                //Collections.reverse (productos);
                 if(productos!=null)
                     System.out.println(productos.size());
                 

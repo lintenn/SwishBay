@@ -14,13 +14,15 @@ import swishbay.dao.ProductoFacade;
 import swishbay.dao.PujaFacade;
 import swishbay.dao.UsuarioFacade;
 import swishbay.dto.ProductoDTO;
+import swishbay.entity.Categoria;
 import swishbay.entity.Producto;
 import swishbay.entity.Puja;
+import swishbay.entity.PujaPK;
 import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop
+ * @author galop, Luis
  */
 
 @Stateless
@@ -31,7 +33,7 @@ public class ProductoService {
     @EJB UsuarioFacade uf;
     @EJB PujaFacade puf;
     
-    private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { //Luis
+    private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { // Luis
         List<ProductoDTO> listaDTO = null;
         if (lista != null) {
             listaDTO = new ArrayList<>();
@@ -42,7 +44,7 @@ public class ProductoService {
         return listaDTO;
     }
     
-    public List<ProductoDTO> listarProductos (String filtroNombre, String filtroCategoria) { //Luis
+    public List<ProductoDTO> listarProductos (String filtroNombre, String filtroCategoria) { // Luis
         List<Producto> productos = null;
         
         if (filtroNombre == null || filtroNombre.isEmpty()) {
@@ -86,33 +88,58 @@ public class ProductoService {
         return p;
     }
     
-    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor){ // Galo
         p.setTitulo(titulo);
         p.setDescripcion(desc);
         p.setFoto(foto);
         p.setFinPuja(date);
-        p.setCategoria(cf.findByNombre(categoria).get(0));
+        p.setCategoria(cf.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
         short n=0;
         p.setEnPuja(n);
         p.setVendedor(uf.find(vendedor));
     }
-
-    public void crearProducto(String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) {
-
-        Producto p = new Producto();
-        
-        rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
-        
-        pf.create(p);
+    
+    private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio){ // Galo
+        p.setTitulo(titulo);
+        p.setDescripcion(desc);
+        p.setFoto(foto);
+        p.setFinPuja(date);
+        p.setCategoria(cf.findByName(categoria));
+        p.setPrecioSalida(Double.parseDouble(precio));
+        short n=0;
+        p.setEnPuja(n);
+       
     }
 
-    public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) {
+    public void crearProducto(String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) { // Galo
 
-        Producto p = pf.find(Integer.parseInt(strId));
+        Producto p = new Producto();
+        Categoria c = cf.findByName(categoria);
+        Usuario seller = uf.find(vendedor);
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
+        c.getProductoList().add(p);
+        seller.getProductoList2().add(p);
         
+        pf.create(p);
+        cf.edit(c);
+        uf.edit(seller);
+    }
+
+    public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio) { // Galo
+
+        Producto p = pf.find(Integer.parseInt(strId));
+        Categoria anteriorCategoria = p.getCategoria();
+        Categoria c = cf.findByName(categoria);
+        
+        anteriorCategoria.getProductoList().remove(p);
+        cf.edit(anteriorCategoria);
+        
+        rellenarProducto(p,titulo,desc,foto,date,categoria,precio);
+        c.getProductoList().add(p);
+        
+        cf.edit(c);
         pf.edit(p);
 
     }
@@ -121,11 +148,10 @@ public class ProductoService {
         p.setTitulo(titulo);
         p.setDescripcion(desc);
         p.setFoto(foto);
-        //p.setFinPuja(date);
-        p.setCategoria(cf.findByNombre(categoria).get(0));
+
+        p.setCategoria(cf.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
-        //short n=0;
-        //p.setEnPuja(n);
+
     }
     
     public void modificarProducto(String strId, String titulo, String desc, String foto, String categoria, String precio) { //Luis
@@ -196,16 +222,19 @@ public class ProductoService {
         if(!p.getPujaList().isEmpty()){
             
             puja = puf.findMax(p.getId());
-
+            Usuario comprador =puja.getUsuario();
+            List<Puja> pujasPerdedoras = pf.findLosers(id, puja.getPujaPK());
+            
+            
             p.setEnPuja((short) 0);
             p.setComprador(puja.getUsuario());
-            System.out.println("Vendido");
+            comprador.getProductoList1().add(p);
+            
+            this.uf.edit(comprador);
             this.pf.edit(p);
             
-            for(Puja pu : p.getPujaList()){
-                 if(!pu.equals(puja)){
-                     sumarSaldo(pu.getPrecio(),pu.getUsuario());
-                 }
+            for(Puja pu : pujasPerdedoras){                 
+                sumarSaldo(pu.getPrecio(),pu.getUsuario());                
              }       
             
         }else{
@@ -225,4 +254,29 @@ public class ProductoService {
         uf.edit(user);
     }
     
+    public void realizarPuja(int idproducto, double cantidad, int idusuario){
+        Producto producto = pf.findByID(idproducto);
+        Usuario usuario = uf.findByID(idusuario);
+        
+        Puja puja = new Puja();
+        
+        java.util.Date date = new java.util.Date();
+        Date sqlDate = new Date(date.getTime());
+        
+        puja.setFecha(sqlDate);
+        puja.setPrecio(cantidad);
+        puja.setUsuario(usuario);
+        puja.setProducto1(producto);
+        
+        PujaPK pujapk = new PujaPK();
+        pujapk.setComprador(idusuario);
+        pujapk.setProducto(idproducto);
+        
+        puja.setPujaPK(pujapk);
+        puf.create(puja);
+        
+        producto.getPujaList().add(puja);
+        
+        pf.edit(producto);
+    }
 }

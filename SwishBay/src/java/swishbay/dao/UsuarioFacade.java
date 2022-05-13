@@ -31,7 +31,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
     
-    public Usuario findByCorreo (String correo) {
+    public Usuario findByCorreo (String correo) { // Luis
         Query q;
         q = this.getEntityManager().createQuery("select u from Usuario u where u.correo like :correo");
         q.setParameter("correo", correo );
@@ -43,7 +43,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }    
     }
     
-    public Usuario comprobarUsuario (String strcorreo, String strclave) {
+    public Usuario comprobarUsuario (String strcorreo, String strclave) { // Luis
         Query q;
         
         q = this.getEntityManager().createQuery("select u from Usuario u where u.correo = :correo and"
@@ -58,26 +58,34 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }        
     }
     
-    public List<Usuario> findByNombre (String nombre) {
+    public List<Usuario> findByNombre (String nombre) { // Luis
         Query q;
         q = this.getEntityManager().createQuery("select u from Usuario u where u.nombre like :nombre");
         q.setParameter("nombre", '%' + nombre +'%');
         return q.getResultList();
     }
     
-    public List<Usuario> findAll (String filtroRol) {
+    public List<Usuario> findAll (String filtroRol) { // Luis
         Query q;
         q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like :filtroRol");
         q.setParameter("filtroRol",  filtroRol);
         return q.getResultList();
     }
     
-    public List<Usuario> findByNombre (String filtroNombre, String filtroRol) {
+    public List<Usuario> findByNombre (String filtroNombre, String filtroRol) { // Luis
         Query q;   
         q = this.getEntityManager().createQuery("select u from Usuario u where u.nombre like :nombre and u.rol.nombre like :filtroRol");
         q.setParameter("nombre", '%' + filtroNombre + '%');
         q.setParameter("filtroRol",  filtroRol);
         return q.getResultList(); 
+    }
+    
+    public Usuario findByID(int id){ // Galo
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.id = :id");
+        q.setParameter("id", id);
+        
+        return (Usuario) q.getResultList().get(0);
     }
     
 }

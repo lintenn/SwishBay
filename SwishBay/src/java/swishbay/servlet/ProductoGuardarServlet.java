@@ -78,7 +78,7 @@ public class ProductoGuardarServlet extends SwishBayServlet {
                 
                 ps.crearProducto(titulo, desc, foto, date, categoria, precio, user.getId());
             }else {
-                ps.modificarProducto(strId, titulo, desc, foto, date, categoria, precio, user.getId());
+                ps.modificarProducto(strId, titulo, desc, foto, date, categoria, precio);
             }           
             
             response.sendRedirect(request.getContextPath() + "/SellerServlet");

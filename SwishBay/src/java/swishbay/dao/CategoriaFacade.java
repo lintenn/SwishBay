@@ -14,7 +14,7 @@ import swishbay.entity.Categoria;
 
 /**
  *
- * @author migue
+ * @author Miguel 40%, Luis 30%, Galo 30%
  */
 @Stateless
 public class CategoriaFacade extends AbstractFacade<Categoria> {
@@ -31,18 +31,19 @@ public class CategoriaFacade extends AbstractFacade<Categoria> {
         super(Categoria.class);
     }
     
-    public List<Categoria> findByNombre (String nombre) {
+    public List<Categoria> findByNombre (String nombre) { // Luis
         Query q;
         q = this.getEntityManager().createQuery("select c from Categoria c where c.nombre like :nombre");
         q.setParameter("nombre", '%' + nombre +'%');
         return q.getResultList();
     }
     
-    /*public List<Categoria> findByUsuario (Integer id) {
+    public Categoria findByName(String nombre) { // Galo
         Query q;
-        q = this.getEntityManager().createQuery("select c from Categoria c JOIN c.usuarioList u WHERE u.id = :id");
-        q.setParameter("id", id);
-        return q.getResultList();
-    }*/
-    
+        q = this.getEntityManager().createQuery("select c from Categoria c where c.nombre like :nombre");
+        q.setParameter("nombre",  nombre );
+        
+        return (q.getResultList()==null || q.getResultList().isEmpty()) ? null: (Categoria) q.getResultList().get(0);
+    }
+
 }

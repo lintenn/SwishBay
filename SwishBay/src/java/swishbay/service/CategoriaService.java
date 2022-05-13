@@ -25,7 +25,7 @@ public class CategoriaService {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
-    private List<CategoriaDTO> listaEntityADTO (List<Categoria> lista) {
+    private List<CategoriaDTO> listaEntityADTO (List<Categoria> lista) { // Luis
         List<CategoriaDTO> listaDTO = null;
         if (lista != null) {
             listaDTO = new ArrayList<>();
@@ -37,12 +37,12 @@ public class CategoriaService {
     }
     
     
-    public List<CategoriaDTO> listarCategorias () {
+    public List<CategoriaDTO> listarCategorias () { // Luis
         List<Categoria> lista = this.categoriaFacade.findAll();
         return this.listaEntityADTO(lista);
     }
     
-    public List<CategoriaDTO> listarCategorias (String filtroNombre) {
+    public List<CategoriaDTO> listarCategorias (String filtroNombre) { // Luis
         List<Categoria> categorias = null;
 
         if (filtroNombre == null || filtroNombre.isEmpty()) {
@@ -54,23 +54,23 @@ public class CategoriaService {
         return this.listaEntityADTO(categorias);
     }
     
-    public CategoriaDTO buscarCategoria (Integer id) {
+    public CategoriaDTO buscarCategoria (Integer id) { // Luis
         Categoria categoria = this.categoriaFacade.find(id);
         return categoria.toDTO();
     }
     
-    public void borrarCategoria (Integer id) {
+    public void borrarCategoria (Integer id) { // Luis
         Categoria categoria = this.categoriaFacade.find(id);
         
         this.categoriaFacade.remove(categoria);
     }
     
-    private void rellenarCategoria(Categoria categoria, String nombre, String descripcion) {
+    private void rellenarCategoria(Categoria categoria, String nombre, String descripcion) { // Luis
         categoria.setNombre(nombre);
         categoria.setDescripcion(descripcion);
     }
     
-    public void crearCategoria (String nombre, String descripcion) {
+    public void crearCategoria (String nombre, String descripcion) { // Luis
         Categoria categoria = new Categoria();
         
         this.rellenarCategoria(categoria, nombre, descripcion);
@@ -78,7 +78,7 @@ public class CategoriaService {
         this.categoriaFacade.create(categoria);
     }
     
-    public void modificarCategoria (Integer id, String nombre, String descripcion) {
+    public void modificarCategoria (Integer id, String nombre, String descripcion) { // Luis
         Categoria categoria = this.categoriaFacade.find(id);
         
         this.rellenarCategoria(categoria, nombre, descripcion);
@@ -86,8 +86,4 @@ public class CategoriaService {
         this.categoriaFacade.edit(categoria);
     }
     
-    /*public List<CategoriaDTO> listarCategoriasPreferidas (Integer idUsuario) {
-        List<Categoria> lista = this.categoriaFacade.findByUsuario(idUsuario);
-        return this.listaEntityADTO(lista);
-    }*/
 }

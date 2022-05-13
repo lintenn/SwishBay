@@ -198,7 +198,7 @@
 
             <p>Al hacer click en
                 <em>Registrarse</em> aceptas los
-                términos de servicio.
+                <a href="./" target="_blank">términos de servicio</a>.
             </p>
             </div>
             
