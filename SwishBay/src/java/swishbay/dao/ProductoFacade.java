@@ -16,7 +16,7 @@ import swishbay.entity.PujaPK;
 
 /**
  *
- * @author Miguel Oña Guerrero, Luis 25%
+ * @author Miguel Oña Guerrero, Luis 25%, Galo
  */
 @Stateless
 public class ProductoFacade extends AbstractFacade<Producto> {

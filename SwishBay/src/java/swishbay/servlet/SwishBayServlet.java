@@ -15,7 +15,7 @@ import swishbay.dto.UsuarioDTO;
 
 /**
  *
- * @author Luis 66%, Galo 33%
+ * @author Luis 50%, Galo 25%, angel 25%
  */
 public abstract class SwishBayServlet extends HttpServlet {
     
@@ -28,7 +28,7 @@ public abstract class SwishBayServlet extends HttpServlet {
             throws ServletException, IOException;
 
     protected boolean comprobarSession (HttpServletRequest request, HttpServletResponse response) 
-                throws ServletException, IOException {
+                throws ServletException, IOException { // Luis
         HttpSession session = request.getSession();
         UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
         if (user == null) {
@@ -41,7 +41,7 @@ public abstract class SwishBayServlet extends HttpServlet {
     }
     
     protected boolean comprobarCompradorVendedorSession (HttpServletRequest request, HttpServletResponse response) 
-                throws ServletException, IOException {
+                throws ServletException, IOException { // Galo
         HttpSession session = request.getSession();
         UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
         
@@ -61,7 +61,7 @@ public abstract class SwishBayServlet extends HttpServlet {
     }
     
     protected boolean comprobarAdminSession (HttpServletRequest request, HttpServletResponse response)
-                throws ServletException, IOException {
+                throws ServletException, IOException { // Luis
         HttpSession session = request.getSession();
         UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
         
