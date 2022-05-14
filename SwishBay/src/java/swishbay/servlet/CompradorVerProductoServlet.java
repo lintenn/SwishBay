@@ -50,6 +50,7 @@ public class CompradorVerProductoServlet extends HttpServlet {
             request.setAttribute("puja", puja);
         }
         
+        request.getSession().setAttribute("servlet", this.getServletName() + "?id=" + producto.getId());
         request.setAttribute("producto", producto);
         
         request.getRequestDispatcher("WEB-INF/jsp/verproducto.jsp").forward(request, response);
