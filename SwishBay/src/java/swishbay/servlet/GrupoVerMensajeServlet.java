@@ -21,7 +21,7 @@ import swishbay.service.MensajeService;
  * @author angel
  */
 @WebServlet(name = "GrupoVerMensajeServlet", urlPatterns = {"/GrupoVerMensajeServlet"})
-public class GrupoVerMensajeServlet extends HttpServlet {
+public class GrupoVerMensajeServlet extends SwishBayServlet {
 
      @EJB MensajeService mensajeService;
     /**
@@ -36,6 +36,8 @@ public class GrupoVerMensajeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String filtroNombre = request.getParameter("filtro");
             List<MensajeDTO> mensajes = null;
             String str = request.getParameter("id");
@@ -48,6 +50,8 @@ public class GrupoVerMensajeServlet extends HttpServlet {
 
             request.setAttribute("mensajes", mensajes);
             request.getRequestDispatcher("WEB-INF/jsp/mensajes.jsp").forward(request, response);   
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

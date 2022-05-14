@@ -23,7 +23,7 @@ import swishbay.service.UsuarioService;
  * @author angel
  */
 @WebServlet(name = "MensajeGuardarServlet", urlPatterns = {"/MensajeGuardarServlet"})
-public class MensajeGuardarServlet extends HttpServlet {
+public class MensajeGuardarServlet extends SwishBayServlet {
 
     @EJB MensajeService mensajeService;
     @EJB UsuarioService usuarioService;
@@ -40,6 +40,8 @@ public class MensajeGuardarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        if(super.comprobarMarketingSession(request, response)){
+        
             HttpSession session = request.getSession();
             UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
             String asunto, contenido, goTo = "GrupoVerMensajeServlet", strId, strIdGrupo;
@@ -58,6 +60,8 @@ public class MensajeGuardarServlet extends HttpServlet {
             }          
 
             response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            
+        }    
             
     }
 

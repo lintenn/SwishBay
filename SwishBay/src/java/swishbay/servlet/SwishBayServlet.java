@@ -78,4 +78,23 @@ public abstract class SwishBayServlet extends HttpServlet {
             return true;
         }     
     }
+    
+    protected boolean comprobarMarketingSession (HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException { // angel
+        HttpSession session = request.getSession();
+        UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
+        
+        if (user == null) {
+            response.sendRedirect(request.getContextPath());
+            return false;
+        } else if (user.getRol().getNombre().equals("compradorvendedor")) {
+            response.sendRedirect(request.getContextPath() + "/CompradorProductosServlet");
+            return false;
+        } else if (user.getRol().getNombre().equals("administrador")) {
+            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
+            return false;
+        } else {
+            return true;
+        }     
+    }
 }

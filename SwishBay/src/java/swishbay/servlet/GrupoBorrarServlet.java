@@ -19,7 +19,7 @@ import swishbay.service.GrupoService;
  * @author angel
  */
 @WebServlet(name = "GrupoBorrarServlet", urlPatterns = {"/GrupoBorrarServlet"})
-public class GrupoBorrarServlet extends HttpServlet {
+public class GrupoBorrarServlet extends SwishBayServlet {
 
     @EJB GrupoService grupoService;
     /**
@@ -34,11 +34,15 @@ public class GrupoBorrarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+            
             String str = request.getParameter("id");
 
             this.grupoService.borrarGrupo(Integer.parseInt(str));
 
             response.sendRedirect(request.getContextPath() + "/GrupoServlet");
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

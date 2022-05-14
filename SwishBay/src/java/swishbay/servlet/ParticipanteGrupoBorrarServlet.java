@@ -20,7 +20,7 @@ import swishbay.service.UsuarioService;
  * @author angel
  */
 @WebServlet(name = "ParticipanteGrupoBorrarServlet", urlPatterns = {"/ParticipanteGrupoBorrarServlet"})
-public class ParticipanteGrupoBorrarServlet extends HttpServlet {
+public class ParticipanteGrupoBorrarServlet extends SwishBayServlet {
 
     @EJB GrupoService grupoService;
     @EJB UsuarioService usuarioService;
@@ -36,6 +36,8 @@ public class ParticipanteGrupoBorrarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String str = request.getParameter("id");
             String strIdusuario = request.getParameter("idUsuario");
             
@@ -43,6 +45,8 @@ public class ParticipanteGrupoBorrarServlet extends HttpServlet {
             this.usuarioService.eliminarGrupoAListaGruposUsuario(Integer.parseInt(strIdusuario), Integer.parseInt(str));
             
             response.sendRedirect(request.getContextPath() + "/ParticipantesGrupoEditarServlet?id=" + Integer.parseInt(str));
+            
+        }    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

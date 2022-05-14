@@ -24,7 +24,7 @@ import swishbay.service.UsuarioService;
  * @author angel
  */
 @WebServlet(name = "GrupoGuardarServlet", urlPatterns = {"/GrupoGuardarServlet"})
-public class GrupoGuardarServlet extends HttpServlet {
+public class GrupoGuardarServlet extends SwishBayServlet {
     
     @EJB GrupoService grupoService;
     @EJB UsuarioService usuarioService;
@@ -41,6 +41,8 @@ public class GrupoGuardarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        if(super.comprobarMarketingSession(request, response)){
+        
             HttpSession session = request.getSession();
             UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
             String nombre, goTo = "GrupoServlet", strId;
@@ -55,7 +57,9 @@ public class GrupoGuardarServlet extends HttpServlet {
                 this.grupoService.editarGrupo(Integer.parseInt(strId), nombre, user.getId());
             }
 
-            response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            response.sendRedirect(request.getContextPath() + "/" + goTo);
+        
+        }
             
     }
 
