@@ -32,6 +32,7 @@ public class ProductoService {
     @EJB CategoriaFacade cf;
     @EJB UsuarioFacade uf;
     @EJB PujaFacade puf;
+    @EJB GrupoService grupoService;
     
     private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { // Luis
         List<ProductoDTO> listaDTO = null;
@@ -185,7 +186,10 @@ public class ProductoService {
         }
         p.setFinPuja(d);
         
+        this.grupoService.notificarComienzoPuja("Grupo_"+p.getId(), p.toDTO());
+        
         pf.edit(p);
+        
         
     }
 
@@ -215,6 +219,9 @@ public class ProductoService {
     public void finalizarPuja(String id) {
 
         Producto p = pf.findByID(Integer.parseInt(id));
+        
+        this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
+        
         Double d=p.getPrecioSalida();
         Puja puja=null;
         
