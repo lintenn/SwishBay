@@ -31,7 +31,7 @@ public class CompradorService {
         return listaDTO;
     }
     
-    public List<ProductoDTO> listarProductosExistentes(String filtroTitulo, String filtroCategoria, int usuario){
+    public List<ProductoDTO> listarProductosExistentes(String filtroTitulo, String filtroCategoria, int usuario){ 
         List<Producto> productos = productoFacade.findExistentesByFiltro(filtroTitulo, filtroCategoria, usuario);
         
         return this.listaProductoEntityADTO(productos);
@@ -54,6 +54,5 @@ public class CompradorService {
         
         return this.listaProductoEntityADTO(productos);
     }
-    
-    
+
 }

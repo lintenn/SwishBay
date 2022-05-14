@@ -5,7 +5,6 @@
 --%>
 
 <%@page import="swishbay.dto.CategoriaDTO"%>
-<%@page import="swishbay.entity.Categoria"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
