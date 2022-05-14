@@ -102,4 +102,12 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         
         return q.getResultList();
     }
+    
+    public Usuario findByMarketing(){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'marketing'");
+        List<Usuario> marketings = q.getResultList();
+        
+        return (marketings==null || marketings.isEmpty()) ? null : marketings.get(0);
+    }
 }

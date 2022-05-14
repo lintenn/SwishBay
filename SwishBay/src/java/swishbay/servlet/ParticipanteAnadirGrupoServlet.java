@@ -41,8 +41,8 @@ public class ParticipanteAnadirGrupoServlet extends SwishBayServlet {
             String str = request.getParameter("id");
             String strIdusuario = request.getParameter("idUsuario");
             
-            this.grupoService.añadirUsuarioAListaUsuariosGrupo(Integer.parseInt(strIdusuario), Integer.parseInt(str));
-            this.usuarioService.añadirGrupoAListaGruposUsuario(Integer.parseInt(strIdusuario), Integer.parseInt(str));
+            this.grupoService.anadirUsuarioAListaUsuariosGrupo(Integer.parseInt(strIdusuario), Integer.parseInt(str));
+            this.usuarioService.anadirGrupoAListaGruposUsuario(Integer.parseInt(strIdusuario), Integer.parseInt(str));
             
             response.sendRedirect(request.getContextPath() + "/ParticipantesGrupoAnadirServlet?id=" + Integer.parseInt(str));
             
