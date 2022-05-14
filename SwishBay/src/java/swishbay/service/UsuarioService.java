@@ -290,26 +290,32 @@ public class UsuarioService {
         return userdto;
     }
     
-    public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){
+    public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){ //Miguel Oña Guerrero
         
-        Usuario usuario = this.buscarUsuarioById(idUsuario);
+        Usuario usuario = this.usuarioFacade.findByID(idUsuario);
         Producto producto = this.productoFacade.findByID(idProducto);
+        
         
         if(usuario.getProductoList().contains(producto)){
             usuario.getProductoList().remove(producto);
-            this.eliminarUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario);
+            producto.getUsuarioList().remove(usuario);
+            
+            this.eliminarUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario); //Marketing
         }else{
             usuario.getProductoList().add(producto);
-            this.anadirUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario);
+            producto.getUsuarioList().add(usuario);
+            
+            this.anadirUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario); //Marketing
         }
         
         this.usuarioFacade.edit(usuario);
+        this.productoFacade.edit(producto);
         
         return usuario.toDTO();
     }
     
-    public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){ //Miguel
-        Usuario usuario = this.buscarUsuarioById(idUsuario);
+    public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){ //Miguel Oña Guerrero
+        Usuario usuario = this.usuarioFacade.findByID(idUsuario);
         
         double saldo = usuario.getSaldo();
         saldo += cantidad;
