@@ -15,7 +15,7 @@ import swishbay.dto.UsuarioDTO;
 
 /**
  *
- * @author Luis
+ * @author Luis 66%, Galo 33%
  */
 public abstract class SwishBayServlet extends HttpServlet {
     
@@ -37,6 +37,26 @@ public abstract class SwishBayServlet extends HttpServlet {
         } else {
             return true;
         }        
+        
+    }
+    
+    protected boolean comprobarCompradorVendedorSession (HttpServletRequest request, HttpServletResponse response) 
+                throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
+        
+        if (user == null) {
+            response.sendRedirect(request.getContextPath());
+            return false;
+        }  else if (user.getRol().getNombre().equals("marketing")) {
+            response.sendRedirect(request.getContextPath() + "/UsuarioCompradorServlet");
+            return false;
+        } else if (user.getRol().getNombre().equals("administrador")) {
+            response.sendRedirect(request.getContextPath() + "/UsuarioServlet");
+            return false;
+        }else {
+            return true;
+        }          
         
     }
     

@@ -40,7 +40,7 @@ public class ProductosVendidosServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             
-        if (super.comprobarSession(request, response)) {
+        if (super.comprobarCompradorVendedorSession(request, response)) {
             UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
         
 

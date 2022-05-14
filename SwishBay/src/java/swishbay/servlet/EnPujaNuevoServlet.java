@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import swishbay.dto.ProductoDTO;
+import swishbay.dto.UsuarioDTO;
 import swishbay.service.ProductoService;
 
 
@@ -23,7 +24,7 @@ import swishbay.service.ProductoService;
  * @author galop
  */
 @WebServlet(name = "EnPujaNuevoServlet", urlPatterns = {"/EnPujaNuevoServlet"})
-public class EnPujaNuevoServlet extends HttpServlet {
+public class EnPujaNuevoServlet extends SwishBayServlet {
 
     @EJB ProductoService ps;
     /**
@@ -38,21 +39,24 @@ public class EnPujaNuevoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String str = request.getParameter("id");
-        if(str !=null ){
-            ProductoDTO p = ps.buscarProducto(str);
-            Double precio = 0.0;
-            if(p.getEnPuja()==1)
-                precio = ps.precioMax(str);
-            else
-                precio = p.getPrecioSalida();
-            
-            request.setAttribute("producto", p);
-            request.setAttribute("precio", precio);
+        if (super.comprobarCompradorVendedorSession(request, response)) {
+            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
+
+            String str = request.getParameter("id");
+            if(str !=null ){
+                ProductoDTO p = ps.buscarProducto(str);
+                Double precio = 0.0;
+                if(p.getEnPuja()==1)
+                    precio = ps.precioMax(str);
+                else
+                    precio = p.getPrecioSalida();
+
+                request.setAttribute("producto", p);
+                request.setAttribute("precio", precio);
+            }
+
+            request.getRequestDispatcher("WEB-INF/jsp/EnPuja.jsp").forward(request, response);
         }
-        
-        request.getRequestDispatcher("WEB-INF/jsp/EnPuja.jsp").forward(request, response);
-        
         
     }
 
