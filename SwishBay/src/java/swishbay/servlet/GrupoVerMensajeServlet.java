@@ -45,7 +45,7 @@ public class GrupoVerMensajeServlet extends SwishBayServlet {
             if (filtroNombre == null || filtroNombre.isEmpty()) {
                 mensajes = this.mensajeService.buscarMensajesPorIdGrupo(Integer.parseInt(str));        
             } else {
-                mensajes = this.mensajeService.buscarMensajesPorAsunto(filtroNombre);
+                mensajes = this.mensajeService.buscarMensajesPorIdGrupoYPorAsunto(Integer.parseInt(str), filtroNombre);
             }
 
             request.setAttribute("mensajes", mensajes);

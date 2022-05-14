@@ -18,9 +18,6 @@ public class MensajeDTO {
     private String asunto;
     private String contenido;
     private Date fecha;
-    private List<UsuarioDTO> usuarioList;
-    private GrupoDTO grupo;
-    private UsuarioDTO marketing;
     
     /**
      * @return the id
@@ -76,47 +73,5 @@ public class MensajeDTO {
      */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    /**
-     * @return the usuarioList
-     */
-    public List<UsuarioDTO> getUsuarioList() {
-        return usuarioList;
-    }
-
-    /**
-     * @param usuarioList the usuarioList to set
-     */
-    public void setUsuarioList(List<UsuarioDTO> usuarioList) {
-        this.usuarioList = usuarioList;
-    }
-
-    /**
-     * @return the grupo
-     */
-    public GrupoDTO getGrupo() {
-        return grupo;
-    }
-
-    /**
-     * @param grupo the grupo to set
-     */
-    public void setGrupo(GrupoDTO grupo) {
-        this.grupo = grupo;
-    }
-
-    /**
-     * @return the marketing
-     */
-    public UsuarioDTO getMarketing() {
-        return marketing;
-    }
-
-    /**
-     * @param marketing the marketing to set
-     */
-    public void setMarketing(UsuarioDTO marketing) {
-        this.marketing = marketing;
     }
 }
