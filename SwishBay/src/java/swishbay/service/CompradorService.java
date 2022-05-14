@@ -31,26 +31,26 @@ public class CompradorService {
         return listaDTO;
     }
     
-    public List<ProductoDTO> listarProductosExistentes(String filtroTitulo, String filtroCategoria, int usuario){ 
-        List<Producto> productos = productoFacade.findExistentesByFiltro(filtroTitulo, filtroCategoria, usuario);
+    public List<ProductoDTO> listarProductosExistentes(String filtroTitulo, String filtroCategoria, int idUsuario){ 
+        List<Producto> productos = productoFacade.findExistentesByFiltro(filtroTitulo, filtroCategoria, idUsuario);
         
         return this.listaProductoEntityADTO(productos);
     }
     
-    public List<ProductoDTO> listarProductosFavoritos(String filtroTitulo, String filtroCategoria, int usuario){
-        List<Producto> productos = productoFacade.findFavoritosByFiltro(filtroTitulo, filtroCategoria, usuario);
+    public List<ProductoDTO> listarProductosFavoritos(String filtroTitulo, String filtroCategoria, int idUsuario){
+        List<Producto> productos = productoFacade.findFavoritosByFiltro(filtroTitulo, filtroCategoria, idUsuario);
         
         return this.listaProductoEntityADTO(productos);
     }
     
-    public List<ProductoDTO> listarProductosComprados(String filtroTitulo, String filtroCategoria, int usuario){
-        List<Producto> productos = productoFacade.findCompradosByFiltro(filtroTitulo, filtroCategoria, usuario);
+    public List<ProductoDTO> listarProductosComprados(String filtroTitulo, String filtroCategoria, int idUsuario){
+        List<Producto> productos = productoFacade.findCompradosByFiltro(filtroTitulo, filtroCategoria, idUsuario);
         
         return this.listaProductoEntityADTO(productos);
     }
     
-    public List<ProductoDTO> listarProductosEnPuja(String filtroTitulo, String filtroCategoria, int usuario){
-        List<Producto> productos = productoFacade.findEnPujaByFiltro(filtroTitulo, filtroCategoria, usuario);
+    public List<ProductoDTO> listarProductosEnPuja(String filtroTitulo, String filtroCategoria, int idUsuario){
+        List<Producto> productos = productoFacade.findEnPujaByFiltro(filtroTitulo, filtroCategoria, idUsuario);
         
         return this.listaProductoEntityADTO(productos);
     }
