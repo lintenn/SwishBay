@@ -16,18 +16,16 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un vendedor debe poder realizar la asignación del producto vendido al comprador que corresponda _(y lo notifica)_. ❔
 
 #### Comprador - Miguel Oña Guerrero
-- Un comprador debe poder ver los productos que hay registrados por vendedores. 
-- Un comprador debe poder ver los productos que hay en puja por vendedores.
-- ~~Un comprador debe poder comprar un producto en venta.~~ ❓
-- Un comprador debe poder pujar un producto en puja con la intención de comprarlo.
-- Un comprador debe poder marcar productos (estén en puja o no) como favoritos para hacer **seguimientos**. ❔
-- Un comprador debe poder añadir fondos a su cuenta. ❔
-- Un comprador debe poder ver en un listado los productos que ha comprado _(y a quién)_.
-- Un comprador debe poder **buscar y aplicar filtrados** de búsqueda sobre los productos que ha comprado.
-- _Un comprador debe poder devolver sus productos comprados_. ❔
-- Un comprador debe poder ver en un listado los productos que sigue como favoritos.
-- Un comprador debe poder **buscar y aplicar filtrados** de búsqueda sobre los productos que sigue como favoritos.
-- Un comprador debe poder quitar productos de los que sigue como favoritos.
+- Un comprador debe poder ver los productos que hay registrados por vendedores. :heavy_check_mark:
+- Un comprador debe poder ver los productos que hay en puja por vendedores. :heavy_check_mark:
+- Un comprador debe poder pujar un producto en puja con la intención de comprarlo. :heavy_check_mark:
+- Un comprador debe poder marcar productos (estén en puja o no) como favoritos para hacer **seguimientos**. :heavy_check_mark:
+- Un comprador debe poder añadir fondos a su cuenta. :heavy_check_mark:
+- Un comprador debe poder ver en un listado los productos que ha comprado _(y a quién)_. :heavy_check_mark:
+- Un comprador debe poder **buscar y aplicar filtrados** de búsqueda sobre los productos que ha comprado. :heavy_check_mark:
+- Un comprador debe poder ver en un listado los productos que sigue como favoritos. :heavy_check_mark:
+- Un comprador debe poder **buscar y aplicar filtrados** de búsqueda sobre los productos que sigue como favoritos. :heavy_check_mark:
+- Un comprador debe poder quitar productos de los que sigue como favoritos. :heavy_check_mark:
 
 #### Administrador y Login/Registro - Luis Miguel García Marín
 - Un administrador debe poder ver en un listado las categorías del sistema. :heavy_check_mark:
