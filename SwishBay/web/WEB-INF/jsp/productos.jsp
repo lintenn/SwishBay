@@ -64,7 +64,7 @@
                                 <%
                                     }else{
                                 %>
-                                <small class="card-text text-dark text-center mb-0 text-muted" >Puja más alta <%= puja.getPrecio() + " por " + puja.getComprador().getNombre() %></small>
+                                <small class="card-text text-dark text-center mb-0 text-muted" >Puja más alta <%= puja.getPrecio() + "€ por " + puja.getComprador().getNombre()%></small>
                                 <%
                                     }
                                 %>              
@@ -101,7 +101,7 @@
             </main>
 
             <footer class="mt-auto text-white-50">
-              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/SwishBay/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>
             <%
