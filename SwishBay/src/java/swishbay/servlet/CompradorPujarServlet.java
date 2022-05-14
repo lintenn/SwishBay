@@ -15,7 +15,7 @@ import swishbay.service.PujaService;
 import swishbay.service.UsuarioService;
 
 /**
- * Este servlet efectua las pujas por parte del comprador
+ * Este servlet efectua las pujas por parte del comprador //REFACTOR UN COMPRADOR PUJAR DOS VECES
  * 
  * @author Miguel Oña Guerrero
  */

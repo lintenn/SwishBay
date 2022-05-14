@@ -62,7 +62,7 @@ public class CompradorProductosServlet extends CompradorServlet {
     }
     
     @Override
-    protected String getServlet() {
+    protected String getServlet() {        
         return this.getServletName();
     }
 }

@@ -28,7 +28,6 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un comprador debe poder ver en un listado los productos que sigue como favoritos.
 - Un comprador debe poder **buscar y aplicar filtrados** de búsqueda sobre los productos que sigue como favoritos.
 - Un comprador debe poder quitar productos de los que sigue como favoritos.
-- Un comprador debe poder ser notificado cuando se ha cerrado el proceso de puja y si si finalmente se queda con el producto.
 
 #### Administrador y Login/Registro - Luis Miguel García Marín
 - Un administrador debe poder ver en un listado las categorías del sistema. :heavy_check_mark:
@@ -64,3 +63,4 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un personal de marketing debe poder eliminar mensajes enviados a sus grupos de usuarios. :heavy_check_mark:
 - Un personal de marketing debe poder gestionar la recepción de los mensajes en la bandeja de entrada de mensajes de los usuarios compradores. ❓
 - Un personal de marketing debe poder notificar a los usuarios de que sus productos favoritos se han abierto para puja.
+- Un comprador debe poder ser notificado cuando se ha cerrado el proceso de puja y si si finalmente se queda con el producto.
