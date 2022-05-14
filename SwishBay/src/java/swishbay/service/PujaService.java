@@ -15,7 +15,7 @@ import swishbay.entity.Puja;
 
 /**
  *
- * @author galop
+ * @author galop 33%, Miguel 66%
  */
 
 @Stateless
@@ -23,14 +23,14 @@ public class PujaService {
     
     @EJB PujaFacade pf;
     
-    public PujaDTO buscarPuja(Integer id){
+    public PujaDTO buscarPuja(Integer id){ //Galo
         
         Puja p = pf.find(id);
         
         return p.toDTO();
     }
     
-    public PujaDTO mayorPuja(Integer id){
+    public PujaDTO mayorPuja(Integer id){ //Miguel
         Puja puja = pf.findMax(id);
         
         return (puja == null) ? null : puja.toDTO();

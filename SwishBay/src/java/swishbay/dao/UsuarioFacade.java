@@ -14,7 +14,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author Luis
+ * @author Luis 56% , Galo 11%, Angel 33%
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
