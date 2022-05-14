@@ -43,7 +43,25 @@
                     
                   </ul>
                   <form method="post" class="d-flex" action="ProductoAdminServlet">
-                    <div class="col-sm-4">
+                    <%
+                        String filtroDesde = (String) request.getAttribute("desdeSelected");
+                        String filtroHasta = (String) request.getAttribute("hastaSelected");
+                    %>
+                    
+                      <div class="mt-2">
+                        Desde:  
+                      </div>
+                      
+                      <input class="form-control mx-1" type="number" min="0"  style=" width:80px;" id="desde" name="desde" value=<%= filtroDesde==null ? "0":Integer.parseInt(filtroDesde)  %> ></>
+                      <div class="mt-2" style="margin-right: 15px;">€</div>
+                      <div class="mt-2">
+                        Hasta:  
+                      </div>
+                      
+                      <input class="form-control mx-1" type="number" min="0" style=" width:80px;" id="hasta" name="hasta" value=<%= filtroHasta==null ? "9999":Integer.parseInt(filtroHasta)  %> ></>
+                      <div class="mt-2" style="margin-right: 15px;">€</div>
+                    
+                    <div class="col-sm-3">
                         <select class="form-select px-2" id="filtroCategoria" name="filtroCategoria">
                             
                             <%

@@ -65,7 +65,7 @@ public class SellerService {
     }
     
     
-    public List<ProductoDTO> listarProductos(UsuarioDTO user, String filtroNombre, String filtroCategoria, String filtroDesde, String filtroHasta){
+    public List<ProductoDTO> listarProductos(UsuarioDTO user, String filtroNombre, String filtroCategoria, String filtroDesde, String filtroHasta){ // Galo
         
         List<Producto> productos = null;    
         if(filtroNombre == null || filtroNombre.isEmpty()){

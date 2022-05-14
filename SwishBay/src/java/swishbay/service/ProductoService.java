@@ -68,6 +68,55 @@ public class ProductoService {
         return this.listaEntityADTO(productos);
     }
     
+    public List<ProductoDTO> listarProductos (String filtroNombre, String filtroCategoria, String filtroDesde, String filtroHasta) { // Luis
+        List<Producto> productos = null;
+        
+        if (filtroNombre == null || filtroNombre.isEmpty()) {
+            
+            if (filtroDesde == null) {   // En este caso filtroHasta también sería null  
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findAll();
+                    
+                } else {
+                    productos= this.pf.findAll(filtroCategoria);
+
+                }
+            } else {
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findAllDesde(filtroDesde, filtroHasta);
+                    
+                } else {
+                    productos= this.pf.findAllFilteredDesde(filtroCategoria, filtroDesde, filtroHasta);
+
+                }
+            }
+                
+        } else {
+            
+            if (filtroDesde == null) {   // En este caso filtroHasta también sería null 
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findByNombre(filtroNombre);
+
+                } else {
+                    productos = pf.findByNombre(filtroNombre, filtroCategoria);
+
+                } 
+            } else {
+                if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
+                    productos = this.pf.findByNombreDesde(filtroNombre, filtroDesde, filtroHasta);
+
+                } else {
+                    productos = pf.findByNombreFilteredDesde(filtroNombre, filtroCategoria, filtroDesde, filtroHasta);
+
+                }  
+            }
+            
+                 
+        }
+        
+        return this.listaEntityADTO(productos);
+    }
+    
     public ProductoDTO buscarProducto(String strId){
         Producto p=null;
         if(strId !=null && !strId.isEmpty()){
