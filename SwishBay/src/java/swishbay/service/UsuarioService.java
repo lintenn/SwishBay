@@ -37,6 +37,7 @@ public class UsuarioService {
     @EJB RolUsuarioFacade rolUsuarioFacade;
     @EJB ProductoFacade productoFacade;
     @EJB GrupoFacade grupoFacade;
+    @EJB GrupoService grupoService;
     
     private List<UsuarioDTO> listaEntityADTO (List<Usuario> lista) { // Luis
         List<UsuarioDTO> listaDTO = null;
@@ -296,8 +297,10 @@ public class UsuarioService {
         
         if(usuario.getProductoList().contains(producto)){
             usuario.getProductoList().remove(producto);
+            this.eliminarUsuarioAGrupoADarleFavoritoAProducto(idUsuario, idUsuario);
         }else{
             usuario.getProductoList().add(producto);
+            this.anadirUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario);
         }
         
         this.usuarioFacade.edit(usuario);
@@ -331,5 +334,33 @@ public class UsuarioService {
         
         return this.listaEntityADTO(usuarios);
         
+    }
+    
+    public Integer buscarUsuarioMarketing(){ // angel
+        
+        Usuario usuario = this.usuarioFacade.findByMarketing();
+        
+        if(usuario == null){
+            this.crearUsuario("Usuario marketing", "Número 1", "usuarioMarketingNumero1@gmail.com", "123456", null, null, null, null, null, "marketing", null);
+        }
+        
+        return this.usuarioFacade.findByMarketing().getId();
+    }
+    
+    public void anadirUsuarioAGrupoADarleFavoritoAProducto(int idProducto, int idUsuario){ // angel
+        
+        this.grupoService.comprobarExistenciaGrupoPorNombre("Grupo_"+idProducto);
+        Integer idGrupo = this.grupoService.buscarGruposPorNombre("Grupo_"+idProducto).get(0).getId();
+        this.grupoService.añadirUsuarioAListaUsuariosGrupo(idUsuario, idGrupo);
+        this.añadirGrupoAListaGruposUsuario(idUsuario, idGrupo);
+            
+    }
+    
+    public void eliminarUsuarioAGrupoADarleFavoritoAProducto(int idProducto, int idUsuario){ // angel
+
+        Integer idGrupo = this.grupoService.buscarGruposPorNombre("Grupo_"+idProducto).get(0).getId();
+        this.grupoService.eliminarUsuarioAListaUsuariosGrupo(idUsuario, idGrupo);
+        this.eliminarGrupoAListaGruposUsuario(idUsuario, idGrupo);
+            
     }
 }

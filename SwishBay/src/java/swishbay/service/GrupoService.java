@@ -25,6 +25,7 @@ public class GrupoService {
     
     @EJB GrupoFacade grupoFacade;
     @EJB UsuarioFacade usuarioFacade;
+    @EJB UsuarioService usuarioService;
     
     private Grupo buscarGrupo(Integer id){ // angel
         
@@ -201,5 +202,17 @@ public class GrupoService {
             }
         }
         return listaDTO;
+    }
+    
+    public void comprobarExistenciaGrupoPorNombre(String nombre){ // angel
+        
+        List<GrupoDTO> grupos = this.buscarGruposPorNombre(nombre);
+        
+        if(grupos == null || grupos.isEmpty()){
+            
+            this.crearGrupo(nombre, this.usuarioService.buscarUsuarioMarketing());
+            
+        }
+        
     }
 }
