@@ -173,14 +173,7 @@ public class Mensaje implements Serializable {
         mensajeDTO.setAsunto(asunto);
         mensajeDTO.setContenido(contenido);
         mensajeDTO.setFecha(fecha);
-        mensajeDTO.setGrupo(grupo.toDTO());
         mensajeDTO.setId(id);
-        mensajeDTO.setMarketing(marketing.toDTO());
-        List<UsuarioDTO> usuarios = new ArrayList<>();
-        for(Usuario usuario : usuarioList){
-            usuarios.add(usuario.toDTO());
-        }
-        mensajeDTO.setUsuarioList(usuarios);
         
         return mensajeDTO;
         
