@@ -1,7 +1,6 @@
 package swishbay.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -46,7 +45,7 @@ public abstract class CompradorServlet extends SwishBayServlet {
             String filtroTitulo = request.getParameter("filtro");
             String filtroCategoria = request.getParameter("filtroCategoria");
             
-            if(filtroTitulo == null || filtroTitulo.isEmpty()){
+            if(filtroTitulo == null || filtroTitulo.isEmpty() || filtroTitulo.trim().length() <= 0 ){
                 filtroTitulo = "";
             }
             
@@ -55,16 +54,12 @@ public abstract class CompradorServlet extends SwishBayServlet {
             }
             
             List<ProductoDTO> productos = this.getProductos(filtroTitulo, filtroCategoria, usuario);   
-            List<CategoriaDTO> categorias = categoriaService.listarCategorias();
-            
-            List<PujaDTO> mayoresPujas = new ArrayList<>();
-            for(ProductoDTO producto : productos){
-                mayoresPujas.add(pujaService.mayorPuja(producto.getId()));
-            }
-            request.setAttribute("mayoresPujas", mayoresPujas);
+            List<CategoriaDTO> categorias = categoriaService.listarCategorias();          
+            List<PujaDTO> mayoresPujas = pujaService.buscarMayoresPujas(productos) ;            
             
             request.setAttribute("productos", productos);
             request.setAttribute("categorias", categorias);
+            request.setAttribute("mayoresPujas", mayoresPujas);
             request.setAttribute("selected", filtroCategoria);
             request.setAttribute("servlet", this.getServlet());
             request.getSession().setAttribute("servlet", this.getServlet());

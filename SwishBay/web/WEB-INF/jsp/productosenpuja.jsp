@@ -30,7 +30,6 @@
                 List<ProductoDTO> productos = (List)request.getAttribute("productos");
                 UsuarioDTO usuario = (UsuarioDTO)session.getAttribute("usuario");
                 List<PujaDTO> mayoresPujas = (List)request.getAttribute("mayoresPujas");
-                //List<ProductoDTO> favoritos = usuario.getProductoList();
                 
                 if(productos.isEmpty()){
             %>
