@@ -13,7 +13,7 @@ import swishbay.entity.Puja;
 
 /**
  *
- * @author migue
+ * @author Miguel Oña Guerrero
  */
 @Stateless
 public class PujaFacade extends AbstractFacade<Puja> {
@@ -46,7 +46,7 @@ public class PujaFacade extends AbstractFacade<Puja> {
 
     }
     
-    public Puja findMayor(Integer id){
+    public Puja findMayor(Integer id){ //Miguel Oña Guerrero
         Query q; 
         q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id and p.precio = (select max(p.precio) from Puja p where p.producto1.id = :id)");
         q.setParameter("id", id );

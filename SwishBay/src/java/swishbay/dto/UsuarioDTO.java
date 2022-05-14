@@ -26,6 +26,7 @@ public class UsuarioDTO {
     private RolUsuarioDTO rol;
     private List<Integer> categoriaList;
     private List<Integer> favoritos;
+    private List<MensajeDTO> mensajeList;
     
     public UsuarioDTO() {
     }
@@ -198,5 +199,13 @@ public class UsuarioDTO {
     
     public void setFavoritos(List<Integer> favoritos) {
         this.favoritos = favoritos;
+    }
+
+    public List<MensajeDTO> getMensajeList() {
+        return mensajeList;
+    }
+
+    public void setMensajeList(List<MensajeDTO> mensajeList) {
+        this.mensajeList = mensajeList;
     }
 }

@@ -22,7 +22,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop, Luis
+ * @author galop 68%, Luis 27%, Miguel 5%
  */
 
 @Stateless
@@ -117,7 +117,7 @@ public class ProductoService {
         return this.listaEntityADTO(productos);
     }
     
-    public ProductoDTO buscarProducto(String strId){
+    public ProductoDTO buscarProducto(String strId){ // Galo
         Producto p=null;
         if(strId !=null && !strId.isEmpty()){
             p = pf.find(Integer.parseInt(strId));
@@ -127,7 +127,7 @@ public class ProductoService {
         return (ProductoDTO) (p!=null ? p.toDTO(): p);
     }
     
-    public Double precioMax(String strId){
+    public Double precioMax(String strId){ // Galo
         
         Double p=0.0;
         
@@ -213,18 +213,18 @@ public class ProductoService {
 
     }
     
-    public void borrarProducto(Integer id){
+    public void borrarProducto(Integer id){ // Galo
         Producto p = pf.find(id);
         pf.remove(p);
     }
     
-    public void ponerEnPuja(Integer id){
+    public void ponerEnPuja(Integer id){ //Galo
         Producto p = pf.find(id);
         p.setEnPuja((short) 1);
         pf.edit(p);
     }
 
-    public void modificarPuja(String strId, String precio, java.util.Date d) {
+    public void modificarPuja(String strId, String precio, java.util.Date d) { //Galo
 
         Producto p = pf.find(Integer.parseInt(strId));
         
@@ -238,7 +238,7 @@ public class ProductoService {
         
     }
 
-    public void modificarPuja(String strId, java.util.Date d) {
+    public void modificarPuja(String strId, java.util.Date d) { //Galo
         Producto p = pf.find(Integer.parseInt(strId));
         
         if(p.getEnPuja()==0){
@@ -249,7 +249,7 @@ public class ProductoService {
         pf.edit(p);
     }
 
-    public void quitarPuja(String str) {
+    public void quitarPuja(String str) { //Galo
         
         Producto p = this.pf.find(Integer.parseInt(str));
         p.getPujaList().clear();
@@ -261,7 +261,7 @@ public class ProductoService {
         pf.edit(p);
     }
 
-    public void finalizarPuja(String id) {
+    public void finalizarPuja(String id) { //Galo
 
         Producto p = pf.findByID(Integer.parseInt(id));
         Double d=p.getPrecioSalida();
@@ -294,7 +294,7 @@ public class ProductoService {
 
     }
     
-    private void sumarSaldo(double cantidad, Usuario user){
+    private void sumarSaldo(double cantidad, Usuario user){ //Galo
         
         double saldo = user.getSaldo();
         saldo += cantidad;
@@ -303,7 +303,7 @@ public class ProductoService {
         uf.edit(user);
     }
     
-    public void realizarPuja(int idproducto, double cantidad, int idusuario){
+    public void realizarPuja(int idproducto, double cantidad, int idusuario){ //Miguel
         Producto producto = pf.findByID(idproducto);
         Usuario usuario = uf.findByID(idusuario);
         

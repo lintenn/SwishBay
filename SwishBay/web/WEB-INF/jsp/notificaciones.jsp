@@ -1,10 +1,11 @@
 <%-- 
-    Document   : usuariosCompradores
-    Created on : 16 abr 2022, 1:58:16
-    Author     : angel
+    Document   : notificaciones
+    Created on : 14-may-2022, 14:11:58
+    Author     : anaji
 --%>
 
-<%@page import="swishbay.dto.UsuarioDTO"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="swishbay.dto.MensajeDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -20,21 +21,20 @@
     </head>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-            <jsp:include page="cabeceraPrincipal.jsp" />
+            <jsp:include page="cabecera.jsp" />
             
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
               <div class="container-fluid">
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse" style="float: right" id="navbarSupportedContent"> 
+                    <%
+                    String str = request.getParameter("id");
+                    String id = "?id="+str;
+                    %>
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="UsuarioCompradorServlet">Panel de usuarios compradores</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="GrupoServlet">Panel de grupos</a>
-                    </li>
-                    
                   </ul>
-                  <form method="post" class="d-flex" action="UsuarioCompradorServlet">
+                  <form method="post" class="d-flex" action="NotificacionesVerServlet<%=id%>">
                     <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
@@ -45,35 +45,25 @@
             <main class="row d-flex justify-content-center mt-4">
             
                 <div class="d-flex justify-content-between">
-                    <h1>Listado de usuarios compradores: </h1>
+                    <h1>Listado de notificaciones: </h1>
                 </div>
                 
             <table class="table table-dark table-striped">
                 <tr>
-                    <th>NOMBRE</th>
-                    <th>CORREO</th>                
-                    <th>APELLIDOS</th>
-                    <th>CIUDAD</th>
-                    <th>DOMICILIO</th>
-                    <th>NACIMIENTO</th>
-                    <th>SEXO</th>
-                    <th>SALDO</th>
+                    <th>ASUNTO</th>
+                    <th>CUERPO DEL MENSAJE</th>
+                    <th>FECHA</th>
                 </tr>
             <%
-                List<UsuarioDTO> usuarios = (List)request.getAttribute("usuarios");
-                if(usuarios.size() != 0){
-                    for (UsuarioDTO usuario : usuarios) {
-                        String strFechaNacimiento = DateFormat.getDateInstance(DateFormat.SHORT).format(usuario.getFechaNacimiento());
+                List<MensajeDTO> mensajes = (List)request.getAttribute("mensajes");
+                if(mensajes.size() != 0){
+                    for (MensajeDTO mensaje : mensajes) {
+                        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             %>    
             <tr>
-                <td><%= usuario.getNombre()%></td>
-                <td><%= usuario.getCorreo()%></td>
-                <td><%= usuario.getApellidos()%></td>
-                <td><%= usuario.getCiudad()%></td>
-                <td><%= usuario.getDomicilio()%></td>
-                <td><%= strFechaNacimiento %></td>
-                <td><%= usuario.getSexo()%></td>
-                <td><%= usuario.getSaldo()%></td>
+                <td><%= mensaje.getAsunto()%></td>
+                <td><%= mensaje.getContenido() %></td>
+                <td><%= format.format(mensaje.getFecha()) %></td>
             </tr>
 
             <%
@@ -82,11 +72,10 @@
             %>
             </table>
             <%
-                }
-                else {
+                } else {
             %>
             </table>
-            <h1>No hemos encontrado ningún usuario</h1>
+            <h1>No hemos encontrado ningún mensaje</h1>
             <%
                 }
             %>

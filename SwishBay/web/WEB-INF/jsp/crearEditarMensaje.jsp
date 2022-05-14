@@ -71,7 +71,7 @@
             
             
             
-            <footer class="text-white-50 fixed-bottom">
+            <footer class="mt-5 text-white-50">
             <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>
