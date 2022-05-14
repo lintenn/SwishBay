@@ -299,4 +299,21 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
 
+    public List<Puja> findLosers(String productoId, PujaPK pujaPK) {
+        Query q;
+        q = this.getEntityManager().createQuery("select pu from Puja pu where pu.producto1.id= :pId and pu.pujaPK!=:pujaId");
+        q.setParameter("pId", Integer.parseInt(productoId));
+        q.setParameter("pujaId", pujaPK);
+        
+        return q.getResultList();
+    }
+    
+    public List<Puja> findUsersPujaNoGrupo(Integer idProducto, List<Integer> idsUsers){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select pu from Puja pu where pu.producto1.id = :idProducto and pu.usuario.id NOT IN :idsUsers");
+        q.setParameter("idProducto", idProducto);
+        q.setParameter("idsUsers", idsUsers);
+        
+        return q.getResultList();
+    }
 }
