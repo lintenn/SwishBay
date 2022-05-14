@@ -13,7 +13,7 @@ import swishbay.entity.Puja;
 
 /**
  *
- * @author Miguel Oña Guerrero
+ * @author Miguel Oña Guerrero 66%, Galo 33%
  */
 @Stateless
 public class PujaFacade extends AbstractFacade<Puja> {
@@ -30,7 +30,7 @@ public class PujaFacade extends AbstractFacade<Puja> {
         super(Puja.class);
     }
 
-    public Puja findPuja(Integer uId, Integer pId) {
+    public Puja findPuja(Integer uId, Integer pId) { // Miguel Oña Guerrero
         Query q;   
         q= this.getEntityManager().createQuery("select p from Puja p where p.usuario= :usuario and p.producto1= :producto");
         q.setParameter("usuario", uId );
@@ -38,7 +38,7 @@ public class PujaFacade extends AbstractFacade<Puja> {
         return (Puja) q.getSingleResult();
     }
 
-    public Puja findMax(Integer pId) {
+    public Puja findMax(Integer pId) { //Galo
         Query q;   
         q= this.getEntityManager().createQuery("select pu from Producto p JOIN p.pujaList pu WHERE p.id = :producto ORDER BY pu.precio DESC ");
         q.setParameter("producto", pId );
