@@ -21,7 +21,7 @@ import swishbay.service.GrupoService;
  * @author angel
  */
 @WebServlet(name = "ParticipantesGrupoAnadirServlet", urlPatterns = {"/ParticipantesGrupoAnadirServlet"})
-public class ParticipantesGrupoAnadirServlet extends HttpServlet {
+public class ParticipantesGrupoAnadirServlet extends SwishBayServlet {
 
     @EJB GrupoService grupoService;
     /**
@@ -36,6 +36,8 @@ public class ParticipantesGrupoAnadirServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String filtroNombre = request.getParameter("filtro");
             Integer strId = Integer.parseInt(request.getParameter("id"));
             List<UsuarioDTO> usuarios;
@@ -47,7 +49,9 @@ public class ParticipantesGrupoAnadirServlet extends HttpServlet {
             }
 
             request.setAttribute("usuarios", usuarios);
-            request.getRequestDispatcher("WEB-INF/jsp/participantesGrupoAnadir.jsp").forward(request, response);   
+            request.getRequestDispatcher("WEB-INF/jsp/participantesGrupoAnadir.jsp").forward(request, response); 
+            
+        }    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

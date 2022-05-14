@@ -33,7 +33,7 @@ import swishbay.dto.UsuarioDTO;
 
 /**
  *
- * @author Luis
+ * @author Linten
  */
 @Entity
 @Table(name = "MENSAJE")

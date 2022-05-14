@@ -211,6 +211,8 @@ public class UsuarioService {
         
         this.usuarioFacade.create(usuario);
         
+        usuario = this.usuarioFacade.findByCorreo(usuario.getCorreo()); // No debería hacer falta hacer esto, pero por algún motivo al hacer create(usuario) el id (aún siendo autoincrementado y guardándose en la base de datos) no se setea y se queda como null
+        
         this.actualizarRolUsuario(usuario);
         
         this.rellenarCategoriasUsuario(categorias, usuario);

@@ -36,12 +36,16 @@ public class GrupoNuevoEditarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String str = request.getParameter("id");
             if (str != null && !str.isEmpty()) {
                 GrupoDTO grupo = this.grupoService.buscarGrupoDTO(Integer.parseInt(str));
                 request.setAttribute("grupo", grupo);
             }
             request.getRequestDispatcher("WEB-INF/jsp/crearEditarGrupo.jsp").forward(request, response);
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

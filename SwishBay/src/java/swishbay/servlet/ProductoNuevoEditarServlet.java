@@ -24,7 +24,7 @@ import swishbay.service.ProductoService;
  * @author galop
  */
 @WebServlet(name = "ProductoNuevoEditarServlet", urlPatterns = {"/ProductoNuevoEditarServlet"})
-public class ProductoNuevoEditarServlet extends HttpServlet {
+public class ProductoNuevoEditarServlet extends SwishBayServlet {
 
     @EJB ProductoService ps;
     @EJB CategoriaService cs;
@@ -40,15 +40,17 @@ public class ProductoNuevoEditarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String str = request.getParameter("id");
-        
-        ProductoDTO p= ps.buscarProducto(str);
-        List<CategoriaDTO> categorias = cs.listarCategorias();
-        
-        request.setAttribute("categorias",categorias );
-        if(p!=null)
-            request.setAttribute("producto", p);
-        request.getRequestDispatcher("WEB-INF/jsp/producto.jsp").forward(request, response);
+        if (super.comprobarCompradorVendedorSession(request, response)) {
+            String str = request.getParameter("id");
+
+            ProductoDTO p= ps.buscarProducto(str);
+            List<CategoriaDTO> categorias = cs.listarCategorias();
+
+            request.setAttribute("categorias",categorias );
+            if(p!=null)
+                request.setAttribute("producto", p);
+            request.getRequestDispatcher("WEB-INF/jsp/producto.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

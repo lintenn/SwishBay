@@ -19,7 +19,7 @@ import swishbay.service.MensajeService;
  * @author angel
  */
 @WebServlet(name = "MensajeBorrarServlet", urlPatterns = {"/MensajeBorrarServlet"})
-public class MensajeBorrarServlet extends HttpServlet {
+public class MensajeBorrarServlet extends SwishBayServlet {
 
     @EJB MensajeService mensajeService;
     /**
@@ -34,12 +34,16 @@ public class MensajeBorrarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String str = request.getParameter("id");
             String strGrupo = request.getParameter("idGrupo");
 
             this.mensajeService.borrarMensaje(Integer.parseInt(str));
 
             response.sendRedirect(request.getContextPath() + "/GrupoVerMensajeServlet?id="+strGrupo);
+            
+        }    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

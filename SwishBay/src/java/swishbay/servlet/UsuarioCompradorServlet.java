@@ -39,6 +39,8 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+            
             String filtroNombre = request.getParameter("filtro");
             List<UsuarioDTO> usuarios = null;
 
@@ -49,7 +51,9 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
             }
 
             request.setAttribute("usuarios", usuarios);
-            request.getRequestDispatcher("WEB-INF/jsp/usuariosCompradores.jsp").forward(request, response);   
+            request.getRequestDispatcher("WEB-INF/jsp/usuariosCompradores.jsp").forward(request, response);
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

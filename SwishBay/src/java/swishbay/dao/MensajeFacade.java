@@ -14,7 +14,7 @@ import swishbay.entity.Mensaje;
 
 /**
  *
- * @author migue
+ * @author Ángel
  */
 @Stateless
 public class MensajeFacade extends AbstractFacade<Mensaje> {
