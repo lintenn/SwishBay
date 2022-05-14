@@ -4,6 +4,7 @@
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="swishbay.dto.PujaDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.util.List"%>
@@ -21,13 +22,26 @@
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <jsp:include page="cabecera.jsp" />
-            <jsp:include page="menucomprador.jsp" />
-
+            
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="SellerServlet">Vender</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <jsp:include page="menucomprador.jsp"/>
+                    <jsp:include page="productofiltro.jsp"/>
+                </div>
+              </div>
+            </nav>
+                  
             <main class="row d-flex justify-content-center mt-4">
                 
             <%
                 List<ProductoDTO> productos = (List)request.getAttribute("productos");
                 UsuarioDTO usuario = (UsuarioDTO)session.getAttribute("usuario");
+                List<PujaDTO> mayoresPujas = (List)request.getAttribute("mayoresPujas");
                 
                 if(productos.isEmpty()){
             %>
@@ -39,8 +53,10 @@
                 </footer>
             <%
                 }else{
-
+                    int i = 0;
                     for(ProductoDTO producto : productos){
+                        PujaDTO puja = mayoresPujas.get(i);
+                        i++;
             %> 
 
                 <div class="card mb-3 ms-2 me-2 col-4 position-relative" style="width: 18rem;">
@@ -52,7 +68,19 @@
                         <div class="col-sm-12 mt-0">
                             <div class="row justify-content-center">
                                 <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
-                                <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>
+                                
+                                <%
+                                    if(puja == null){
+                                %>
+                                <small class="card-text text-dark text-center mb-0 text-muted" >Aún no hay pujas en esta subasta</small>
+                                <%
+                                    }else{
+                                %>
+                                <small class="card-text text-dark text-center mb-0 text-muted" >Puja más alta <%= puja.getPrecio() + "€ por " + puja.getComprador().getNombre()%></small>
+                                <%
+                                    }
+                                %>              
+                                <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>                       
                                 <div class="row justify-content-center pb-2 px-0">
                                     <a href="CompradorVerProductoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Ver producto</a>
                                     <a href="CompradorManejoFavoritoServlet?id=<%=producto.getId() %>" class="col-2">
@@ -85,7 +113,7 @@
             </main>
 
             <footer class="mt-auto text-white-50">
-              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/SwishBay/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>
             <%

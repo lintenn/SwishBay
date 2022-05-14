@@ -6,7 +6,6 @@
 
 <%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="java.util.List"%>
-<%@page import="swishbay.entity.Categoria"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
                   <%
@@ -21,10 +20,10 @@
                              %>
                              <option <%= (filtroCategoria==null || filtroCategoria.equals("Categoria")) ? "selected":"" %> value="Categoria">Categoría </option>
                              <%
-                              for (CategoriaDTO c : categorias){
+                              for (CategoriaDTO categoria : categorias){
                                 
                             %>     
-                                <option <%= (filtroCategoria!=null && filtroCategoria.equals(c.getNombre())) ? "selected":"" %> value="<%=c.getNombre()%>"><%=c.getNombre()%> </option>
+                                <option <%= (filtroCategoria!=null && filtroCategoria.equals(categoria.getNombre())) ? "selected":"" %> value="<%=categoria.getNombre()%>"><%=categoria.getNombre()%> </option>
                            <%  
                               }
                            %>

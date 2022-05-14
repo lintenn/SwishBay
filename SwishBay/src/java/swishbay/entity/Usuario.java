@@ -30,6 +30,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.MensajeDTO;
 import swishbay.dto.UsuarioDTO;
 
 /**
@@ -370,6 +371,15 @@ public class Usuario implements Serializable {
             }
         }
         dto.setFavoritos(favoritos);
+        
+        List<MensajeDTO> mensajes = null;
+        if(mensajeList != null){
+            mensajes = new ArrayList<>();
+            for(Mensaje mensaje : mensajeList){
+                mensajes.add(mensaje.toDTO());
+            }
+        }
+        dto.setMensajeList(mensajes);
        
         return dto;        
     }  

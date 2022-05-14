@@ -14,7 +14,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author Luis
+ * @author Luis 56% , Galo 11%, Angel 33%
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
@@ -101,5 +101,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         q.setParameter("nombre", '%' + nombre +'%');
         
         return q.getResultList();
+    }
+    
+    public Usuario findByMarketing(){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'marketing'");
+        List<Usuario> marketings = q.getResultList();
+        
+        return (marketings==null || marketings.isEmpty()) ? null : marketings.get(0);
     }
 }

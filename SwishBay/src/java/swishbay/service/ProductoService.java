@@ -22,16 +22,17 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop, Luis
+ * @author galop 68%, Luis 27%, Miguel 5%
  */
 
 @Stateless
 public class ProductoService {
     
-    @EJB ProductoFacade pf;
-    @EJB CategoriaFacade cf;
-    @EJB UsuarioFacade uf;
-    @EJB PujaFacade puf;
+    @EJB ProductoFacade productoFacade;
+    @EJB CategoriaFacade categoriaFacade;
+    @EJB UsuarioFacade usuarioFacade;
+    @EJB PujaFacade pujaFacade;
+    @EJB GrupoService grupoService;
     
     private List<ProductoDTO> listaEntityADTO (List<Producto> lista) { // Luis
         List<ProductoDTO> listaDTO = null;
@@ -49,18 +50,18 @@ public class ProductoService {
         
         if (filtroNombre == null || filtroNombre.isEmpty()) {
                 if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
-                    productos = this.pf.findAll();
+                    productos = this.productoFacade.findAll();
                     
                 } else {
-                    productos= this.pf.findAll(filtroCategoria);
+                    productos= this.productoFacade.findAll(filtroCategoria);
 
                 }
         } else {
                 if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
-                    productos = this.pf.findByNombre(filtroNombre);
+                    productos = this.productoFacade.findByNombre(filtroNombre);
 
                 } else {
-                    productos = pf.findByNombre(filtroNombre,filtroCategoria);
+                    productos = productoFacade.findByNombre(filtroNombre,filtroCategoria);
 
                 }   
         }
@@ -75,18 +76,18 @@ public class ProductoService {
             
             if (filtroDesde == null) {   // En este caso filtroHasta también sería null  
                 if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
-                    productos = this.pf.findAll();
+                    productos = this.productoFacade.findAll();
                     
                 } else {
-                    productos= this.pf.findAll(filtroCategoria);
+                    productos= this.productoFacade.findAll(filtroCategoria);
 
                 }
             } else {
                 if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
-                    productos = this.pf.findAllDesde(filtroDesde, filtroHasta);
+                    productos = this.productoFacade.findAllDesde(filtroDesde, filtroHasta);
                     
                 } else {
-                    productos= this.pf.findAllFilteredDesde(filtroCategoria, filtroDesde, filtroHasta);
+                    productos= this.productoFacade.findAllFilteredDesde(filtroCategoria, filtroDesde, filtroHasta);
 
                 }
             }
@@ -95,18 +96,18 @@ public class ProductoService {
             
             if (filtroDesde == null) {   // En este caso filtroHasta también sería null 
                 if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
-                    productos = this.pf.findByNombre(filtroNombre);
+                    productos = this.productoFacade.findByNombre(filtroNombre);
 
                 } else {
-                    productos = pf.findByNombre(filtroNombre, filtroCategoria);
+                    productos = productoFacade.findByNombre(filtroNombre, filtroCategoria);
 
                 } 
             } else {
                 if (filtroCategoria==null || filtroCategoria.equals("Categoria")) {
-                    productos = this.pf.findByNombreDesde(filtroNombre, filtroDesde, filtroHasta);
+                    productos = this.productoFacade.findByNombreDesde(filtroNombre, filtroDesde, filtroHasta);
 
                 } else {
-                    productos = pf.findByNombreFilteredDesde(filtroNombre, filtroCategoria, filtroDesde, filtroHasta);
+                    productos = productoFacade.findByNombreFilteredDesde(filtroNombre, filtroCategoria, filtroDesde, filtroHasta);
 
                 }  
             }
@@ -117,22 +118,22 @@ public class ProductoService {
         return this.listaEntityADTO(productos);
     }
     
-    public ProductoDTO buscarProducto(String strId){
+    public ProductoDTO buscarProducto(String strId){ // Galo
         Producto p=null;
         if(strId !=null && !strId.isEmpty()){
-            p = pf.find(Integer.parseInt(strId));
+            p = productoFacade.find(Integer.parseInt(strId));
             
             
         }
         return (ProductoDTO) (p!=null ? p.toDTO(): p);
     }
     
-    public Double precioMax(String strId){
+    public Double precioMax(String strId){ // Galo
         
         Double p=0.0;
         
         if(strId !=null && !strId.isEmpty()){
-            p = pf.findPrecioMax(strId); 
+            p = productoFacade.findPrecioMax(strId); 
         }
         return p;
     }
@@ -142,11 +143,11 @@ public class ProductoService {
         p.setDescripcion(desc);
         p.setFoto(foto);
         p.setFinPuja(date);
-        p.setCategoria(cf.findByName(categoria));
+        p.setCategoria(categoriaFacade.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
         short n=0;
         p.setEnPuja(n);
-        p.setVendedor(uf.find(vendedor));
+        p.setVendedor(usuarioFacade.find(vendedor));
     }
     
     private void rellenarProducto(Producto p, String titulo, String desc, String foto, Date date, String categoria, String precio){ // Galo
@@ -154,7 +155,7 @@ public class ProductoService {
         p.setDescripcion(desc);
         p.setFoto(foto);
         p.setFinPuja(date);
-        p.setCategoria(cf.findByName(categoria));
+        p.setCategoria(categoriaFacade.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
         short n=0;
         p.setEnPuja(n);
@@ -164,32 +165,32 @@ public class ProductoService {
     public void crearProducto(String titulo, String desc, String foto, Date date, String categoria, String precio, int vendedor) { // Galo
 
         Producto p = new Producto();
-        Categoria c = cf.findByName(categoria);
-        Usuario seller = uf.find(vendedor);
+        Categoria c = categoriaFacade.findByName(categoria);
+        Usuario seller = usuarioFacade.find(vendedor);
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio,vendedor);
         c.getProductoList().add(p);
         seller.getProductoList2().add(p);
         
-        pf.create(p);
-        cf.edit(c);
-        uf.edit(seller);
+        productoFacade.create(p);
+        categoriaFacade.edit(c);
+        usuarioFacade.edit(seller);
     }
 
     public void modificarProducto(String strId, String titulo, String desc, String foto, Date date, String categoria, String precio) { // Galo
 
-        Producto p = pf.find(Integer.parseInt(strId));
+        Producto p = productoFacade.find(Integer.parseInt(strId));
         Categoria anteriorCategoria = p.getCategoria();
-        Categoria c = cf.findByName(categoria);
+        Categoria c = categoriaFacade.findByName(categoria);
         
         anteriorCategoria.getProductoList().remove(p);
-        cf.edit(anteriorCategoria);
+        categoriaFacade.edit(anteriorCategoria);
         
         rellenarProducto(p,titulo,desc,foto,date,categoria,precio);
         c.getProductoList().add(p);
         
-        cf.edit(c);
-        pf.edit(p);
+        categoriaFacade.edit(c);
+        productoFacade.edit(p);
 
     }
     
@@ -198,35 +199,35 @@ public class ProductoService {
         p.setDescripcion(desc);
         p.setFoto(foto);
 
-        p.setCategoria(cf.findByName(categoria));
+        p.setCategoria(categoriaFacade.findByName(categoria));
         p.setPrecioSalida(Double.parseDouble(precio));
 
     }
     
     public void modificarProducto(String strId, String titulo, String desc, String foto, String categoria, String precio) { //Luis
 
-        Producto p = pf.find(Integer.parseInt(strId));
+        Producto p = productoFacade.find(Integer.parseInt(strId));
         
         rellenarProducto(p,titulo,desc,foto,categoria,precio);
         
-        pf.edit(p);
+        productoFacade.edit(p);
 
     }
     
-    public void borrarProducto(Integer id){
-        Producto p = pf.find(id);
-        pf.remove(p);
+    public void borrarProducto(Integer id){ // Galo
+        Producto p = productoFacade.find(id);
+        productoFacade.remove(p);
     }
     
-    public void ponerEnPuja(Integer id){
-        Producto p = pf.find(id);
+    public void ponerEnPuja(Integer id){ //Galo
+        Producto p = productoFacade.find(id);
         p.setEnPuja((short) 1);
-        pf.edit(p);
+        productoFacade.edit(p);
     }
 
-    public void modificarPuja(String strId, String precio, java.util.Date d) {
+    public void modificarPuja(String strId, String precio, java.util.Date d) { //Galo
 
-        Producto p = pf.find(Integer.parseInt(strId));
+        Producto p = productoFacade.find(Integer.parseInt(strId));
         
         if(p.getEnPuja()==0){
             p.setEnPuja((short) 1);
@@ -234,53 +235,59 @@ public class ProductoService {
         }
         p.setFinPuja(d);
         
-        pf.edit(p);
+        this.grupoService.notificarComienzoPuja("Grupo_"+p.getId(), p.toDTO());
+        
+        productoFacade.edit(p);
+        
         
     }
 
-    public void modificarPuja(String strId, java.util.Date d) {
-        Producto p = pf.find(Integer.parseInt(strId));
+    public void modificarPuja(String strId, java.util.Date d) { //Galo
+        Producto p = productoFacade.find(Integer.parseInt(strId));
         
         if(p.getEnPuja()==0){
             p.setEnPuja((short) 1);
         }
         p.setFinPuja(d);
         
-        pf.edit(p);
+        productoFacade.edit(p);
     }
 
-    public void quitarPuja(String str) {
+    public void quitarPuja(String str) { //Galo
         
-        Producto p = this.pf.find(Integer.parseInt(str));
+        Producto p = this.productoFacade.find(Integer.parseInt(str));
         p.getPujaList().clear();
         for(Puja pu : p.getPujaList()){
-            puf.remove(pu);
+            pujaFacade.remove(pu);
             
         }
         p.setEnPuja((short) 0);
-        pf.edit(p);
+        productoFacade.edit(p);
     }
 
-    public void finalizarPuja(String id) {
+    public void finalizarPuja(String id) { //Galo
 
-        Producto p = pf.findByID(Integer.parseInt(id));
+        Producto p = productoFacade.findByID(Integer.parseInt(id));
+        
+        this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
+        
         Double d=p.getPrecioSalida();
         Puja puja=null;
         
         
         if(!p.getPujaList().isEmpty()){
             
-            puja = puf.findMax(p.getId());
+            puja = pujaFacade.findMax(p.getId());
             Usuario comprador =puja.getUsuario();
-            List<Puja> pujasPerdedoras = pf.findLosers(id, puja.getPujaPK());
+            List<Puja> pujasPerdedoras = productoFacade.findLosers(id, puja.getPujaPK());
             
             
             p.setEnPuja((short) 0);
             p.setComprador(puja.getUsuario());
             comprador.getProductoList1().add(p);
             
-            this.uf.edit(comprador);
-            this.pf.edit(p);
+            this.usuarioFacade.edit(comprador);
+            this.productoFacade.edit(p);
             
             for(Puja pu : pujasPerdedoras){                 
                 sumarSaldo(pu.getPrecio(),pu.getUsuario());                
@@ -288,24 +295,24 @@ public class ProductoService {
             
         }else{
              p.setEnPuja((short) 0);
-             this.pf.edit(p);
+             this.productoFacade.edit(p);
              
         }
 
     }
     
-    private void sumarSaldo(double cantidad, Usuario user){
+    private void sumarSaldo(double cantidad, Usuario user){ //Galo
         
         double saldo = user.getSaldo();
         saldo += cantidad;
         user.setSaldo(saldo);
         
-        uf.edit(user);
+        usuarioFacade.edit(user);
     }
     
-    public void realizarPuja(int idproducto, double cantidad, int idusuario){
-        Producto producto = pf.findByID(idproducto);
-        Usuario usuario = uf.findByID(idusuario);
+    public void realizarPuja(int idproducto, double cantidad, int idusuario){ //Miguel Oña Guerrero
+        Producto producto = productoFacade.find(idproducto);
+        Usuario usuario = usuarioFacade.find(idusuario);
         
         Puja puja = new Puja();
         
@@ -322,10 +329,10 @@ public class ProductoService {
         pujapk.setProducto(idproducto);
         
         puja.setPujaPK(pujapk);
-        puf.create(puja);
+        pujaFacade.create(puja);
         
         producto.getPujaList().add(puja);
         
-        pf.edit(producto);
+        productoFacade.edit(producto);
     }
 }

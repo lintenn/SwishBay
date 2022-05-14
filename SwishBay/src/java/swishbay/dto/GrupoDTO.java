@@ -15,9 +15,8 @@ public class GrupoDTO {
     
     private Integer id;
     private String nombre;
-    private List<UsuarioDTO> usuarioList;
     private UsuarioDTO marketing;
-    private List<MensajeDTO> mensajeList;
+    private List<UsuarioDTO> usuarioList;
     
     /**
      * @return the id
@@ -48,20 +47,6 @@ public class GrupoDTO {
     }
 
     /**
-     * @return the usuarioList
-     */
-    public List<UsuarioDTO> getUsuarioList() {
-        return usuarioList;
-    }
-
-    /**
-     * @param usuarioList the usuarioList to set
-     */
-    public void setUsuarioList(List<UsuarioDTO> usuarioList) {
-        this.usuarioList = usuarioList;
-    }
-
-    /**
      * @return the marketing
      */
     public UsuarioDTO getMarketing() {
@@ -76,16 +61,16 @@ public class GrupoDTO {
     }
 
     /**
-     * @return the mensajeList
+     * @return the usuarioList
      */
-    public List<MensajeDTO> getMensajeList() {
-        return mensajeList;
+    public List<UsuarioDTO> getUsuarioList() {
+        return usuarioList;
     }
 
     /**
-     * @param mensajeList the mensajeList to set
+     * @param usuarioList the usuarioList to set
      */
-    public void setMensajeList(List<MensajeDTO> mensajeList) {
-        this.mensajeList = mensajeList;
+    public void setUsuarioList(List<UsuarioDTO> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 }

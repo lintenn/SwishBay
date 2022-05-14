@@ -1,5 +1,5 @@
 <%-- 
-    Document   : productosenpuja
+    Document   : productoscomprados
     Created on : Mar 28, 2022, 11:03:29 AM
     Author     : Miguel Oña Guerrero
 --%>
@@ -69,24 +69,19 @@
                         </div>
                         <div class="col-sm-12 mt-0">
                             <div class="row justify-content-center">
-                                <h5 class="card-title text-dark mt-2">Precio de salida: <%= producto.getPrecioSalida() %>€</h5>
-                                <div style="height: 92px">
-                                    <p class="card-text text-dark text-center mb-0" >Vendido por: <%= producto.getVendedor().getNombre() %></p>
-                                    <%
-                                        if(puja == null){
-                                    %>
-                                    <p class="card-text text-dark text-center mb-0" >Aún no hay pujas en esta subasta</p>
-                                    <%
-                                        }else{
-                                    %>
-                                    <p class="card-text text-dark text-center mb-0" >Puja más alta: <%= puja.getPrecio() %>€ por <%= puja.getComprador().getNombre() %></p>
-                                    <%
-                                        }
-                                    %>
-                                    <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= formato.format(producto.getFinPuja()) %> </p>
-                                </div>
+                                <h5 class="card-title text-dark mt-2"><%= producto.getPrecioSalida() %>€</h5>
+                                
+                                <%
+                                    if(puja != null){
+                                %>
+                                <small class="card-text text-dark text-center mb-0 text-muted" >Comprado por <%= puja.getPrecio() %>€ el <%= formato.format(puja.getFecha()) %></small>
+                                <%
+                                    }
+                                %>
+                                <p class="card-text text-dark text-center mb-0" >Producto comprado a <%= producto.getVendedor().getNombre() %></p>
+                                <p class="card-text text-dark text-center" style="height: 72px"><%= producto.getDescripcion() %></p>                       
                                 <div class="row justify-content-center pb-2 px-0">
-                                    <a href="CompradorVerProductoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-8 mx-2">Ver producto y pujar</a>                                 
+                                    <a href="CompradorVerProductoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-5 mx-2">Ver producto</a>
                                     <a href="CompradorManejoFavoritoServlet?id=<%=producto.getId() %>" class="col-2">
                                         <%
                                             if(usuario.getFavoritos().contains(producto.getId())){
@@ -111,19 +106,21 @@
                 </div>
             
             <%
-                    }
+                    }             
             %>
 
             </main>
 
             <footer class="mt-auto text-white-50">
-              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/SwishBay/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>
             <%
-                }                             
+                }
             %>
+
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
 </html>
+

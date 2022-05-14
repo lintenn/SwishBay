@@ -5,6 +5,7 @@
  */
 package swishbay.dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,7 +14,7 @@ import swishbay.entity.Puja;
 
 /**
  *
- * @author migue
+ * @author Miguel Oña Guerrero 66%, Galo 33%
  */
 @Stateless
 public class PujaFacade extends AbstractFacade<Puja> {
@@ -30,7 +31,7 @@ public class PujaFacade extends AbstractFacade<Puja> {
         super(Puja.class);
     }
 
-    public Puja findPuja(Integer uId, Integer pId) {
+    public Puja findPuja(Integer uId, Integer pId) { // Miguel Oña Guerrero
         Query q;   
         q= this.getEntityManager().createQuery("select p from Puja p where p.usuario= :usuario and p.producto1= :producto");
         q.setParameter("usuario", uId );
@@ -38,13 +39,28 @@ public class PujaFacade extends AbstractFacade<Puja> {
         return (Puja) q.getSingleResult();
     }
 
-    public Puja findMax(Integer pId) {
+    public Puja findMax(Integer pId) { //Galo
         Query q;   
         q= this.getEntityManager().createQuery("select pu from Producto p JOIN p.pujaList pu WHERE p.id = :producto ORDER BY pu.precio DESC ");
         q.setParameter("producto", pId );
         return (q.getResultList().isEmpty()) ? null : (Puja)q.getResultList().get(0);
 
     }
-
+    
+    public Puja findMayor(Integer id){ //Miguel Oña Guerrero
+        Query q; 
+        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id and p.precio = (select max(p.precio) from Puja p where p.producto1.id = :id)");
+        q.setParameter("id", id );
+        
+        return (q.getResultList().isEmpty()) ? null : (Puja) q.getResultList().get(0);
+    }   
+    
+    public List<Puja> findOrdenado(Integer id){
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id order by p.precio desc");
+        q.setParameter("id", id);
+        
+        return (List) q.getResultList();
+    }
     
 }
