@@ -121,7 +121,7 @@ public class UsuarioService {
             }
         }
         
-        if (strId == null || strId.isEmpty()) { // si estamos añadiendo
+        if (strId == null || strId.isEmpty()) { // si estamos aÃ±adiendo
             try {
                 posibleUser = usuarioFacade.findByCorreo(correo);
             } catch (EJBException e) {
@@ -161,7 +161,7 @@ public class UsuarioService {
         RolUsuario rol = this.rolUsuarioFacade.findByNombre(strTipoUsuario);
         usuario.setRol(rol);
                
-        // Faltarían las categorias...
+        // FaltarÃ­an las categorias...
     }
     
     private void actualizarRolUsuario (Usuario newUser) {
@@ -172,7 +172,7 @@ public class UsuarioService {
     }
     
     private void rellenarCategoriasUsuario (String[] categorias, Usuario newUser) {
-        // Cargamos las categorías...
+        // Cargamos las categorÃ­as...
         
         // Borramos al usuario de las categorias anteriores
         for (Categoria categoria : newUser.getCategoriaList()) {
@@ -180,19 +180,19 @@ public class UsuarioService {
                 
             this.categoriaFacade.edit(categoria);
         } 
-        // Borramos las categorías anteriores del usuario
+        // Borramos las categorÃ­as anteriores del usuario
         newUser.getCategoriaList().clear();
         
         if (categorias != null) {
             for (String categoriaId : categorias) {
-                // Añadimos al usuario en las nuevas categorías
+                // AÃ±adimos al usuario en las nuevas categorÃ­as
                 Categoria categoria = categoriaFacade.find(Integer.parseInt(categoriaId));
                 
                 categoria.getUsuarioList().add(newUser);
                 
                 this.categoriaFacade.edit(categoria);
                 
-                // Añadimos las nuevas categorías al usuario
+                // AÃ±adimos las nuevas categorÃ­as al usuario
                 newUser.getCategoriaList().add(categoria);
             }
             
@@ -212,7 +212,7 @@ public class UsuarioService {
         
         this.usuarioFacade.create(usuario);
         
-        usuario = this.usuarioFacade.findByCorreo(usuario.getCorreo()); // No debería hacer falta hacer esto, pero por algún motivo al hacer create(usuario) el id (aún siendo autoincrementado y guardándose en la base de datos) no se setea y se queda como null
+        usuario = this.usuarioFacade.findByCorreo(usuario.getCorreo()); // No deberÃ­a hacer falta hacer esto, pero por algÃºn motivo al hacer create(usuario) el id (aÃºn siendo autoincrementado y guardÃ¡ndose en la base de datos) no se setea y se queda como null
         
         this.actualizarRolUsuario(usuario);
         
@@ -251,7 +251,7 @@ public class UsuarioService {
         
     }
     
-    public void añadirGrupoAListaGruposUsuario(Integer idUsuario, Integer idGrupo){ // angel
+    public void anadirGrupoAListaGruposUsuario(Integer idUsuario, Integer idGrupo){ // angel
         
         Usuario usuario = this.buscarUsuarioById(idUsuario);
         Grupo grupo = this.grupoFacade.find(idGrupo);
@@ -297,7 +297,7 @@ public class UsuarioService {
         
         if(usuario.getProductoList().contains(producto)){
             usuario.getProductoList().remove(producto);
-            this.eliminarUsuarioAGrupoADarleFavoritoAProducto(idUsuario, idUsuario);
+            this.eliminarUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario);
         }else{
             usuario.getProductoList().add(producto);
             this.anadirUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario);
@@ -341,7 +341,7 @@ public class UsuarioService {
         Usuario usuario = this.usuarioFacade.findByMarketing();
         
         if(usuario == null){
-            this.crearUsuario("Usuario marketing", "Número 1", "usuarioMarketingNumero1@gmail.com", "123456", null, null, null, null, null, "marketing", null);
+            this.crearUsuario("Usuario marketing", "Numero 1", "usuarioMarketingNumero1@gmail.com", "123456", null, null, null, null, null, "marketing", null);
         }
         
         return this.usuarioFacade.findByMarketing().getId();
@@ -351,8 +351,8 @@ public class UsuarioService {
         
         this.grupoService.comprobarExistenciaGrupoPorNombre("Grupo_"+idProducto);
         Integer idGrupo = this.grupoService.buscarGruposPorNombre("Grupo_"+idProducto).get(0).getId();
-        this.grupoService.añadirUsuarioAListaUsuariosGrupo(idUsuario, idGrupo);
-        this.añadirGrupoAListaGruposUsuario(idUsuario, idGrupo);
+        this.grupoService.anadirUsuarioAListaUsuariosGrupo(idUsuario, idGrupo);
+        this.anadirGrupoAListaGruposUsuario(idUsuario, idGrupo);
             
     }
     

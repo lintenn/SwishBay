@@ -113,7 +113,7 @@ public class GrupoService {
         
     }
     
-    public void añadirUsuarioAListaUsuariosGrupo(Integer idUsuario, Integer idGrupo){ // angel
+    public void anadirUsuarioAListaUsuariosGrupo(Integer idUsuario, Integer idGrupo){ // angel
         
         Usuario usuario = this.usuarioFacade.find(idUsuario);
         Grupo grupo = this.buscarGrupo(idGrupo);
