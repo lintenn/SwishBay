@@ -1,9 +1,10 @@
 <%-- 
-    Document   : productos
+    Document   : productosenpuja
     Created on : Mar 28, 2022, 11:03:29 AM
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="swishbay.dto.PujaDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="swishbay.dto.ProductoDTO"%>
@@ -30,6 +31,7 @@
                 List<ProductoDTO> productos = (List)request.getAttribute("productos");
                 UsuarioDTO usuario = (UsuarioDTO)session.getAttribute("usuario");
                 List<PujaDTO> mayoresPujas = (List)request.getAttribute("mayoresPujas");
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 
                 if(productos.isEmpty()){
             %>
@@ -69,7 +71,7 @@
                                     <%
                                         }
                                     %>
-                                    <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= producto.getFinPuja().toGMTString().substring(0, 12) %> </p>
+                                    <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= formato.format(producto.getFinPuja()) %> </p>
                                 </div>
                                 <div class="row justify-content-center pb-2 px-0">
                                     <a href="CompradorVerProductoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-8 mx-2">Ver producto y pujar</a>                                 
