@@ -41,7 +41,7 @@ public class CompradorVerProductoServlet extends HttpServlet {
         ProductoDTO producto = productoService.buscarProducto(idProducto);
         
         if(producto.getEnPuja() == 1){
-            List<PujaDTO> pujas = producto.getPujaList();
+            List<PujaDTO> pujas = pujaService.buscarPujasOrdenadas(Integer.parseInt(idProducto));
             request.setAttribute("pujas", pujas);
         }
         

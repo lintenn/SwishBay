@@ -5,6 +5,7 @@
  */
 package swishbay.dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -54,6 +55,12 @@ public class PujaFacade extends AbstractFacade<Puja> {
         return (q.getResultList().isEmpty()) ? null : (Puja) q.getResultList().get(0);
     }   
     
-
+    public List<Puja> findOrdenado(Integer id){
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id order by p.precio desc");
+        q.setParameter("id", id);
+        
+        return (List) q.getResultList();
+    }
     
 }
