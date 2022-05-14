@@ -23,7 +23,19 @@
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <jsp:include page="cabecera.jsp" />
-            <jsp:include page="menucomprador.jsp" />
+            
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="SellerServlet">Vender</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <jsp:include page="menucomprador.jsp"/>
+                    <jsp:include page="productofiltro.jsp"/>
+                </div>
+              </div>
+            </nav>
 
             <main class="row d-flex justify-content-center mt-4">
                 
