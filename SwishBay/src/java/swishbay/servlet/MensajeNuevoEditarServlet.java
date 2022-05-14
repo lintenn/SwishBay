@@ -12,9 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.MensajeFacade;
-import swishbay.entity.Mensaje;
-
+import swishbay.dto.MensajeDTO;
+import swishbay.service.MensajeService;
+ 
 /**
  *
  * @author angel
@@ -22,7 +22,7 @@ import swishbay.entity.Mensaje;
 @WebServlet(name = "MensajeNuevoEditarServlet", urlPatterns = {"/MensajeNuevoEditarServlet"})
 public class MensajeNuevoEditarServlet extends HttpServlet {
 
-    @EJB MensajeFacade mensajeFacade;
+    @EJB MensajeService mensajeService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,7 +38,7 @@ public class MensajeNuevoEditarServlet extends HttpServlet {
         
             String str = request.getParameter("id");
             if (str != null && !str.isEmpty()) {
-                Mensaje mensaje = this.mensajeFacade.find(Integer.parseInt(str));
+                MensajeDTO mensaje = this.mensajeService.buscarMensajeDTO(Integer.parseInt(str));
                 request.setAttribute("mensaje", mensaje);
             }
             request.getRequestDispatcher("WEB-INF/jsp/crearEditarMensaje.jsp").forward(request, response);

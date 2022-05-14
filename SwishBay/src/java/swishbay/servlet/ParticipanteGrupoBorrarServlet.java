@@ -6,18 +6,15 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.GrupoFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Grupo;
-import swishbay.entity.Usuario;
-
+import swishbay.service.GrupoService;
+import swishbay.service.UsuarioService;
+ 
 /**
  *
  * @author angel
@@ -25,8 +22,8 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "ParticipanteGrupoBorrarServlet", urlPatterns = {"/ParticipanteGrupoBorrarServlet"})
 public class ParticipanteGrupoBorrarServlet extends HttpServlet {
 
-    @EJB GrupoFacade grupoFacade;
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB GrupoService grupoService;
+    @EJB UsuarioService usuarioService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,19 +39,8 @@ public class ParticipanteGrupoBorrarServlet extends HttpServlet {
             String str = request.getParameter("id");
             String strIdusuario = request.getParameter("idUsuario");
             
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(strIdusuario));
-            Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
-            
-            List<Usuario> usuarioList = grupo.getUsuarioList();
-            usuarioList.remove(usuario);
-            grupo.setUsuarioList(usuarioList);
-            
-            List<Grupo> grupoList = usuario.getGrupoList();
-            grupoList.remove(grupo);
-            usuario.setGrupoList(grupoList);
-            
-            this.grupoFacade.edit(grupo);
-            this.usuarioFacade.edit(usuario);
+            this.grupoService.eliminarUsuarioAListaUsuariosGrupo(Integer.parseInt(strIdusuario), Integer.parseInt(str));
+            this.usuarioService.eliminarGrupoAListaGruposUsuario(Integer.parseInt(strIdusuario), Integer.parseInt(str));
             
             response.sendRedirect(request.getContextPath() + "/ParticipantesGrupoEditarServlet?id=" + Integer.parseInt(str));
     }

@@ -5,6 +5,7 @@
  */
 package swishbay.dao;
 
+import java.util.Arrays;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,21 +33,21 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         super(Grupo.class);
     }
     
-    public List<Grupo> findByNombre (String nombre) {
+    public List<Grupo> findGrupoByGrupoNombre (String nombre) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select g from Grupo g where g.nombre like :nombre");
         q.setParameter("nombre", '%' + nombre +'%');
         return q.getResultList();
     }
     
-    public List<Usuario> findById (Integer id) {
+    public List<Usuario> findUsuariosByGrupoId (Integer id) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select u from Grupo g JOIN g.usuarioList u where g.id = :id");
         q.setParameter("id", id);
         return q.getResultList();
     }
     
-    public List<Usuario> findByIdAndNombre (Integer id, String nombre) {
+    public List<Usuario> findUsuariosByGrupoIdAndGrupoNombre (Integer id, String nombre) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select u from Grupo g JOIN g.usuarioList u where g.id = :id and u.nombre like :nombre");
         q.setParameter("id", id);
@@ -54,11 +55,18 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         return q.getResultList();
     }
     
-    public List<Usuario> findByIdNotAre (Integer id) {
+    public List<Usuario> findUsuariosNotInGrupoId (List<Integer> idsUsuarios) { // angel
         Query q;
-        q = this.getEntityManager().createQuery("select u from Grupo g JOIN g.usuarioList ug where g.id = :id and u.nombre like :nombre");
-        q.setParameter("id", id);
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.id NOT IN :idsUsuarios");
+        q.setParameter("idsUsuarios", idsUsuarios);
         return q.getResultList();
     }
     
+    public List<Usuario> findUsuariosNotInGrupoIdByNombre (List<Integer> idsUsuarios, String nombre) { // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.nombre like :nombre and u.id NOT IN :idsUsuarios");
+        q.setParameter("idsUsuarios", idsUsuarios);
+        q.setParameter("nombre", '%' + nombre +'%');
+        return q.getResultList();
+    }
 }

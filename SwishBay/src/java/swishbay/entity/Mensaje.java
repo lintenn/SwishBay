@@ -6,6 +6,7 @@
 package swishbay.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -27,6 +28,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.MensajeDTO;
+import swishbay.dto.UsuarioDTO;
 
 /**
  *
@@ -161,6 +164,26 @@ public class Mensaje implements Serializable {
     @Override
     public String toString() {
         return "swishbay.entity.Mensaje[ id=" + id + " ]";
+    }
+    
+    public MensajeDTO toDTO(){
+        
+        MensajeDTO mensajeDTO = new MensajeDTO();
+        
+        mensajeDTO.setAsunto(asunto);
+        mensajeDTO.setContenido(contenido);
+        mensajeDTO.setFecha(fecha);
+        mensajeDTO.setGrupo(grupo.toDTO());
+        mensajeDTO.setId(id);
+        mensajeDTO.setMarketing(marketing.toDTO());
+        List<UsuarioDTO> usuarios = new ArrayList<>();
+        for(Usuario usuario : usuarioList){
+            usuarios.add(usuario.toDTO());
+        }
+        mensajeDTO.setUsuarioList(usuarios);
+        
+        return mensajeDTO;
+        
     }
     
 }

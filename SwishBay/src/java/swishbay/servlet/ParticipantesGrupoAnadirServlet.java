@@ -6,7 +6,6 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -14,10 +13,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.GrupoFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Usuario;
-
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.GrupoService;
+ 
 /**
  *
  * @author angel
@@ -25,8 +23,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "ParticipantesGrupoAnadirServlet", urlPatterns = {"/ParticipantesGrupoAnadirServlet"})
 public class ParticipantesGrupoAnadirServlet extends HttpServlet {
 
-    @EJB GrupoFacade grupoFacade;
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB GrupoService grupoService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,28 +38,12 @@ public class ParticipantesGrupoAnadirServlet extends HttpServlet {
         
             String filtroNombre = request.getParameter("filtro");
             Integer strId = Integer.parseInt(request.getParameter("id"));
-            List<Usuario> usuarios;
-            List<Usuario> usuariosGrupo;
-            List<Usuario> usuariosCompradores = new ArrayList<>();
+            List<UsuarioDTO> usuarios;
 
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                usuariosGrupo = this.grupoFacade.findById(strId);
-                usuarios = this.usuarioFacade.findAll();
-                for (Usuario usuario : usuarios){
-                    if(usuario.getRol().getNombre().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
-                        usuariosCompradores.add(usuario);
-                    }
-                }
-                usuarios = usuariosCompradores;
+                usuarios = this.grupoService.listarUsuariosQueNoPertenecenAUnGrupo(strId);
             } else {
-                usuariosGrupo = this.grupoFacade.findByIdAndNombre(strId, filtroNombre);
-                usuarios = this.usuarioFacade.findByNombre(filtroNombre);
-                for (Usuario usuario : usuarios){
-                    if(usuario.getRol().getNombre().equals("compradorvendedor") && !usuariosGrupo.contains(usuario)){
-                        usuariosCompradores.add(usuario);
-                    }
-                }
-                usuarios = usuariosCompradores;
+                usuarios = this.grupoService.listarUsuariosQueNoPertenecenAUnGrupoPorNombre(strId, filtroNombre);
             }
 
             request.setAttribute("usuarios", usuarios);
