@@ -15,7 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dao.UsuarioFacade;
+import swishbay.dto.UsuarioDTO;
 import swishbay.entity.Usuario;
+import swishbay.service.UsuarioService;
 
 /**
  *
@@ -24,7 +26,7 @@ import swishbay.entity.Usuario;
 @WebServlet(name = "UsuarioCompradorServlet", urlPatterns = {"/UsuarioCompradorServlet"})
 public class UsuarioCompradorServlet extends SwishBayServlet {
 
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB UsuarioService usuarioService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,26 +39,21 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+            
             String filtroNombre = request.getParameter("filtro");
-            List<Usuario> usuarios;
-            List<Usuario> usuariosCompradores = new ArrayList<>();
+            List<UsuarioDTO> usuarios = null;
 
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                usuarios = this.usuarioFacade.findAll();
-                for (Usuario usuario : usuarios){
-                    if(usuario.getRol().getNombre().equals("compradorvendedor")){
-                        usuariosCompradores.add(usuario);
-                    }
-                }
-                usuarios = usuariosCompradores;
+                usuarios = this.usuarioService.buscarPorCompradorVendedor();
             } else {
-                System.out.println(filtroNombre);
-                System.out.println(this.usuarioFacade.findByNombre(filtroNombre));
-                usuarios = this.usuarioFacade.findByNombre(filtroNombre);
+                usuarios = this.usuarioService.buscarPorCompradorVendedorPorNombre(filtroNombre);
             }
 
             request.setAttribute("usuarios", usuarios);
-            request.getRequestDispatcher("WEB-INF/jsp/usuariosCompradores.jsp").forward(request, response);   
+            request.getRequestDispatcher("WEB-INF/jsp/usuariosCompradores.jsp").forward(request, response);
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

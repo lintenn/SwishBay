@@ -14,17 +14,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.GrupoFacade;
-import swishbay.entity.Usuario;
-
+import swishbay.dto.UsuarioDTO;
+import swishbay.service.GrupoService;
+ 
 /**
  *
  * @author angel
  */
 @WebServlet(name = "ParticipantesGrupoEditarServlet", urlPatterns = {"/ParticipantesGrupoEditarServlet"})
-public class ParticipantesGrupoEditarServlet extends HttpServlet {
+public class ParticipantesGrupoEditarServlet extends SwishBayServlet {
     
-    @EJB GrupoFacade grupoFacade;
+    @EJB GrupoService grupoService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,19 +37,22 @@ public class ParticipantesGrupoEditarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String filtroNombre = request.getParameter("filtro");
             Integer strId = Integer.parseInt(request.getParameter("id"));
-            List<Usuario> usuarios;
-            List<Usuario> usuariosCompradores = new ArrayList<>();
+            List<UsuarioDTO> usuarios;
 
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                usuarios = this.grupoFacade.findById(strId);
+                usuarios = this.grupoService.listarUsuariosDeUnGrupo(strId);
             } else {
-                usuarios = this.grupoFacade.findByIdAndNombre(strId, filtroNombre);
+                usuarios = this.grupoService.listarUsuariosDeUnGrupoPorNombre(strId, filtroNombre);
             }
 
             request.setAttribute("usuarios", usuarios);
-            request.getRequestDispatcher("WEB-INF/jsp/participantesGrupoEditar.jsp").forward(request, response);   
+            request.getRequestDispatcher("WEB-INF/jsp/participantesGrupoEditar.jsp").forward(request, response); 
+            
+        }    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

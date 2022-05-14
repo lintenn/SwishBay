@@ -66,11 +66,8 @@ public class SellerServlet extends SwishBayServlet {
             request.setAttribute("hastaSelected", filtroHasta);
             request.setAttribute("usuario", user);
             
-            if (user.getRol().getNombre().equals("administrador")) {
-                request.getRequestDispatcher("WEB-INF/jsp/productosAdmin.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("WEB-INF/jsp/seller.jsp").forward(request, response);
-            }
+            request.getRequestDispatcher("WEB-INF/jsp/seller.jsp").forward(request, response);
+            
         }
     }
 

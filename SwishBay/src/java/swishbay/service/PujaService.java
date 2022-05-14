@@ -4,9 +4,12 @@
  */
 package swishbay.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import swishbay.dao.PujaFacade;
+import swishbay.dto.ProductoDTO;
 import swishbay.dto.PujaDTO;
 import swishbay.entity.Puja;
 
@@ -33,4 +36,19 @@ public class PujaService {
         return (puja == null) ? null : puja.toDTO();
     }
     
+    public PujaDTO buscarMayorPuja(Integer id){
+        Puja puja = pf.findMayor(id);
+        
+        return (puja == null) ? null : puja.toDTO();
+    }
+    
+    public List<PujaDTO> buscarMayoresPujas(List<ProductoDTO> productos){
+        List<PujaDTO> pujas = new ArrayList();
+        
+        for(ProductoDTO producto : productos){
+            pujas.add(this.buscarMayorPuja(producto.getId()));
+        }
+        
+        return pujas;
+    }
 }

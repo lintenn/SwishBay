@@ -4,8 +4,8 @@
     Author     : angel
 --%>
 
+<%@page import="swishbay.dto.GrupoDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="swishbay.entity.Grupo"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     </head>
     <%
-        Grupo grupo = (Grupo)request.getAttribute("grupo");
+        GrupoDTO grupo = (GrupoDTO)request.getAttribute("grupo");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">

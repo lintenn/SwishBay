@@ -6,9 +6,6 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,23 +13,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.MensajeFacade;
-import swishbay.entity.Mensaje;
-import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
-import swishbay.dao.UsuarioFacade;
+import swishbay.dto.UsuarioDTO;
 import swishbay.entity.Usuario;
-
+import swishbay.service.MensajeService;
+import swishbay.service.UsuarioService;
+ 
 /**
  *
  * @author angel
  */
 @WebServlet(name = "MensajeGuardarServlet", urlPatterns = {"/MensajeGuardarServlet"})
-public class MensajeGuardarServlet extends HttpServlet {
+public class MensajeGuardarServlet extends SwishBayServlet {
 
-    @EJB MensajeFacade mensajeFacade;
-    @EJB GrupoFacade grupoFacade;
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB MensajeService mensajeService;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,48 +40,28 @@ public class MensajeGuardarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        if(super.comprobarMarketingSession(request, response)){
+        
             HttpSession session = request.getSession();
-            Usuario user = (Usuario)session.getAttribute("usuario");
+            UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
             String asunto, contenido, goTo = "GrupoVerMensajeServlet", strId, strIdGrupo;
 
             strId = request.getParameter("id");
             strIdGrupo = request.getParameter("idGrupo");
             goTo += "?id="+strIdGrupo;
-            Mensaje newMensaje = null;
             
             asunto = request.getParameter("asunto");
             contenido = request.getParameter("contenido");
-            Grupo grupo = null;
             
             if(strId == null || strId.isEmpty()){
-                newMensaje = new Mensaje();
-                grupo = this.grupoFacade.find(Integer.parseInt(strIdGrupo));
-                newMensaje.setGrupo(grupo);
-                newMensaje.setMarketing(user);
-                newMensaje.setFecha(new Date());
-                newMensaje.setUsuarioList(new ArrayList<Usuario>());
+                this.mensajeService.crearMensaje(Integer.parseInt(strIdGrupo), user.getId(), asunto, contenido);
             } else {
-                newMensaje = this.mensajeFacade.find(Integer.parseInt(strId));
-            }
-               
-            newMensaje.setAsunto(asunto);
-            newMensaje.setContenido(contenido);
-               
-            if(strId == null || strId.isEmpty()){
-                mensajeFacade.create(newMensaje);
-                for(Usuario usuario : grupo.getUsuarioList()){
-                    List<Mensaje> mensajeList = usuario.getMensajeList();
-                    mensajeList.add(newMensaje);
-                    usuario.setMensajeList(mensajeList);
-                    usuarioFacade.edit(usuario);
-                };
-            } else {
-                mensajeFacade.edit(newMensaje);   
-            }
-            
-            
+                this.mensajeService.modificarMensaje(Integer.parseInt(strId), asunto, contenido);
+            }          
 
             response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            
+        }    
             
     }
 

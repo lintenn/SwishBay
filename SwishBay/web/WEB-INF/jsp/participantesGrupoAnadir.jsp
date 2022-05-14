@@ -4,9 +4,9 @@
     Author     : angel
 --%>
 
+<%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
-<%@page import="swishbay.entity.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,9 +59,9 @@
                     <th></th>
                 </tr>
             <%
-                List<Usuario> usuarios = (List)request.getAttribute("usuarios");
+                List<UsuarioDTO> usuarios = (List)request.getAttribute("usuarios");
                 if(usuarios.size() != 0){
-                    for (Usuario usuario : usuarios) {
+                    for (UsuarioDTO usuario : usuarios) {
                         String strFechaNacimiento = DateFormat.getDateInstance(DateFormat.SHORT).format(usuario.getFechaNacimiento());
             %>    
             <tr>

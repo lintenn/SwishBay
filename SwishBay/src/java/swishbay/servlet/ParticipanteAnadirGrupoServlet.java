@@ -6,27 +6,24 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.GrupoFacade;
-import swishbay.dao.UsuarioFacade;
-import swishbay.entity.Grupo;
-import swishbay.entity.Usuario;
-
+import swishbay.service.GrupoService;
+import swishbay.service.UsuarioService;
+ 
 /**
  *
  * @author angel
  */
 @WebServlet(name = "ParticipanteAnadirGrupoServlet", urlPatterns = {"/ParticipanteAnadirGrupoServlet"})
-public class ParticipanteAnadirGrupoServlet extends HttpServlet {
+public class ParticipanteAnadirGrupoServlet extends SwishBayServlet {
 
-    @EJB GrupoFacade grupoFacade;
-    @EJB UsuarioFacade usuarioFacade;
+    @EJB GrupoService grupoService;
+    @EJB UsuarioService usuarioService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,24 +36,17 @@ public class ParticipanteAnadirGrupoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String str = request.getParameter("id");
             String strIdusuario = request.getParameter("idUsuario");
             
-            Usuario usuario = this.usuarioFacade.find(Integer.parseInt(strIdusuario));
-            Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
-            
-            List<Usuario> usuarioList = grupo.getUsuarioList();
-            usuarioList.add(usuario);
-            grupo.setUsuarioList(usuarioList);
-            
-            List<Grupo> grupoList = usuario.getGrupoList();
-            grupoList.add(grupo);
-            usuario.setGrupoList(grupoList);
-            
-            this.grupoFacade.edit(grupo);
-            this.usuarioFacade.edit(usuario);
+            this.grupoService.añadirUsuarioAListaUsuariosGrupo(Integer.parseInt(strIdusuario), Integer.parseInt(str));
+            this.usuarioService.añadirGrupoAListaGruposUsuario(Integer.parseInt(strIdusuario), Integer.parseInt(str));
             
             response.sendRedirect(request.getContextPath() + "/ParticipantesGrupoAnadirServlet?id=" + Integer.parseInt(str));
+            
+        }    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

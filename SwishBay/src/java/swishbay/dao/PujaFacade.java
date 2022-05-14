@@ -45,6 +45,15 @@ public class PujaFacade extends AbstractFacade<Puja> {
         return (q.getResultList().isEmpty()) ? null : (Puja)q.getResultList().get(0);
 
     }
+    
+    public Puja findMayor(Integer id){
+        Query q; 
+        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id and p.precio = (select max(p.precio) from Puja p where p.producto1.id = :id)");
+        q.setParameter("id", id );
+        
+        return (q.getResultList().isEmpty()) ? null : (Puja) q.getResultList().get(0);
+    }   
+    
 
     
 }

@@ -12,17 +12,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.MensajeFacade;
-import swishbay.entity.Mensaje;
-
+import swishbay.service.MensajeService;
+ 
 /**
  *
  * @author angel
  */
 @WebServlet(name = "MensajeBorrarServlet", urlPatterns = {"/MensajeBorrarServlet"})
-public class MensajeBorrarServlet extends HttpServlet {
+public class MensajeBorrarServlet extends SwishBayServlet {
 
-    @EJB MensajeFacade mensajeFacade;
+    @EJB MensajeService mensajeService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,14 +34,16 @@ public class MensajeBorrarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String str = request.getParameter("id");
             String strGrupo = request.getParameter("idGrupo");
 
-            Mensaje mensaje = this.mensajeFacade.find(Integer.parseInt(str));
-
-            this.mensajeFacade.remove(mensaje);
+            this.mensajeService.borrarMensaje(Integer.parseInt(str));
 
             response.sendRedirect(request.getContextPath() + "/GrupoVerMensajeServlet?id="+strGrupo);
+            
+        }    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

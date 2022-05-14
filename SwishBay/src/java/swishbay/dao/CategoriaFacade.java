@@ -14,7 +14,7 @@ import swishbay.entity.Categoria;
 
 /**
  *
- * @author Miguel 40%, Luis 30%, Galo 30%
+ * @author Luis 50%, Galo 50%
  */
 @Stateless
 public class CategoriaFacade extends AbstractFacade<Categoria> {

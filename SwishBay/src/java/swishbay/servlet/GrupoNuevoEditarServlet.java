@@ -12,8 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
+import swishbay.dto.GrupoDTO;
+import swishbay.service.GrupoService;
 
 /**
  *
@@ -22,7 +22,7 @@ import swishbay.entity.Grupo;
 @WebServlet(name = "GrupoNuevoEditarServlet", urlPatterns = {"/GrupoNuevoEditarServlet"})
 public class GrupoNuevoEditarServlet extends SwishBayServlet {
 
-    @EJB GrupoFacade grupoFacade;
+    @EJB GrupoService grupoService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,12 +36,16 @@ public class GrupoNuevoEditarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String str = request.getParameter("id");
             if (str != null && !str.isEmpty()) {
-                Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
+                GrupoDTO grupo = this.grupoService.buscarGrupoDTO(Integer.parseInt(str));
                 request.setAttribute("grupo", grupo);
             }
             request.getRequestDispatcher("WEB-INF/jsp/crearEditarGrupo.jsp").forward(request, response);
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
