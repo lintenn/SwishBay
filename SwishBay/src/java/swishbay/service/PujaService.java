@@ -21,23 +21,23 @@ import swishbay.entity.Puja;
 @Stateless
 public class PujaService {
     
-    @EJB PujaFacade pf;
+    @EJB PujaFacade pujaFacade;
     
     public PujaDTO buscarPuja(Integer id){ //Galo
         
-        Puja p = pf.find(id);
+        Puja p = pujaFacade.find(id);
         
         return p.toDTO();
     }
     
     public PujaDTO mayorPuja(Integer id){ //Miguel
-        Puja puja = pf.findMax(id);
+        Puja puja = pujaFacade.findMax(id);
         
         return (puja == null) ? null : puja.toDTO();
     }
     
     public PujaDTO buscarMayorPuja(Integer id){ //Miguel Oña Guerrero
-        Puja puja = pf.findMayor(id);
+        Puja puja = pujaFacade.findMayor(id);
         
         return (puja == null) ? null : puja.toDTO();
     }

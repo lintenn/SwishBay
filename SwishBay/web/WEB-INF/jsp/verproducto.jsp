@@ -24,7 +24,7 @@
         ProductoDTO producto = (ProductoDTO) request.getAttribute("producto");
         String error = (String) request.getAttribute("error");
         error = (error == null) ? "" : error;
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
@@ -51,7 +51,7 @@
                             <p class="fs-4">Precio de salida por <%= producto.getPrecioSalida()%>€</p>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <p class="fs-4">Fin de subasta el <%= producto.getFinPuja().toGMTString().substring(0, 12)%></p>
+                            <p class="fs-4">Fin de subasta el <%= formato.format(producto.getFinPuja())%></p>
                         </div>
                         <div class="d-flex justify-content-center">
                             <p class="fs-4">Vendido por <%= producto.getVendedor().getNombre() + " " + producto.getVendedor().getApellidos()%></p>
@@ -68,10 +68,11 @@
                 </div>
                 <%
                     }else if(producto.getComprador() != null){
-                        
+                        PujaDTO puja = (PujaDTO) request.getAttribute("puja");
                 %>
                 <div class="row col-9 d-flex justify-content-center mt-2">
                     <h3>Subasta finalizada</h3>
+                    <p class="fs-4">Compraste este producto por <%= puja.getPrecio() %>€ en la fecha <%= formato.format(puja.getFecha()) %></p>
                 </div>
                 <%
                     }else{
@@ -120,7 +121,7 @@
                                 <tr>     
                                     <td><%= puja.getComprador().getNombre() + " " + puja.getComprador().getApellidos() %></td>
                                     <td><%= puja.getPrecio() %>€</td>
-                                    <td><%= format.format(puja.getFecha()) %></td>
+                                    <td><%= formato.format(puja.getFecha()) %></td>
                                 </tr>
                                 <%
                                     }
