@@ -4,9 +4,9 @@
     Author     : angel
 --%>
 
+<%@page import="swishbay.dto.GrupoDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
-<%@page import="swishbay.entity.Grupo"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,9 +58,9 @@
                     <th></th>
                 </tr>
             <%
-                List<Grupo> grupos = (List)request.getAttribute("grupos");
+                List<GrupoDTO> grupos = (List)request.getAttribute("grupos");
                 if(grupos.size() != 0){
-                    for (Grupo grupo : grupos) {
+                    for (GrupoDTO grupo : grupos) {
             %>    
             <tr>
                 <td><%= grupo.getNombre()%></td>

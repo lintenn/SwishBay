@@ -22,7 +22,7 @@ import swishbay.service.ProductoService;
  * @author galop
  */
 @WebServlet(name = "PujaBorrarServlet", urlPatterns = {"/PujaBorrarServlet"})
-public class PujaBorrarServlet extends HttpServlet {
+public class PujaBorrarServlet extends SwishBayServlet {
 
     @EJB ProductoService ps;
     /**
@@ -37,20 +37,15 @@ public class PujaBorrarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        UsuarioDTO user=null;
-        try{
-            HttpSession session = request.getSession();
-            user = (UsuarioDTO) session.getAttribute("usuario");
+        if (super.comprobarCompradorVendedorSession(request, response)) {
+            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
 
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-        }
-        
-        if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
-            String str = request.getParameter("id");
-            ps.quitarPuja(str);
-           
-            response.sendRedirect(request.getContextPath() + "/PujasServlet");
+            if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
+                String str = request.getParameter("id");
+                ps.quitarPuja(str);
+
+                response.sendRedirect(request.getContextPath() + "/PujasServlet");
+            }
         }
     }
 

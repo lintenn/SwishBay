@@ -13,11 +13,14 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import swishbay.dao.CategoriaFacade;
+import swishbay.dao.GrupoFacade;
 import swishbay.dao.ProductoFacade;
 import swishbay.dao.RolUsuarioFacade;
 import swishbay.dao.UsuarioFacade;
 import swishbay.dto.UsuarioDTO;
 import swishbay.entity.Categoria;
+import swishbay.entity.Grupo;
+import swishbay.entity.Mensaje;
 import swishbay.entity.Producto;
 import swishbay.entity.RolUsuario;
 import swishbay.entity.Usuario;
@@ -33,6 +36,7 @@ public class UsuarioService {
     @EJB CategoriaFacade categoriaFacade;
     @EJB RolUsuarioFacade rolUsuarioFacade;
     @EJB ProductoFacade productoFacade;
+    @EJB GrupoFacade grupoFacade;
     
     private List<UsuarioDTO> listaEntityADTO (List<Usuario> lista) { // Luis
         List<UsuarioDTO> listaDTO = null;
@@ -82,12 +86,17 @@ public class UsuarioService {
     }
     
     public UsuarioDTO buscarUsuario (Integer id) { // Luis
-        Usuario usuario = this.usuarioFacade.find(id);
+        Usuario usuario = this.buscarUsuarioById(id);
         return usuario.toDTO();
     }
     
-    public void borrarUsuario (Integer id) { // Luis
+    private Usuario buscarUsuarioById (Integer id) { // angel
         Usuario usuario = this.usuarioFacade.find(id);
+        return usuario;
+    }
+    
+    public void borrarUsuario (Integer id) { // Luis
+        Usuario usuario = this.buscarUsuarioById(id);
         
         this.usuarioFacade.remove(usuario);
     }
@@ -214,7 +223,7 @@ public class UsuarioService {
     public UsuarioDTO modificarUsuario (Integer id, String nombre, String apellidos, String correo,
                                 String password, String domicilio, String ciudad, String sexo,
                                 Date fechaNacimiento, Double saldo, String strTipoUsuario, String[] categorias) {
-        Usuario usuario = this.usuarioFacade.find(id);
+        Usuario usuario = this.buscarUsuarioById(id);
         
         RolUsuario rolAntiguo = usuario.getRol();
         rolAntiguo.getUsuarioList().remove(usuario);
@@ -229,6 +238,42 @@ public class UsuarioService {
         this.rellenarCategoriasUsuario(categorias, usuario);
         
         return usuario.toDTO();
+    }
+    
+    public void modificarListaMensajesUsuario(Integer id, List<Mensaje> mensajes){ // angel
+        
+        Usuario usuario = this.buscarUsuarioById(id);
+        
+        usuario.setMensajeList(mensajes);
+        
+        this.usuarioFacade.edit(usuario);
+        
+    }
+    
+    public void añadirGrupoAListaGruposUsuario(Integer idUsuario, Integer idGrupo){ // angel
+        
+        Usuario usuario = this.buscarUsuarioById(idUsuario);
+        Grupo grupo = this.grupoFacade.find(idGrupo);
+        
+        List<Grupo> grupoList = usuario.getGrupoList();
+        grupoList.add(grupo);
+        usuario.setGrupoList(grupoList);
+        
+        this.usuarioFacade.edit(usuario);
+        
+    }
+    
+    public void eliminarGrupoAListaGruposUsuario(Integer idUsuario, Integer idGrupo){ // angel
+        
+        Usuario usuario = this.buscarUsuarioById(idUsuario);
+        Grupo grupo = this.grupoFacade.find(idGrupo);
+        
+        List<Grupo> grupoList = usuario.getGrupoList();
+        grupoList.remove(grupo);
+        usuario.setGrupoList(grupoList);
+        
+        this.usuarioFacade.edit(usuario);
+        
     }
     
     public UsuarioDTO comprobarCredenciales (String correo, String password) { // Luis
@@ -246,7 +291,7 @@ public class UsuarioService {
     
     public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){
         
-        Usuario usuario = this.usuarioFacade.find(idUsuario);
+        Usuario usuario = this.buscarUsuarioById(idUsuario);
         Producto producto = this.productoFacade.findByID(idProducto);
         
         if(usuario.getProductoList().contains(producto)){
@@ -261,7 +306,7 @@ public class UsuarioService {
     }
     
     public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){ //Miguel
-        Usuario usuario = this.usuarioFacade.find(idUsuario);
+        Usuario usuario = this.buscarUsuarioById(idUsuario);
         
         double saldo = usuario.getSaldo();
         saldo += cantidad;
@@ -270,5 +315,21 @@ public class UsuarioService {
         usuarioFacade.edit(usuario);
         
         return usuario.toDTO();
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedor(){ // angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedor();
+        
+        return this.listaEntityADTO(usuarios);
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorNombre(String nombre){ // angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByName(nombre);
+        
+        return this.listaEntityADTO(usuarios);
+        
     }
 }

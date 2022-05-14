@@ -88,4 +88,18 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return (Usuario) q.getResultList().get(0);
     }
     
+    public List<Usuario> findByCompradorVendedor(){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor'");
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByName(String nombre){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.nombre like :nombre");
+        q.setParameter("nombre", '%' + nombre +'%');
+        
+        return q.getResultList();
+    }
 }

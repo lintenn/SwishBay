@@ -13,17 +13,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.MensajeFacade;
-import swishbay.entity.Mensaje;
-
+import swishbay.dto.MensajeDTO;
+import swishbay.service.MensajeService;
+ 
 /**
  *
  * @author angel
  */
 @WebServlet(name = "GrupoVerMensajeServlet", urlPatterns = {"/GrupoVerMensajeServlet"})
-public class GrupoVerMensajeServlet extends HttpServlet {
+public class GrupoVerMensajeServlet extends SwishBayServlet {
 
-     @EJB MensajeFacade mensajeFacade;
+     @EJB MensajeService mensajeService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,19 +36,22 @@ public class GrupoVerMensajeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        if(super.comprobarMarketingSession(request, response)){
+        
             String filtroNombre = request.getParameter("filtro");
-            List<Mensaje> mensajes = null;
+            List<MensajeDTO> mensajes = null;
             String str = request.getParameter("id");
-            System.out.print(str);
             
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                mensajes = this.mensajeFacade.findByIdGrupo(Integer.parseInt(str));        
+                mensajes = this.mensajeService.buscarMensajesPorIdGrupo(Integer.parseInt(str));        
             } else {
-                mensajes = this.mensajeFacade.findByAsunto(filtroNombre);
+                mensajes = this.mensajeService.buscarMensajesPorAsunto(filtroNombre);
             }
 
             request.setAttribute("mensajes", mensajes);
             request.getRequestDispatcher("WEB-INF/jsp/mensajes.jsp").forward(request, response);   
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

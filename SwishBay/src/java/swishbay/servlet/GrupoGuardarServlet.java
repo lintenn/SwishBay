@@ -7,29 +7,27 @@ package swishbay.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
+import swishbay.dto.UsuarioDTO;
 import swishbay.entity.Usuario;
+import swishbay.service.GrupoService;
+import swishbay.service.UsuarioService;
 
 /**
  *
  * @author angel
  */
 @WebServlet(name = "GrupoGuardarServlet", urlPatterns = {"/GrupoGuardarServlet"})
-public class GrupoGuardarServlet extends HttpServlet {
+public class GrupoGuardarServlet extends SwishBayServlet {
     
-    @EJB GrupoFacade grupoFacade;
+    @EJB GrupoService grupoService;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,31 +41,25 @@ public class GrupoGuardarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        if(super.comprobarMarketingSession(request, response)){
+        
             HttpSession session = request.getSession();
-            Usuario user = (Usuario)session.getAttribute("usuario");
+            UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
             String nombre, goTo = "GrupoServlet", strId;
 
             strId = request.getParameter("id");
-            Grupo newGroup = null;
             
             nombre = request.getParameter("nombre");
             
             if(strId == null || strId.isEmpty()){
-                newGroup = new Grupo();
+                this.grupoService.crearGrupo(nombre, user.getId());
             } else {
-                newGroup = this.grupoFacade.find(Integer.parseInt(strId));
-            }
-               
-            newGroup.setNombre(nombre);
-            newGroup.setMarketing(user);
-               
-            if(strId == null || strId.isEmpty()){
-                grupoFacade.create(newGroup);
-            } else {
-                grupoFacade.edit(newGroup);   
+                this.grupoService.editarGrupo(Integer.parseInt(strId), nombre, user.getId());
             }
 
-            response.sendRedirect(request.getContextPath() + "/" + goTo); 
+            response.sendRedirect(request.getContextPath() + "/" + goTo);
+        
+        }
             
     }
 
