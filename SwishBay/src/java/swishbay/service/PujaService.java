@@ -36,13 +36,13 @@ public class PujaService {
         return (puja == null) ? null : puja.toDTO();
     }
     
-    public PujaDTO buscarMayorPuja(Integer id){
+    public PujaDTO buscarMayorPuja(Integer id){ //Miguel Oña Guerrero
         Puja puja = pf.findMayor(id);
         
         return (puja == null) ? null : puja.toDTO();
     }
     
-    public List<PujaDTO> buscarMayoresPujas(List<ProductoDTO> productos){
+    public List<PujaDTO> buscarMayoresPujas(List<ProductoDTO> productos){ //Miguel Oña Guerrero
         List<PujaDTO> pujas = new ArrayList();
         
         for(ProductoDTO producto : productos){
