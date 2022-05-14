@@ -15,7 +15,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author migue
+ * @author Ángel
  */
 @Stateless
 public class GrupoFacade extends AbstractFacade<Grupo> {
