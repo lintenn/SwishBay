@@ -196,33 +196,10 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    /*
-    public List<Producto> findEnPuja() {
-        Query q;   
-        q = this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1");
-        return q.getResultList(); 
-    }
-    
-    public List<Producto> findByComprador(int id){
-        Query q;   
-        q = this.getEntityManager().createQuery("select p from Producto p where p.comprador.id = :id");
-        q.setParameter("id", id);
-        return q.getResultList(); 
-    }
-    */
-    
     public List<Object[]> findEnPuja(int user) {
         Query q;
         q = this.getEntityManager().createQuery("select p, MAX(pu.precio) from Producto p LEFT JOIN p.pujaList pu where p.enPuja=1 and p.vendedor.id= :user GROUP BY p");
         q.setParameter("user", user);
-        return q.getResultList(); 
-    }
-    
-    public List<Producto> findEnPujaByFiltro(String filtroNombre, String filtroCategoria) {
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.enPuja = 1");
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        q.setParameter("titulo", '%' + filtroNombre + '%');
         return q.getResultList(); 
     }
     
@@ -251,18 +228,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    
-    /*
-    public List<Producto> findCompradosByFiltro(String filtroNombre, String filtroCategoria, int usuario) {
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.comprador.id = :id");
-        q.setParameter("titulo", '%' + filtroNombre + '%');
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        q.setParameter("id", usuario);
-        return q.getResultList(); 
-    }*/
-    
-    public Producto findByID(int id) {
+    public Producto findByID(int id) { //Miguel Oña Guerrero
         Query q;
         q = this.getEntityManager().createQuery("select p from Producto p where p.id = :id");
         q.setParameter("id", id);
@@ -277,23 +243,21 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         q.setParameter("id", Integer.parseInt(id));
         Double d = (Double) q.getSingleResult();
         return d;
+    }    
+    
+    public List<Puja> findLosers(String productoId, PujaPK pujaPK) {
+        Query q;
+        q = this.getEntityManager().createQuery("select pu from Puja pu where pu.producto1.id= :pId and pu.pujaPK!=:pujaId");
+        q.setParameter("pId", Integer.parseInt(productoId));
+        q.setParameter("pujaId", pujaPK);
+        
+        return q.getResultList();
     }
     
-    
-    /*
-    public List<Producto> findFavoritosByFiltro(String filtroNombre, String filtroCategoria, int usuario) {
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.usuarioList.id = :id");
-        q.setParameter("titulo", '%' + filtroNombre + '%');
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        q.setParameter("id", usuario);
-        return q.getResultList(); 
-    }*/
-    
-    public List<Producto> findExistentesByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+    public List<Producto> findExistentesByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
         Query q;
         q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo "
-                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
+                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id and p.comprador = null");
         q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
@@ -301,10 +265,11 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    public List<Producto> findFavoritosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+    public List<Producto> findFavoritosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
         Query q;
         q = this.getEntityManager().createQuery("select p from Producto p join p.usuarioList u where u.id = :id"
-                + " and p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
+                + " and p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id "
+                + "and (p.comprador.id = :id or p.comprador = null)");
         q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
@@ -312,7 +277,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-    public List<Producto> findCompradosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+    public List<Producto> findCompradosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
         Query q;
         q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo "
                 + "and p.categoria.nombre like :filtroCategoria and p.comprador.id = :id");
@@ -323,10 +288,10 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
     
-        public List<Producto> findEnPujaByFiltro(String filtroTitulo, String filtroCategoria, int usuario) {
+        public List<Producto> findEnPujaByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
         Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.enPuja = 1 "
-                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id");
+        q = this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1 and p.titulo like :titulo "
+                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id and p.comprador = null");
         q.setParameter("titulo", '%' + filtroTitulo + '%');
         q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
         q.setParameter("id", usuario);
@@ -334,14 +299,4 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList(); 
     }
 
-    public List<Puja> findLosers(String productoId, PujaPK pujaPK) {
-        Query q;
-        q = this.getEntityManager().createQuery("select pu from Puja pu where pu.producto1.id= :pId and pu.pujaPK!=:pujaId");
-        q.setParameter("pId", Integer.parseInt(productoId));
-        q.setParameter("pujaId", pujaPK);
-        
-        return q.getResultList();
-    }
-
-    
 }

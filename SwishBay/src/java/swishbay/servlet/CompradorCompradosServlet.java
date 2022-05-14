@@ -65,4 +65,9 @@ public class CompradorCompradosServlet extends CompradorServlet {
     protected String getServlet() {
         return this.getServletName();
     }
+    
+    @Override
+    protected void forward(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        request.getRequestDispatcher("WEB-INF/jsp/productoscomprados.jsp").forward(request, response);
+    }
 }
