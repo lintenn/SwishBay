@@ -292,8 +292,8 @@ public class UsuarioService {
     
     public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){ //Miguel Oña Guerrero
         
-        Usuario usuario = this.usuarioFacade.findByID(idUsuario);
-        Producto producto = this.productoFacade.findByID(idProducto);
+        Usuario usuario = this.usuarioFacade.find(idUsuario);
+        Producto producto = this.productoFacade.find(idProducto);
         
         
         if(usuario.getProductoList().contains(producto)){
@@ -315,7 +315,7 @@ public class UsuarioService {
     }
     
     public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){ //Miguel Oña Guerrero
-        Usuario usuario = this.usuarioFacade.findByID(idUsuario);
+        Usuario usuario = this.usuarioFacade.find(idUsuario);
         
         double saldo = usuario.getSaldo();
         saldo += cantidad;

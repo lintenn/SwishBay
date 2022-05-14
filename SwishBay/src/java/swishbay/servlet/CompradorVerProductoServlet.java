@@ -41,7 +41,7 @@ public class CompradorVerProductoServlet extends HttpServlet {
         ProductoDTO producto = productoService.buscarProducto(idProducto);
         
         if(producto.getEnPuja() == 1){
-            List<PujaDTO> pujas = producto.getPujaList();
+            List<PujaDTO> pujas = pujaService.buscarPujasOrdenadas(Integer.parseInt(idProducto));
             request.setAttribute("pujas", pujas);
         }
         
@@ -50,6 +50,7 @@ public class CompradorVerProductoServlet extends HttpServlet {
             request.setAttribute("puja", puja);
         }
         
+        request.getSession().setAttribute("servlet", this.getServletName() + "?id=" + producto.getId());
         request.setAttribute("producto", producto);
         
         request.getRequestDispatcher("WEB-INF/jsp/verproducto.jsp").forward(request, response);
