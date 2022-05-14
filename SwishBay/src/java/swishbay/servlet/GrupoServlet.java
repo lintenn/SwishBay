@@ -13,8 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
+import swishbay.dto.GrupoDTO;
+import swishbay.service.GrupoService;
 
 /**
  *
@@ -23,7 +23,7 @@ import swishbay.entity.Grupo;
 @WebServlet(name = "GrupoServlet", urlPatterns = {"/GrupoServlet"})
 public class GrupoServlet extends HttpServlet {
 
-    @EJB GrupoFacade grupoFacade;
+    @EJB GrupoService grupoService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,12 +37,12 @@ public class GrupoServlet extends HttpServlet {
             throws ServletException, IOException {
         
             String filtroNombre = request.getParameter("filtro");
-            List<Grupo> grupos = null;
+            List<GrupoDTO> grupos = null;
 
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                grupos = this.grupoFacade.findAll();        
+                grupos = this.grupoService.buscarTodosGrupos();        
             } else {
-                grupos = this.grupoFacade.findByNombre(filtroNombre);
+                grupos = this.grupoService.buscarGruposPorNombre(filtroNombre);
             }
 
             request.setAttribute("grupos", grupos);

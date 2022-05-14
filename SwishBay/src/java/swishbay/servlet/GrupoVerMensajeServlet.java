@@ -13,9 +13,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.MensajeFacade;
-import swishbay.entity.Mensaje;
-
+import swishbay.dto.MensajeDTO;
+import swishbay.service.MensajeService;
+ 
 /**
  *
  * @author angel
@@ -23,7 +23,7 @@ import swishbay.entity.Mensaje;
 @WebServlet(name = "GrupoVerMensajeServlet", urlPatterns = {"/GrupoVerMensajeServlet"})
 public class GrupoVerMensajeServlet extends HttpServlet {
 
-     @EJB MensajeFacade mensajeFacade;
+     @EJB MensajeService mensajeService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,14 +37,13 @@ public class GrupoVerMensajeServlet extends HttpServlet {
             throws ServletException, IOException {
         
             String filtroNombre = request.getParameter("filtro");
-            List<Mensaje> mensajes = null;
+            List<MensajeDTO> mensajes = null;
             String str = request.getParameter("id");
-            System.out.print(str);
             
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                mensajes = this.mensajeFacade.findByIdGrupo(Integer.parseInt(str));        
+                mensajes = this.mensajeService.buscarMensajesPorIdGrupo(Integer.parseInt(str));        
             } else {
-                mensajes = this.mensajeFacade.findByAsunto(filtroNombre);
+                mensajes = this.mensajeService.buscarMensajesPorAsunto(filtroNombre);
             }
 
             request.setAttribute("mensajes", mensajes);

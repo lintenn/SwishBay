@@ -6,6 +6,7 @@
 package swishbay.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -24,6 +25,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import swishbay.dto.GrupoDTO;
+import swishbay.dto.MensajeDTO;
+import swishbay.dto.UsuarioDTO;
 
 /**
  *
@@ -127,6 +131,24 @@ public class Grupo implements Serializable {
     @Override
     public String toString() {
         return "swishbay.entity.Grupo[ id=" + id + " ]";
+    }
+    
+    public GrupoDTO toDTO(){
+        
+        GrupoDTO grupoDTO = new GrupoDTO();
+        
+        grupoDTO.setId(id);
+        grupoDTO.setMarketing(marketing.toDTO());
+        grupoDTO.setNombre(nombre);
+        List<UsuarioDTO> usuarios = new ArrayList<>();
+        for(Usuario usuario : usuarioList){
+            usuarios.add(usuario.toDTO());
+        }
+        grupoDTO.setUsuarioList(usuarios);
+        
+        
+        return grupoDTO;
+        
     }
     
 }

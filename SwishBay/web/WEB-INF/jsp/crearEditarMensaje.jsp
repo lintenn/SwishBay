@@ -4,8 +4,8 @@
     Author     : angel
 --%>
 
+<%@page import="swishbay.dto.MensajeDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="swishbay.entity.Mensaje"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     </head>
     <%
-        Mensaje mensaje = (Mensaje)request.getAttribute("mensaje");
+        MensajeDTO mensaje = (MensajeDTO)request.getAttribute("mensaje");
     %>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">

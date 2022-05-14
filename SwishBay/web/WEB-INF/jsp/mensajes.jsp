@@ -4,7 +4,7 @@
     Author     : angel
 --%>
 
-<%@page import="swishbay.entity.Mensaje"%>
+<%@page import="swishbay.dto.MensajeDTO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -52,9 +52,9 @@
                     <th></th>
                 </tr>
             <%
-                List<Mensaje> mensajes = (List)request.getAttribute("mensajes");
+                List<MensajeDTO> mensajes = (List)request.getAttribute("mensajes");
                 if(mensajes.size() != 0){
-                    for (Mensaje mensaje : mensajes) {
+                    for (MensajeDTO mensaje : mensajes) {
             %>    
             <tr>
                 <td><%= mensaje.getAsunto()%></td>

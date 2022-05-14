@@ -12,8 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.GrupoFacade;
-import swishbay.entity.Grupo;
+import swishbay.service.GrupoService;
 
 /**
  *
@@ -22,7 +21,7 @@ import swishbay.entity.Grupo;
 @WebServlet(name = "GrupoBorrarServlet", urlPatterns = {"/GrupoBorrarServlet"})
 public class GrupoBorrarServlet extends HttpServlet {
 
-    @EJB GrupoFacade grupoFacade;
+    @EJB GrupoService grupoService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,9 +36,7 @@ public class GrupoBorrarServlet extends HttpServlet {
         
             String str = request.getParameter("id");
 
-            Grupo grupo = this.grupoFacade.find(Integer.parseInt(str));
-
-            this.grupoFacade.remove(grupo);
+            this.grupoService.borrarGrupo(Integer.parseInt(str));
 
             response.sendRedirect(request.getContextPath() + "/GrupoServlet");
     }

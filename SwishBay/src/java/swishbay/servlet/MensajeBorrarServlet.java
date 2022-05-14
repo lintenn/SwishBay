@@ -12,9 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.MensajeFacade;
-import swishbay.entity.Mensaje;
-
+import swishbay.service.MensajeService;
+ 
 /**
  *
  * @author angel
@@ -22,7 +21,7 @@ import swishbay.entity.Mensaje;
 @WebServlet(name = "MensajeBorrarServlet", urlPatterns = {"/MensajeBorrarServlet"})
 public class MensajeBorrarServlet extends HttpServlet {
 
-    @EJB MensajeFacade mensajeFacade;
+    @EJB MensajeService mensajeService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,9 +37,7 @@ public class MensajeBorrarServlet extends HttpServlet {
             String str = request.getParameter("id");
             String strGrupo = request.getParameter("idGrupo");
 
-            Mensaje mensaje = this.mensajeFacade.find(Integer.parseInt(str));
-
-            this.mensajeFacade.remove(mensaje);
+            this.mensajeService.borrarMensaje(Integer.parseInt(str));
 
             response.sendRedirect(request.getContextPath() + "/GrupoVerMensajeServlet?id="+strGrupo);
     }
