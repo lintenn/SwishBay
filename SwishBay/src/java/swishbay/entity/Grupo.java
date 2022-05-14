@@ -146,7 +146,6 @@ public class Grupo implements Serializable {
         }
         grupoDTO.setUsuarioList(usuarios);
         
-        
         return grupoDTO;
         
     }

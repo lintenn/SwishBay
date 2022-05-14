@@ -53,9 +53,9 @@ public class MensajeService {
         
     }
      
-     public List<MensajeDTO> buscarMensajesPorAsunto(String asunto){ // angel
+     public List<MensajeDTO> buscarMensajesPorIdGrupoYPorAsunto(Integer id, String asunto){ // angel
          
-         List<Mensaje> mensajes = this.mensajeFacade.findByAsunto(asunto);
+         List<Mensaje> mensajes = this.mensajeFacade.findByAsuntoAndIdGrupo(id, asunto);
          
          return this.listaMensajesEntityADTO(mensajes);
          
@@ -121,5 +121,12 @@ public class MensajeService {
          this.mensajeFacade.edit(mensaje);
          
      }
-    
+     
+     public List<MensajeDTO> listarMensajesDeUnUsuarioPorAsunto(String asunto, Integer idUsuario){
+         
+         List<Mensaje> mensajes = this.mensajeFacade.findByAsuntoAndAreInAUser(asunto, idUsuario);
+         
+         return this.listaMensajesEntityADTO(mensajes);
+                 
+     }
 }

@@ -32,6 +32,10 @@
                     String id = "";
                     id = "?id="+strId;
                 %>
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                    </li>
+                  </ul>
                   <form method="post" class="d-flex" action="ParticipantesGrupoAnadirServlet<%=id%>">
                     <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
@@ -84,6 +88,10 @@
 
             <%
                     }
+
+            %>
+            </table>
+            <%
                 }
                 else {
             %>
@@ -92,12 +100,6 @@
             <%
                 }
             %>
-            
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
                 
             <div class="form-group row justify-content-md-center mt-2">
                 <div class="col-sm-10">
@@ -107,7 +109,7 @@
             
             </main>
             
-            <footer class="text-white-50 fixed-bottom">
+            <footer class="mt-5 text-white-50">
             <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>

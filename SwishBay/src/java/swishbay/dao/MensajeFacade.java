@@ -31,10 +31,11 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         super(Mensaje.class);
     }
     
-    public List<Mensaje> findByAsunto (String asunto) {
+    public List<Mensaje> findByAsuntoAndIdGrupo (Integer idGrupo, String asunto) {
         Query q;
-        q = this.getEntityManager().createQuery("select m from Mensaje m where m.asunto like :asunto");
+        q = this.getEntityManager().createQuery("select m from Mensaje m where m.grupo.id = :grupo and m.asunto like :asunto");
         q.setParameter("asunto", '%' + asunto +'%');
+        q.setParameter("grupo", idGrupo);
         return q.getResultList();
     }
     
@@ -42,6 +43,14 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         Query q;
         q = this.getEntityManager().createQuery("select m from Mensaje m where m.grupo.id = :grupo");
         q.setParameter("grupo", idGrupo);
+        return q.getResultList();
+    }
+    
+    public List<Mensaje> findByAsuntoAndAreInAUser (String asunto, Integer idUsuario) {
+        Query q;
+        q = this.getEntityManager().createQuery("select m from Usuario u Join u.mensajeList m where u.id = :idUsuario and m.asunto like :asunto");
+        q.setParameter("idUsuario", idUsuario);
+        q.setParameter("asunto", '%' + asunto + '%');
         return q.getResultList();
     }
     
