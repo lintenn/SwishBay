@@ -44,38 +44,31 @@ public class EnPujaGuardarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        UsuarioDTO user=null;
-        
-        try{
-            HttpSession session = request.getSession();
-            user = (UsuarioDTO) session.getAttribute("usuario");
+        if (super.comprobarCompradorVendedorSession(request, response)) {
+            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
 
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-        }
         
-        
-        if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
+      
             ProductoDTO p;
-            
+
             String strId,str, status= null;
             strId= request.getParameter("id");
 
             p = ps.buscarProducto(strId);
-            
+
             str = request.getParameter("time");
             SimpleDateFormat dateParser = new SimpleDateFormat("yy-MM-dd");
             Date d=new Date(); 
-            
+
             try {
                 d = dateParser.parse(str);
             } catch (ParseException ex) {
-               System.err.println(ex.getLocalizedMessage());
+                System.err.println(ex.getLocalizedMessage());
             }
-            
+
             Date actual = new Date();
             if(actual.before(d)){
-                
+
                 if(p.getEnPuja()==0){
                     p.setEnPuja((short) 1);
                     str = request.getParameter("precio");
@@ -86,13 +79,14 @@ public class EnPujaGuardarServlet extends SwishBayServlet {
 
                 response.sendRedirect(request.getContextPath() + "/PujasServlet");
             }else{
-                status= "La fecha introducida es anterior a la actual";
-                request.setAttribute("status", status);
-                
-                request.getRequestDispatcher("/EnPujaNuevoServlet").forward(request, response);
-               
+                    status= "La fecha introducida es anterior a la actual";
+                    request.setAttribute("status", status);
+
+                    request.getRequestDispatcher("/EnPujaNuevoServlet").forward(request, response);
+
             }
-           
+
+            
         }
         
     }

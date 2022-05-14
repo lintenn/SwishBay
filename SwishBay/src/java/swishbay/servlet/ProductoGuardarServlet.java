@@ -41,22 +41,13 @@ public class ProductoGuardarServlet extends SwishBayServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        UsuarioDTO user=null;
-        try{
-            HttpSession session = request.getSession();
-            user = (UsuarioDTO) session.getAttribute("usuario");
+        if (super.comprobarCompradorVendedorSession(request, response)) {
+            UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
 
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-        }
-        
-        
-        
-        if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
-            
+
             String strId, status=null;
             strId= request.getParameter("id");
-            
+
             java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
             String titulo = request.getParameter("nombre");
             String desc = request.getParameter("descripcion");
@@ -73,15 +64,14 @@ public class ProductoGuardarServlet extends SwishBayServlet {
                 request.getRequestDispatcher("ProductoNuevoEditarServlet").forward(request, response);
 
             }
-            
             if(strId == null || strId.isEmpty()){        
-                
+
                 ps.crearProducto(titulo, desc, foto, date, categoria, precio, user.getId());
             }else {
                 ps.modificarProducto(strId, titulo, desc, foto, date, categoria, precio);
             }           
-            
-            response.sendRedirect(request.getContextPath() + "/SellerServlet");
+
+            response.sendRedirect(request.getContextPath() + "/SellerServlet");  
         }
     }
 
