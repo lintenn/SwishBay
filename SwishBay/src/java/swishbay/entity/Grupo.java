@@ -26,12 +26,11 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import swishbay.dto.GrupoDTO;
-import swishbay.dto.MensajeDTO;
 import swishbay.dto.UsuarioDTO;
 
 /**
  *
- * @author Luis
+ * @author angel
  */
 @Entity
 @Table(name = "GRUPO")
@@ -133,7 +132,7 @@ public class Grupo implements Serializable {
         return "swishbay.entity.Grupo[ id=" + id + " ]";
     }
     
-    public GrupoDTO toDTO(){
+    public GrupoDTO toDTO(){ // angel
         
         GrupoDTO grupoDTO = new GrupoDTO();
         
