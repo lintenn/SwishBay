@@ -419,4 +419,68 @@ public class UsuarioService {
         return this.listaEntityADTO(usuarios);    
         
     }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorNombreQueNoPertencenAUnGrupo(String nombre, List<Integer> ids){ // angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByNameQueNoPertencenAUnGrupo(nombre, ids);
+        
+        return this.listaEntityADTO(usuarios);
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorCorreoQueNoPertencenAUnGrupo(String correo, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByCorreoQueNoPertencenAUnGrupo(correo, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorApellidosQueNoPertencenAUnGrupo(String apellidos, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByApellidosQueNoPertencenAUnGrupo(apellidos, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorCiudadQueNoPertencenAUnGrupo(String ciudad, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByCiudadQueNoPertencenAUnGrupo(ciudad, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorDomicilioQueNoPertencenAUnGrupo(String domicilio, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByDomicilioQueNoPertencenAUnGrupo(domicilio, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSexoQueNoPertencenAUnGrupo(String sexo, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySexoQueNoPertencenAUnGrupo(sexo, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSaldoDesdeQueNoPertencenAUnGrupo(Integer desde, List<Integer> ids, List<Integer> idsGrupo){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySaldoDesdeQueNoPertencenAUnGrupo(desde, ids, idsGrupo);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSaldoHastaQueNoPertencenAUnGrupo(Integer desde, List<Integer> ids, List<Integer> idsGrupo){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySaldoHastaQueNoPertencenAUnGrupo(desde, ids, idsGrupo);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
 }
