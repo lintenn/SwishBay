@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.GrupoService;
+import swishbay.service.UsuarioService;
  
 /**
  *
@@ -25,6 +26,7 @@ import swishbay.service.GrupoService;
 public class ParticipantesGrupoEditarServlet extends SwishBayServlet {
     
     @EJB GrupoService grupoService;
+    @EJB UsuarioService usuarioService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,15 +42,64 @@ public class ParticipantesGrupoEditarServlet extends SwishBayServlet {
         if(super.comprobarMarketingSession(request, response)){
         
             String filtroNombre = request.getParameter("filtro");
+            String tipoFiltro = request.getParameter("filtroUsuariosCompradores");
+            String saldoDesde = request.getParameter("saldoDesde");
+            String saldoHasta = request.getParameter("saldoHasta");
             Integer strId = Integer.parseInt(request.getParameter("id"));
-            List<UsuarioDTO> usuarios;
+            List<UsuarioDTO> usuarios = new ArrayList<>();
+            
+            List<Integer> idsUsuariosGrupo = this.grupoService.listarIdsUsuariosDeUnGrupo(strId);
 
             if (filtroNombre == null || filtroNombre.isEmpty()) {
                 usuarios = this.grupoService.listarUsuariosDeUnGrupo(strId);
             } else {
-                usuarios = this.grupoService.listarUsuariosDeUnGrupoPorNombre(strId, filtroNombre);
+                switch(tipoFiltro){
+                    case "Nombre":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorNombreQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        break;
+                    case "Correo":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCorreoQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        break;
+                    case "Apellidos":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorApellidosQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        break;
+                    case "Ciudad":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCiudadQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        break;
+                    case "Domicilio":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorDomicilioQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        break;
+                    case "Sexo":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorSexoQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        break;
+                }
+            }
+            
+            if(saldoDesde != null && !saldoDesde.isEmpty() && usuarios.size() > 0){
+                
+                List<Integer> ids = new ArrayList<>();
+                for(UsuarioDTO user : usuarios){
+                    ids.add(user.getId());
+                }
+                
+                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoDesdeQuePertencenAUnGrupo(Integer.parseInt(saldoDesde), ids);
+                
+            }
+            
+            if(saldoHasta != null && !saldoHasta.isEmpty() && usuarios.size() > 0){
+                
+                List<Integer> ids = new ArrayList<>();
+                for(UsuarioDTO user : usuarios){
+                    ids.add(user.getId());
+                }
+                
+                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoHastaQuePertencenAUnGrupo(Integer.parseInt(saldoHasta), ids);
+                
             }
 
+            request.setAttribute("saldoDesde", saldoDesde);
+            request.setAttribute("saldoHasta", saldoHasta);
+            request.setAttribute("tipoFiltro", tipoFiltro);
             request.setAttribute("usuarios", usuarios);
             request.getRequestDispatcher("WEB-INF/jsp/participantesGrupoEditar.jsp").forward(request, response); 
             
