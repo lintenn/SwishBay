@@ -363,4 +363,60 @@ public class UsuarioService {
         this.eliminarGrupoAListaGruposUsuario(idUsuario, idGrupo);
             
     }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorCorreo(String correo){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByCorreo(correo);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorApellidos(String apellidos){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByApellidos(apellidos);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorCiudad(String ciudad){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByCiudad(ciudad);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorDomicilio(String domicilio){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByDomicilio(domicilio);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSexo(String sexo){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySexo(sexo);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSaldoDesde(Integer desde, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySaldoDesde(desde, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSaldoHasta(Integer desde, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySaldoHasta(desde, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
 }

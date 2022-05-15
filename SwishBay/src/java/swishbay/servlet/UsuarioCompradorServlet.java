@@ -7,6 +7,7 @@ package swishbay.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -42,14 +43,62 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
         if(super.comprobarMarketingSession(request, response)){
             
             String filtroNombre = request.getParameter("filtro");
+            String tipoFiltro = request.getParameter("filtroUsuariosCompradores");
+            String saldoDesde = request.getParameter("saldoDesde");
+            String saldoHasta = request.getParameter("saldoHasta");
             List<UsuarioDTO> usuarios = null;
-
+            
             if (filtroNombre == null || filtroNombre.isEmpty()) {
                 usuarios = this.usuarioService.buscarPorCompradorVendedor();
             } else {
-                usuarios = this.usuarioService.buscarPorCompradorVendedorPorNombre(filtroNombre);
+                switch(tipoFiltro){
+                    case "Nombre":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorNombre(filtroNombre);
+                        break;
+                    case "Correo":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCorreo(filtroNombre);
+                        break;
+                    case "Apellidos":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorApellidos(filtroNombre);
+                        break;
+                    case "Ciudad":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCiudad(filtroNombre);
+                        break;
+                    case "Domicilio":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorDomicilio(filtroNombre);
+                        break;
+                    case "Sexo":
+                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorSexo(filtroNombre);
+                        break;
+                }
             }
-
+            
+            if(saldoDesde != null && !saldoDesde.isEmpty() && usuarios.size() > 0){
+                
+                List<Integer> ids = new ArrayList<>();
+                for(UsuarioDTO user : usuarios){
+                    ids.add(user.getId());
+                }
+                
+                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoDesde(Integer.parseInt(saldoDesde), ids);
+                
+            }
+            
+            if(saldoHasta != null && !saldoHasta.isEmpty() && usuarios.size() > 0){
+                
+                List<Integer> ids = new ArrayList<>();
+                for(UsuarioDTO user : usuarios){
+                    ids.add(user.getId());
+                }
+                
+                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoHasta(Integer.parseInt(saldoHasta), ids);
+                
+            }
+            
+            
+            request.setAttribute("saldoDesde", saldoDesde);
+            request.setAttribute("saldoHasta", saldoHasta);
+            request.setAttribute("tipoFiltro", tipoFiltro);
             request.setAttribute("usuarios", usuarios);
             request.getRequestDispatcher("WEB-INF/jsp/usuariosCompradores.jsp").forward(request, response);
             

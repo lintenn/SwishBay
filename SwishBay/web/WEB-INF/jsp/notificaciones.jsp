@@ -27,14 +27,19 @@
               <div class="container-fluid">
                 <div class="collapse navbar-collapse" style="float: right" id="navbarSupportedContent"> 
                     <%
-                    String str = request.getParameter("id");
-                    String id = "?id="+str;
+                        String str = request.getParameter("id");
+                        String id = "?id="+str;
+                        String tipoFiltro = (String)request.getAttribute("tipoFiltro");
                     %>
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                     </li>
                   </ul>
                   <form method="post" class="d-flex" action="NotificacionesVerServlet<%=id%>">
+                    <select class="form-select px-2 me-2" id="filtroMensajes" name="filtroMensajes">
+                        <option value="Asunto" <%= (tipoFiltro != null && tipoFiltro.equals("Asunto")) ? "selected" : "" %>>Asunto</option>
+                        <option value="Cuerpo del mensaje" <%= (tipoFiltro != null && tipoFiltro.equals("Cuerpo del mensaje")) ? "selected" : "" %>>Cuerpo del mensaje</option>
+                    </select>
                     <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>

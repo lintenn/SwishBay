@@ -6,6 +6,7 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -39,15 +40,28 @@ public class GrupoVerMensajeServlet extends SwishBayServlet {
         if(super.comprobarMarketingSession(request, response)){
         
             String filtroNombre = request.getParameter("filtro");
-            List<MensajeDTO> mensajes = null;
+            String tipoFiltro = request.getParameter("filtroMensajes");
             String str = request.getParameter("id");
+            List<MensajeDTO> mensajes = this.mensajeService.buscarMensajesPorIdGrupo(Integer.parseInt(str));
             
-            if (filtroNombre == null || filtroNombre.isEmpty()) {
-                mensajes = this.mensajeService.buscarMensajesPorIdGrupo(Integer.parseInt(str));        
-            } else {
-                mensajes = this.mensajeService.buscarMensajesPorIdGrupoYPorAsunto(Integer.parseInt(str), filtroNombre);
+            if (filtroNombre != null && !filtroNombre.isEmpty() && mensajes.size() > 0) {     
+                
+                List<Integer> ids = new ArrayList<>();
+                for(MensajeDTO mensaje : mensajes){
+                    ids.add(mensaje.getId());
+                }
+                
+                switch(tipoFiltro){
+                    case "Asunto":
+                        mensajes = this.mensajeService.listarMensajesDeUnGrupoPorAsuntoPorMensajes(filtroNombre, Integer.parseInt(str), ids);
+                        break;
+                    case "Cuerpo del mensaje":
+                        mensajes = this.mensajeService.listarMensajesDeUnGrupoPorContenidoPorMensajes(filtroNombre, Integer.parseInt(str), ids);
+                        break;
+                }
             }
 
+            request.setAttribute("tipoFiltro", tipoFiltro);
             request.setAttribute("mensajes", mensajes);
             request.getRequestDispatcher("WEB-INF/jsp/mensajes.jsp").forward(request, response);   
             
