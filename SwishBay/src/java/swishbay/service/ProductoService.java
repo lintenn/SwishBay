@@ -265,7 +265,7 @@ public class ProductoService {
 
         Producto p = productoFacade.findByID(Integer.parseInt(id));
         
-        this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
+        //this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
         
         Double d=p.getPrecioSalida();
         Puja puja=null;
