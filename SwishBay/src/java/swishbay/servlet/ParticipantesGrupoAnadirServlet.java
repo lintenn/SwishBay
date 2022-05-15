@@ -97,6 +97,7 @@ public class ParticipantesGrupoAnadirServlet extends SwishBayServlet {
                 
             }
 
+            request.setAttribute("filtro", filtroNombre);
             request.setAttribute("saldoDesde", saldoDesde);
             request.setAttribute("saldoHasta", saldoHasta);
             request.setAttribute("tipoFiltro", tipoFiltro);

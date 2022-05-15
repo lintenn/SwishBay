@@ -40,6 +40,7 @@
                         String tipoFiltro = (String)request.getAttribute("tipoFiltro");
                         String saldoDesde = (String)request.getAttribute("saldoDesde");
                         String saldoHasta = (String)request.getAttribute("saldoHasta");
+                        String filtro = (String)request.getAttribute("filtro");
                     %>
                   <form method="post" class="d-flex" action="UsuarioCompradorServlet">
                       <div class="mt-2 me-2">
@@ -64,7 +65,7 @@
                           <option value="Domicilio" <%= (tipoFiltro != null && tipoFiltro.equals("Domicilio")) ? "selected" : "" %>>Domicilio</option>
                           <option value="Sexo" <%= (tipoFiltro != null && tipoFiltro.equals("Sexo")) ? "selected" : "" %>>Sexo</option>
                       </select>
-                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search" value=<%= filtro==null ? "" : filtro %>>
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>
