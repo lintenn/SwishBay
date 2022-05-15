@@ -212,7 +212,7 @@ public class GrupoService {
     
     public void comprobarExistenciaGrupoPorNombre(String nombre){ // angel
         
-        List<GrupoDTO> grupos = this.buscarGruposPorNombre(nombre);
+        List<GrupoDTO> grupos = this.listaGruposEntityADTO(this.grupoFacade.findGrupoByGrupoNombreExtricto(nombre));
         
         if(grupos == null || grupos.isEmpty()){
             
