@@ -6,6 +6,7 @@
 package swishbay.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -44,7 +45,7 @@ public class UsuarioCompradorService {
         Usuario usuario = this.usuarioFacade.findByMarketing();
         
         if(usuario == null){
-            this.usuarioService.crearUsuario("Usuario marketing", "Numero 1", "usuarioMarketingNumero1@gmail.com", "123456", null, null, null, null, null, "marketing", null);
+            this.usuarioService.crearUsuario("Usuario marketing", "Numero 1", "usuarioMarketingNumero1@gmail.com", "123456", "", "", "masc", new Date(10/1/2000), 0.0, "marketing", null);
         }
         
         return this.usuarioFacade.findByMarketing().getId();

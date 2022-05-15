@@ -58,4 +58,10 @@ public class PujaService {
         
         return this.listaEntityADTO(pujas);
     }
+ 
+    public PujaDTO buscarPuja(Integer idProducto, Integer idUsuario){
+        Puja puja = pujaFacade.findPuja(idUsuario, idProducto);
+        
+        return (puja == null) ? null : puja.toDTO();
+    }
 }

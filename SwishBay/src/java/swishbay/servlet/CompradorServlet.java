@@ -15,6 +15,7 @@ import swishbay.service.CategoriaService;
 import swishbay.service.CompradorService;
 import swishbay.service.ProductoService;
 import swishbay.service.PujaService;
+import swishbay.service.UsuarioService;
 
 /**
  * Servlet abstracto que recupera y muestra los productos aplicando un filtro específico.
@@ -28,6 +29,7 @@ public abstract class CompradorServlet extends SwishBayServlet {
     @EJB CompradorService compradorService;
     @EJB ProductoService productoService;
     @EJB PujaService pujaService;
+    @EJB UsuarioService usuarioService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -85,6 +87,9 @@ public abstract class CompradorServlet extends SwishBayServlet {
             request.setAttribute("selected", filtroCategoria);
             request.setAttribute("servlet", this.getServlet());
             request.getSession().setAttribute("servlet", this.getServlet());
+            
+            usuario = usuarioService.buscarUsuario(usuario.getId());
+            request.getSession().setAttribute("usuario", usuario);
             
             forward(request, response);
         }
