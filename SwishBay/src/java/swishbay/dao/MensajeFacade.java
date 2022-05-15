@@ -31,7 +31,7 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         super(Mensaje.class);
     }
     
-    public List<Mensaje> findByAsuntoAndIdGrupo (Integer idGrupo, String asunto) {
+    public List<Mensaje> findByAsuntoAndIdGrupo (Integer idGrupo, String asunto) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select m from Mensaje m where m.grupo.id = :grupo and m.asunto like :asunto");
         q.setParameter("asunto", '%' + asunto +'%');
@@ -39,14 +39,14 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         return q.getResultList();
     }
     
-    public List<Mensaje> findByIdGrupo (Integer idGrupo) {
+    public List<Mensaje> findByIdGrupo (Integer idGrupo) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select m from Mensaje m where m.grupo.id = :grupo");
         q.setParameter("grupo", idGrupo);
         return q.getResultList();
     }
     
-    public List<Mensaje> findByAsuntoAndAreInAUser (String asunto, Integer idUsuario) {
+    public List<Mensaje> findByAsuntoAndAreInAUser (String asunto, Integer idUsuario) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select m from Usuario u Join u.mensajeList m where u.id = :idUsuario and m.asunto like :asunto");
         q.setParameter("idUsuario", idUsuario);
@@ -54,7 +54,7 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         return q.getResultList();
     }
     
-    public List<Mensaje> findByAsuntoAndIdGrupoByMessages (Integer idGrupo, String asunto, List<Integer> mensajes) {
+    public List<Mensaje> findByAsuntoAndIdGrupoByMessages (Integer idGrupo, String asunto, List<Integer> mensajes) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select m from Mensaje m where m.grupo.id = :grupo and m.asunto like :asunto and m.id IN :mensajes");
         q.setParameter("asunto", '%' + asunto +'%');
@@ -63,7 +63,7 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         return q.getResultList();
     }
     
-    public List<Mensaje> findByContenidoAndIdGrupoByMessages (Integer idGrupo, String contenido, List<Integer> mensajes) {
+    public List<Mensaje> findByContenidoAndIdGrupoByMessages (Integer idGrupo, String contenido, List<Integer> mensajes) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select m from Mensaje m where m.grupo.id = :grupo and m.contenido like :contenido and m.id IN :mensajes");
         q.setParameter("contenido", '%' + contenido +'%');
@@ -72,7 +72,7 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         return q.getResultList();
     }
     
-    public List<Mensaje> findByAsuntoAndIdUserByMessages (Integer idUsuario, String asunto, List<Integer> mensajes) {
+    public List<Mensaje> findByAsuntoAndIdUserByMessages (Integer idUsuario, String asunto, List<Integer> mensajes) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select m from Usuario u Join u.mensajeList m where u.id = :idUsuario and m.asunto like :asunto and m.id IN :mensajes");
         q.setParameter("asunto", '%' + asunto +'%');
@@ -81,7 +81,7 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         return q.getResultList();
     }
     
-    public List<Mensaje> findByContenidoAndIdUserByMessages (Integer idUsuario, String contenido, List<Integer> mensajes) {
+    public List<Mensaje> findByContenidoAndIdUserByMessages (Integer idUsuario, String contenido, List<Integer> mensajes) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select m from Usuario u Join u.mensajeList m where u.id = :idUsuario and m.contenido like :contenido and m.id IN :mensajes");
         q.setParameter("contenido", '%' + contenido +'%');
