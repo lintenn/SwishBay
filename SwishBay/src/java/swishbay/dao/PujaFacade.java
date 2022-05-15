@@ -14,7 +14,7 @@ import swishbay.entity.Puja;
 
 /**
  *
- * @author Miguel Oña Guerrero 66%, Galo 33%
+ * @author Miguel Oña Guerrero 75%, Galo 25%
  */
 @Stateless
 public class PujaFacade extends AbstractFacade<Puja> {
