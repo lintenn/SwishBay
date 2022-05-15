@@ -59,8 +59,8 @@ public class CompradorPujarServlet extends SwishBayServlet {
             }
             
             if(saldoSuficiente && cantidadSuficiente && !actualMayorPuja){
+                cantidad = productoService.realizarPuja(idProducto, usuario.getId(), cantidad);
                 usuario = usuarioService.sumarSaldo(-cantidad, usuario.getId());
-                productoService.realizarPuja(idProducto, cantidad, usuario.getId());
             }else{
                 if(!saldoSuficiente){
                     error = "¡No tienes suficiente saldo!";

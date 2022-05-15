@@ -128,7 +128,7 @@
                         <form action="CompradorPujarServlet" method="POST" class="col-4 d-flex justify-content-center">
                             <input type="hidden" name="productoid" value="<%= producto.getId() %>" />                            
                             <div class="col-8 d-flex justify-content-center">
-                                <input type="text" class="form-control" name="cantidad" placeholder="Cantidad a pujar">
+                                <input type="number" min="1" class="form-control" name="cantidad" placeholder="Cantidad a pujar" required>
                             </div>
                             <div class="col-4">
                                 <button type="submit" class="btn btn-lg btn-success fw-bold border-white mx-2">Pujar</button>
@@ -168,8 +168,8 @@
                 %>
 
             </main>
-            <footer class="mt-auto fixed-bottom text-white-50">
-              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/" class="text-white">Grupo 10</a>.</p>
+            <footer class="mt-5 text-white-50">
+              <p>© 2022 SwishBay, aplicación web desarrollada por el <a href="/SwishBay/" class="text-white">Grupo 10</a>.</p>
             </footer>
         </div>
 

@@ -31,12 +31,13 @@ public class PujaFacade extends AbstractFacade<Puja> {
         super(Puja.class);
     }
 
-    public Puja findPuja(Integer uId, Integer pId) { // Miguel Oña Guerrero
+    public Puja findPuja(Integer idUsuario, Integer idProducto) { // Miguel Oña Guerrero
         Query q;   
-        q= this.getEntityManager().createQuery("select p from Puja p where p.usuario= :usuario and p.producto1= :producto");
-        q.setParameter("usuario", uId );
-        q.setParameter("producto", pId );
-        return (Puja) q.getSingleResult();
+        q= this.getEntityManager().createQuery("select p from Puja p where p.usuario.id = :usuario and p.producto1.id = :producto");
+        q.setParameter("usuario", idUsuario );
+        q.setParameter("producto", idProducto );
+        
+        return (q.getResultList().isEmpty()) ? null : (Puja) q.getResultList().get(0);
     }
 
     public Puja findMax(Integer pId) { //Galo
