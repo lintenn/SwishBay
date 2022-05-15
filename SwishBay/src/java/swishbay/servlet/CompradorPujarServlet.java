@@ -47,15 +47,22 @@ public class CompradorPujarServlet extends SwishBayServlet {
             
             ProductoDTO producto = productoService.buscarProducto(idProducto + "");
             PujaDTO mayorPuja = pujaService.buscarMayorPuja(idProducto);
+            PujaDTO ultimaPuja = pujaService.buscarPuja(idProducto, usuario.getId());
             
             boolean saldoSuficiente = usuario.getSaldo() >= cantidad;
             boolean actualMayorPuja = false;
             boolean cantidadSuficiente;
+            
+            if(ultimaPuja != null){
+                saldoSuficiente = (cantidad - ultimaPuja.getPrecio()) <= usuario.getSaldo();
+            }
+
             if(mayorPuja == null){
                 cantidadSuficiente = cantidad >= producto.getPrecioSalida();
             }else{
                 cantidadSuficiente = mayorPuja.getPrecio() < cantidad;
                 actualMayorPuja = mayorPuja.getComprador().getId().equals(usuario.getId());
+                
             }
             
             if(saldoSuficiente && cantidadSuficiente && !actualMayorPuja){
@@ -66,7 +73,7 @@ public class CompradorPujarServlet extends SwishBayServlet {
                     error = "¡No tienes suficiente saldo!";
                 }
                 if(!cantidadSuficiente){
-                    error = "¡Cantidad insuficinete para realizar la puja!";
+                    error = "¡Cantidad insuficiente!";
                 }
                 if(actualMayorPuja){
                     error = "¡Ya has realizado la máxima puja!";
