@@ -73,6 +73,9 @@ public class GrupoServlet extends SwishBayServlet {
                 
             }
 
+            request.setAttribute("nombreCreador", filtroNombreCreador);
+            request.setAttribute("apellidoCreador", filtroApellidosCreador);
+            request.setAttribute("nombreGrupo", filtroNombreGrupo);
             request.setAttribute("grupos", grupos);
             request.getRequestDispatcher("WEB-INF/jsp/grupos.jsp").forward(request, response);  
             
