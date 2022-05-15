@@ -49,12 +49,13 @@ public class CompradorPujarServlet extends SwishBayServlet {
             PujaDTO mayorPuja = pujaService.buscarMayorPuja(idProducto);
             
             boolean saldoSuficiente = usuario.getSaldo() >= cantidad;
-            boolean actualMayorPuja = mayorPuja.getComprador().getId().equals(usuario.getId());
+            boolean actualMayorPuja = false;
             boolean cantidadSuficiente;
             if(mayorPuja == null){
                 cantidadSuficiente = cantidad >= producto.getPrecioSalida();
             }else{
                 cantidadSuficiente = mayorPuja.getPrecio() < cantidad;
+                actualMayorPuja = mayorPuja.getComprador().getId().equals(usuario.getId());
             }
             
             if(saldoSuficiente && cantidadSuficiente && !actualMayorPuja){
