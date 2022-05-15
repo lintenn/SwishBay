@@ -11,7 +11,7 @@ import swishbay.entity.Puja;
 
 /**
  *
- * @author galop 20%, Miguel Oña Guerrero 80%
+ * @author Miguel Oña Guerrero 83%,  galop 16%
  */
 
 @Stateless
@@ -59,7 +59,7 @@ public class PujaService {
         return this.listaEntityADTO(pujas);
     }
  
-    public PujaDTO buscarPuja(Integer idProducto, Integer idUsuario){
+    public PujaDTO buscarPuja(Integer idProducto, Integer idUsuario){ //Miguel Oña Guerrero
         Puja puja = pujaFacade.findPuja(idUsuario, idProducto);
         
         return (puja == null) ? null : puja.toDTO();
