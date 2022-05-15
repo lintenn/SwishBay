@@ -19,7 +19,7 @@ import swishbay.service.UsuarioService;
 
 /**
  *
- * @author Luis, migue
+ * @author Luis
  */
 @WebServlet(name = "UsuarioServlet", urlPatterns = {"/UsuarioServlet"})
 public class UsuarioServlet extends SwishBayServlet {
