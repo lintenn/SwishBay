@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.GrupoService;
+import swishbay.service.UsuarioCompradorService;
 import swishbay.service.UsuarioService;
  
 /**
@@ -26,7 +27,7 @@ import swishbay.service.UsuarioService;
 public class ParticipantesGrupoEditarServlet extends SwishBayServlet {
     
     @EJB GrupoService grupoService;
-    @EJB UsuarioService usuarioService;
+    @EJB UsuarioCompradorService usuarioCompradorService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,22 +56,22 @@ public class ParticipantesGrupoEditarServlet extends SwishBayServlet {
             } else {
                 switch(tipoFiltro){
                     case "Nombre":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorNombreQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorNombreQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Correo":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCorreoQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorCorreoQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Apellidos":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorApellidosQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorApellidosQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Ciudad":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCiudadQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorCiudadQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Domicilio":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorDomicilioQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorDomicilioQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Sexo":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorSexoQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSexoQuePertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                 }
             }
@@ -82,7 +83,7 @@ public class ParticipantesGrupoEditarServlet extends SwishBayServlet {
                     ids.add(user.getId());
                 }
                 
-                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoDesdeQuePertencenAUnGrupo(Integer.parseInt(saldoDesde), ids);
+                usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSaldoDesdeQuePertencenAUnGrupo(Integer.parseInt(saldoDesde), ids);
                 
             }
             
@@ -93,7 +94,7 @@ public class ParticipantesGrupoEditarServlet extends SwishBayServlet {
                     ids.add(user.getId());
                 }
                 
-                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoHastaQuePertencenAUnGrupo(Integer.parseInt(saldoHasta), ids);
+                usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSaldoHastaQuePertencenAUnGrupo(Integer.parseInt(saldoHasta), ids);
                 
             }
 

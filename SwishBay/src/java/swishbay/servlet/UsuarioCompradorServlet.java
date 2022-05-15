@@ -15,10 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import swishbay.dao.UsuarioFacade;
 import swishbay.dto.UsuarioDTO;
-import swishbay.entity.Usuario;
-import swishbay.service.UsuarioService;
+import swishbay.service.UsuarioCompradorService;
 
 /**
  *
@@ -27,7 +25,7 @@ import swishbay.service.UsuarioService;
 @WebServlet(name = "UsuarioCompradorServlet", urlPatterns = {"/UsuarioCompradorServlet"})
 public class UsuarioCompradorServlet extends SwishBayServlet {
 
-    @EJB UsuarioService usuarioService;
+    @EJB UsuarioCompradorService usuarioCompradorService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,29 +44,29 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
             String tipoFiltro = request.getParameter("filtroUsuariosCompradores");
             String saldoDesde = request.getParameter("saldoDesde");
             String saldoHasta = request.getParameter("saldoHasta");
-            List<UsuarioDTO> usuarios = null;
+            List<UsuarioDTO> usuarios = new ArrayList<>();
             
             if (filtroNombre == null || filtroNombre.isEmpty()) {
-                usuarios = this.usuarioService.buscarPorCompradorVendedor();
+                usuarios = this.usuarioCompradorService.buscarPorCompradorVendedor();
             } else {
                 switch(tipoFiltro){
                     case "Nombre":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorNombre(filtroNombre);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorNombre(filtroNombre);
                         break;
                     case "Correo":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCorreo(filtroNombre);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorCorreo(filtroNombre);
                         break;
                     case "Apellidos":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorApellidos(filtroNombre);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorApellidos(filtroNombre);
                         break;
                     case "Ciudad":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCiudad(filtroNombre);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorCiudad(filtroNombre);
                         break;
                     case "Domicilio":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorDomicilio(filtroNombre);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorDomicilio(filtroNombre);
                         break;
                     case "Sexo":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorSexo(filtroNombre);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSexo(filtroNombre);
                         break;
                 }
             }
@@ -80,7 +78,7 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
                     ids.add(user.getId());
                 }
                 
-                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoDesde(Integer.parseInt(saldoDesde), ids);
+                usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSaldoDesde(Integer.parseInt(saldoDesde), ids);
                 
             }
             
@@ -91,7 +89,7 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
                     ids.add(user.getId());
                 }
                 
-                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoHasta(Integer.parseInt(saldoHasta), ids);
+                usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSaldoHasta(Integer.parseInt(saldoHasta), ids);
                 
             }
             

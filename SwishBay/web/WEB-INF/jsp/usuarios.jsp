@@ -4,9 +4,9 @@
     Author     : Luis
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="swishbay.dto.RolUsuarioDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
-<%@page import="java.text.DateFormat"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -63,7 +63,7 @@
                            %>
                         </select>
                     </div>
-                    <input class="form-control me-2 mx-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <input class="form-control me-2 mx-2" type="search" placeholder="Buscar por nombre" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>
@@ -103,7 +103,7 @@
                 </tr>
             <%
                     for (UsuarioDTO usuario : usuarios) {
-                        String strFechaNacimiento = DateFormat.getDateInstance(DateFormat.SHORT).format(usuario.getFechaNacimiento());
+                        String strFechaNacimiento = new SimpleDateFormat("dd/MM/yyyy").format(usuario.getFechaNacimiento());
             %>    
             <tr>
                 <td><%= usuario.getNombre()%></td>
