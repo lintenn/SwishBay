@@ -321,7 +321,9 @@ public class UsuarioService {
     public void anadirUsuarioAGrupoADarleFavoritoAProducto(int idProducto, int idUsuario){ // angel
         
         this.grupoService.comprobarExistenciaGrupoPorNombre("Grupo_"+idProducto);
-        Integer idGrupo = this.grupoService.buscarGruposPorNombre("Grupo_"+idProducto).get(0).getId();
+        //Integer idGrupo = this.grupoService.buscarGruposPorNombre("Grupo_"+idProducto).get(0).getId();
+        Integer idGrupo = this.grupoFacade.findGrupoByGrupoNombreExtricto("Grupo_"+idProducto).get(0).getId();
+        
         this.grupoService.anadirUsuarioAListaUsuariosGrupo(idUsuario, idGrupo);
         this.anadirGrupoAListaGruposUsuario(idUsuario, idGrupo);
             
@@ -329,7 +331,7 @@ public class UsuarioService {
     
     public void eliminarUsuarioAGrupoADarleFavoritoAProducto(int idProducto, int idUsuario){ // angel
 
-        Integer idGrupo = this.grupoService.buscarGruposPorNombre("Grupo_"+idProducto).get(0).getId();
+        Integer idGrupo = this.grupoFacade.findGrupoByGrupoNombreExtricto("Grupo_"+idProducto).get(0).getId();
         this.grupoService.eliminarUsuarioAListaUsuariosGrupo(idUsuario, idGrupo);
         this.eliminarGrupoAListaGruposUsuario(idUsuario, idGrupo);
             
