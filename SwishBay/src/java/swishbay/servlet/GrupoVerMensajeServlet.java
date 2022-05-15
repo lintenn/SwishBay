@@ -61,6 +61,7 @@ public class GrupoVerMensajeServlet extends SwishBayServlet {
                 }
             }
 
+            request.setAttribute("filtro", filtroNombre);
             request.setAttribute("tipoFiltro", tipoFiltro);
             request.setAttribute("mensajes", mensajes);
             request.getRequestDispatcher("WEB-INF/jsp/mensajes.jsp").forward(request, response);   

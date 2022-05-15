@@ -145,13 +145,12 @@ public class GrupoService {
         
     }
     
-    public List<UsuarioDTO> listarUsuariosQueNoPertenecenAUnGrupo(Integer idGrupo){ // angel
+    public List<UsuarioDTO> listarUsuariosQueNoPertenecenAUnGrupo(List<Integer> ids){ // angel
         
-        List<Integer> ids = this.listarIdsUsuariosDeUnGrupo(idGrupo);
                 
         List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedor();
         
-        if(ids.size() != 0){
+        if(!ids.isEmpty()){
             usuarios = this.grupoFacade.findUsuariosNotInGrupoId(ids);
         }
         
@@ -185,7 +184,7 @@ public class GrupoService {
         
     }
     
-    private List<Integer> listarIdsUsuariosDeUnGrupo(Integer idGrupo){ // angel
+    public List<Integer> listarIdsUsuariosDeUnGrupo(Integer idGrupo){ // angel
         
         List<UsuarioDTO> usuarios = this.listarUsuariosDeUnGrupo(idGrupo);
         

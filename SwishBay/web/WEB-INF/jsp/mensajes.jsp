@@ -30,6 +30,7 @@
                         String str = request.getParameter("id");
                         String id = "?id="+str;
                         String tipoFiltro = (String)request.getAttribute("tipoFiltro");
+                        String filtro = (String)request.getAttribute("filtro");
                     %>
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -40,7 +41,7 @@
                         <option value="Asunto" <%= (tipoFiltro != null && tipoFiltro.equals("Asunto")) ? "selected" : "" %>>Asunto</option>
                         <option value="Cuerpo del mensaje" <%= (tipoFiltro != null && tipoFiltro.equals("Cuerpo del mensaje")) ? "selected" : "" %>>Cuerpo del mensaje</option>
                     </select>
-                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search" value=<%= filtro==null ? "" : filtro %>>
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>
