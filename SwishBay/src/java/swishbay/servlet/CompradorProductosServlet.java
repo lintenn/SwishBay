@@ -57,8 +57,8 @@ public class CompradorProductosServlet extends CompradorServlet {
     }// </editor-fold>
     
     @Override
-    protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario) {
-        return compradorService.listarProductosExistentes(filtroTitulo, filtroCategoria, usuario.getId());
+    protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, Double filtroPrecio, UsuarioDTO usuario) {
+        return compradorService.listarProductosExistentes(filtroTitulo, filtroCategoria, filtroPrecio, usuario.getId());
     }
     
     @Override

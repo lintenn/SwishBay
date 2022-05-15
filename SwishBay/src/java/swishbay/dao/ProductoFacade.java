@@ -254,51 +254,6 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList();
     }
     
-    public List<Producto> findExistentesByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo "
-                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id and p.comprador = null");
-        q.setParameter("titulo", '%' + filtroTitulo + '%');
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        q.setParameter("id", usuario);
-        
-        return q.getResultList(); 
-    }
-    
-    public List<Producto> findFavoritosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p join p.usuarioList u where u.id = :id"
-                + " and p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id "
-                + "and (p.comprador.id = :id or p.comprador = null)");
-        q.setParameter("titulo", '%' + filtroTitulo + '%');
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        q.setParameter("id", usuario);
-        
-        return q.getResultList(); 
-    }
-    
-    public List<Producto> findCompradosByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo "
-                + "and p.categoria.nombre like :filtroCategoria and p.comprador.id = :id");
-        q.setParameter("titulo", '%' + filtroTitulo + '%');
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        q.setParameter("id", usuario);
-        
-        return q.getResultList(); 
-    }
-    
-        public List<Producto> findEnPujaByFiltro(String filtroTitulo, String filtroCategoria, int usuario) { //Miguel Oña Guerrero
-        Query q;
-        q = this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1 and p.titulo like :titulo "
-                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id and p.comprador = null");
-        q.setParameter("titulo", '%' + filtroTitulo + '%');
-        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
-        q.setParameter("id", usuario);
-        
-        return q.getResultList(); 
-    }
-    
     public List<Puja> findUsersPujaNoGrupo(Integer idProducto, List<Integer> idsUsers){ // angel
         Query q;
         q = this.getEntityManager().createQuery("select pu from Puja pu where pu.producto1.id = :idProducto and pu.usuario.id NOT IN :idsUsers");
@@ -307,4 +262,62 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         
         return q.getResultList();
     }
+    
+    public List<Producto> findExistentesByFiltro(String filtroTitulo, String filtroCategoria, Double filtroPrecio, int usuario) { //Miguel Oña Guerrero
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.precioSalida <= :precio "
+                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id and p.comprador = null");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("precio", filtroPrecio);
+        q.setParameter("id", usuario);
+        
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findFavoritosByFiltro(String filtroTitulo, String filtroCategoria, Double filtroPrecio, int usuario) { //Miguel Oña Guerrero
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p join p.usuarioList u where u.id = :id and p.precioSalida <= :precio"
+                + " and p.titulo like :titulo and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id "
+                + "and (p.comprador.id = :id or p.comprador = null)");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("precio", filtroPrecio);
+        q.setParameter("id", usuario);
+        
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findCompradosByFiltro(String filtroTitulo, String filtroCategoria, Double filtroPrecio, int usuario) { //Miguel Oña Guerrero
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.titulo like :titulo and p.precioSalida <= :precio "
+                + "and p.categoria.nombre like :filtroCategoria and p.comprador.id = :id");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("precio", filtroPrecio);
+        q.setParameter("id", usuario);
+        
+        return q.getResultList(); 
+    }
+    
+    public List<Producto> findEnPujaByFiltro(String filtroTitulo, String filtroCategoria, Double filtroPrecio, int usuario) { //Miguel Oña Guerrero
+        Query q;
+        q = this.getEntityManager().createQuery("select p from Producto p where p.enPuja = 1 and p.titulo like :titulo and p.precioSalida <= :precio "
+                + "and p.categoria.nombre like :filtroCategoria and p.vendedor.id != :id and p.comprador = null");
+        q.setParameter("titulo", '%' + filtroTitulo + '%');
+        q.setParameter("filtroCategoria",  '%' + filtroCategoria + '%');
+        q.setParameter("precio", filtroPrecio);
+        q.setParameter("id", usuario);
+        
+        return q.getResultList(); 
+    }
+        
+    public Double findPrecioMaximo(List<Integer> productos){ //Miguel Oña Guerrero
+        Query q;
+        q = this.getEntityManager().createQuery("select max(p.precioSalida) from Producto p where p.id in :ids");
+        q.setParameter("ids", productos);
+        
+        return (q.getResultList().isEmpty()) ? null : (Double)q.getResultList().get(0);
+    }
+    
 }

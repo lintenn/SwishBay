@@ -331,4 +331,14 @@ public class ProductoService {
         
         productoFacade.edit(producto);
     }
+    
+    public Double obtenerMayorPrecio(List<ProductoDTO> productos){
+        List<Integer> idProductos = new ArrayList();
+        
+        for(ProductoDTO producto : productos){
+            idProductos.add(producto.getId());
+        }
+        
+        return (idProductos.isEmpty()) ? 0.0 : productoFacade.findPrecioMaximo(idProductos);
+    }
 }

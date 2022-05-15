@@ -55,7 +55,7 @@ public class PujaFacade extends AbstractFacade<Puja> {
         return (q.getResultList().isEmpty()) ? null : (Puja) q.getResultList().get(0);
     }   
     
-    public List<Puja> findOrdenado(Integer id){
+    public List<Puja> findOrdenado(Integer id){ //Miguel Oña Guerrero
         Query q;
         q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id order by p.precio desc");
         q.setParameter("id", id);
