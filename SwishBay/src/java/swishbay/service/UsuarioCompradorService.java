@@ -14,7 +14,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author angel
+ * @author angel 95%, Luis 5%
  */
 public class UsuarioCompradorService {
     
