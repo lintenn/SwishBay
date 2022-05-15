@@ -42,7 +42,7 @@
                     
                   </ul>
                   <form method="post" class="d-flex" action="CategoriaServlet">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar por nombre" name="filtro" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>
