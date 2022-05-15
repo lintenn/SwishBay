@@ -12,7 +12,7 @@ import javax.validation.ConstraintViolationException;
 
 /**
  *
- * @author migue
+ * @author Miguel Oña Guerrero (autogenerado)
  */
 public abstract class AbstractFacade<T> {
 

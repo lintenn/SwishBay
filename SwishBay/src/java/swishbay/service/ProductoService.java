@@ -18,7 +18,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop 68%, Luis 27%, Miguel 5%
+ * @author galop 65%, Luis 25%, Miguel 10%
  */
 
 @Stateless
@@ -349,7 +349,7 @@ public class ProductoService {
         return cantidadRestada;
     }
     
-    public Double obtenerMayorPrecio(List<ProductoDTO> productos){
+    public Double obtenerMayorPrecio(List<ProductoDTO> productos){ //Miguel Oña Guerrero
         List<Integer> idProductos = new ArrayList();
         
         for(ProductoDTO producto : productos){
