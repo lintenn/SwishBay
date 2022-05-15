@@ -40,12 +40,11 @@ public class PujaBorrarServlet extends SwishBayServlet {
         if (super.comprobarCompradorVendedorSession(request, response)) {
             UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
 
-            if(user!=null && user.getRol().getNombre().equals("compradorvendedor")){
-                String str = request.getParameter("id");
-                ps.quitarPuja(str);
+            String str = request.getParameter("id");
+            ps.quitarPuja(str);
 
-                response.sendRedirect(request.getContextPath() + "/PujasServlet");
-            }
+            response.sendRedirect(request.getContextPath() + "/PujasServlet");
+          
         }
     }
 
