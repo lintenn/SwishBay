@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Linten
+ * @author migue
  */
 @Embeddable
 public class PujaPK implements Serializable {
@@ -26,13 +26,18 @@ public class PujaPK implements Serializable {
     @NotNull
     @Column(name = "PRODUCTO")
     private int producto;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "PRECIO")
+    private double precio;
 
     public PujaPK() {
     }
 
-    public PujaPK(int comprador, int producto) {
+    public PujaPK(int comprador, int producto, double precio) {
         this.comprador = comprador;
         this.producto = producto;
+        this.precio = precio;
     }
 
     public int getComprador() {
@@ -51,11 +56,20 @@ public class PujaPK implements Serializable {
         this.producto = producto;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) comprador;
         hash += (int) producto;
+        hash += (int) precio;
         return hash;
     }
 
@@ -72,12 +86,15 @@ public class PujaPK implements Serializable {
         if (this.producto != other.producto) {
             return false;
         }
+        if (this.precio != other.precio) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "swishbay.entity.PujaPK[ comprador=" + comprador + ", producto=" + producto + " ]";
+        return "swishbay.entity.PujaPK[ comprador=" + comprador + ", producto=" + producto + ", precio=" + precio + " ]";
     }
     
 }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import swishbay.dto.ProductoDTO;
 import swishbay.dto.PujaDTO;
 import swishbay.service.ProductoService;
+import swishbay.service.PujaService;
 
 /**
  * Este servlet muestra la información y las pujas de un producto
@@ -21,6 +22,7 @@ import swishbay.service.ProductoService;
 public class CompradorVerProductoServlet extends HttpServlet {
     
     @EJB ProductoService productoService;
+    @EJB PujaService pujaService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,15 +36,21 @@ public class CompradorVerProductoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String id = request.getParameter("id");
+        String idProducto = request.getParameter("id");
         
-        ProductoDTO producto = productoService.buscarProducto(id);
+        ProductoDTO producto = productoService.buscarProducto(idProducto);
         
         if(producto.getEnPuja() == 1){
-            List<PujaDTO> pujas = producto.getPujaList();
+            List<PujaDTO> pujas = pujaService.buscarPujasOrdenadas(Integer.parseInt(idProducto));
             request.setAttribute("pujas", pujas);
         }
         
+        if(producto.getComprador() != null){
+            PujaDTO puja = pujaService.buscarMayorPuja(Integer.parseInt(idProducto));
+            request.setAttribute("puja", puja);
+        }
+        
+        request.getSession().setAttribute("servlet", this.getServletName() + "?id=" + producto.getId());
         request.setAttribute("producto", producto);
         
         request.getRequestDispatcher("WEB-INF/jsp/verproducto.jsp").forward(request, response);

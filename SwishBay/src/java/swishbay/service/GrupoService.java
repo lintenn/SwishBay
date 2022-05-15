@@ -10,10 +10,14 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import swishbay.dao.GrupoFacade;
+import swishbay.dao.ProductoFacade;
 import swishbay.dao.UsuarioFacade;
 import swishbay.dto.GrupoDTO;
+import swishbay.dto.ProductoDTO;
+import swishbay.dto.PujaDTO;
 import swishbay.dto.UsuarioDTO;
 import swishbay.entity.Grupo;
+import swishbay.entity.Puja;
 import swishbay.entity.Usuario;
 
 /**
@@ -26,6 +30,8 @@ public class GrupoService {
     @EJB GrupoFacade grupoFacade;
     @EJB UsuarioFacade usuarioFacade;
     @EJB UsuarioService usuarioService;
+    @EJB MensajeService mensajeService;
+    @EJB ProductoFacade productoFacade;
     
     private Grupo buscarGrupo(Integer id){ // angel
         
@@ -213,6 +219,106 @@ public class GrupoService {
             this.crearGrupo(nombre, this.usuarioService.buscarUsuarioMarketing());
             
         }
+        
+    }
+    
+    public void notificarComienzoPuja(String nombre, ProductoDTO producto){ // angel
+        
+        this.comprobarExistenciaGrupoPorNombre(nombre);
+        
+        GrupoDTO grupo = this.buscarGruposPorNombre(nombre).get(0);
+        
+        this.mensajeService.crearMensaje(grupo.getId(), grupo.getMarketing().getId(), "Inicio de puja de " + producto.getTitulo(), "Se ha iniciado una nueva puja del producto " + producto.getTitulo() + ".");
+        
+    }
+    
+    public void notificarFinPuja(String nombre, ProductoDTO producto){ // angel
+        
+        GrupoDTO grupo = this.buscarGruposPorNombre(nombre).get(0);
+        
+        List<Integer> usuariosGrupo = new ArrayList<>();
+        
+        for(UsuarioDTO usuario : grupo.getUsuarioList()){
+            usuariosGrupo.add(usuario.getId());
+        }
+        
+        List<PujaDTO> usuariosPujaNoGrupo = null;
+        
+        if(usuariosGrupo == null || usuariosGrupo.isEmpty()){
+            usuariosPujaNoGrupo = producto.getPujaList();
+        } else {
+            usuariosPujaNoGrupo = this.listaPujasEntityADTO(this.productoFacade.findUsersPujaNoGrupo(producto.getId(), usuariosGrupo));
+        }
+        
+        for(PujaDTO puja : usuariosPujaNoGrupo){
+            
+            this.usuarioService.anadirUsuarioAGrupoADarleFavoritoAProducto(producto.getId(), puja.getComprador().getId());
+            
+        }
+        
+        if(producto.getPujaList() == null || producto.getPujaList().isEmpty()){
+            
+            this.mensajeService.crearMensaje(grupo.getId(), grupo.getMarketing().getId(), "Fin de puja de " + producto.getTitulo(), "Se ha terminado la puja del producto " + producto.getTitulo() + ". Nadie ha ganado la puja.");
+
+        } else {
+           
+            UsuarioDTO ganadorPuja = producto.getPujaList().get(producto.getPujaList().size() - 1).getComprador();
+            this.mensajeService.crearMensaje(grupo.getId(), grupo.getMarketing().getId(), "Fin de puja de " + producto.getTitulo(), "Se ha terminado la puja del producto " + producto.getTitulo() + ". " + ganadorPuja.getNombre() + " " + ganadorPuja.getApellidos() + " ha sido el ganador de la puja.");
+            
+        }
+        
+        for(PujaDTO puja : usuariosPujaNoGrupo){
+            
+            this.usuarioService.eliminarUsuarioAGrupoADarleFavoritoAProducto(producto.getId(), puja.getComprador().getId());
+            
+        }
+                
+    }
+    
+    private List<PujaDTO> listaPujasEntityADTO(List<Puja> pujas){ // angel
+        
+        List<PujaDTO> pujasDTO = null;
+        
+        if(pujas != null) {
+            pujasDTO = new ArrayList<>();
+            for(Puja puja : pujas) {
+                pujasDTO.add(puja.toDTO());
+            }
+        }
+        
+        return pujasDTO;
+        
+    }
+    
+    public List<GrupoDTO> buscarGruposPorNombreYGrupos(String nombre, List<Integer> ids){ // angel
+        
+        List<Grupo> grupos = this.grupoFacade.findGrupoByGrupoNombreAndGroups(nombre, ids);
+        
+        return this.listaGruposEntityADTO(grupos);
+        
+    }
+    
+    public List<GrupoDTO> buscarGruposPorNombreYApellidosCreador(String nombre, String apellidos, List<Integer> ids){ // angel
+        
+        List<Grupo> grupos = this.grupoFacade.findGrupoByGrupoNombreCreadorAndApellidosCreadorAndGroups(nombre, apellidos, ids);
+        
+        return this.listaGruposEntityADTO(grupos);
+        
+    }
+    
+    public List<GrupoDTO> buscarGruposPorNombreCreador(String nombre, List<Integer> ids){ // angel
+        
+        List<Grupo> grupos = this.grupoFacade.findGrupoByGrupoNombreCreadorAndGroups(nombre, ids);
+        
+        return this.listaGruposEntityADTO(grupos);
+        
+    }
+    
+    public List<GrupoDTO> buscarGruposPorApellidosCreador(String apellidos, List<Integer> ids){ // angel
+        
+        List<Grupo> grupos = this.grupoFacade.findGrupoByGrupoApellidosCreadorAndGroups(apellidos, ids);
+        
+        return this.listaGruposEntityADTO(grupos);
         
     }
 }

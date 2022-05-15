@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.UsuarioService;
 
@@ -19,6 +18,7 @@ import swishbay.service.UsuarioService;
 public class CompradorSaldoServlet extends SwishBayServlet {
     
     @EJB UsuarioService usuarioService;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,10 +32,10 @@ public class CompradorSaldoServlet extends SwishBayServlet {
             throws ServletException, IOException {
         
         if(super.comprobarSession(request, response)){
-            int id = Integer.parseInt(request.getParameter("id")); 
-            double saldo = Double.parseDouble(request.getParameter("saldo"));
+            int idUsuario = Integer.parseInt(request.getParameter("id")); 
+            double cantidad = Double.parseDouble(request.getParameter("saldo"));
             
-            UsuarioDTO usuario = usuarioService.sumarSaldo(saldo, id);
+            UsuarioDTO usuario = usuarioService.sumarSaldo(cantidad, idUsuario);
 
             request.getSession().setAttribute("usuario", usuario);
             

@@ -13,6 +13,7 @@ import swishbay.dto.PujaDTO;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.CategoriaService;
 import swishbay.service.CompradorService;
+import swishbay.service.ProductoService;
 import swishbay.service.PujaService;
 
 /**
@@ -25,6 +26,7 @@ public abstract class CompradorServlet extends SwishBayServlet {
     
     @EJB CategoriaService categoriaService;
     @EJB CompradorService compradorService;
+    @EJB ProductoService productoService;
     @EJB PujaService pujaService;
     
     /**
@@ -44,6 +46,13 @@ public abstract class CompradorServlet extends SwishBayServlet {
             UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
             String filtroTitulo = request.getParameter("filtro");
             String filtroCategoria = request.getParameter("filtroCategoria");
+            String precioMaximo = request.getParameter("precioMaximo");
+            Double filtroPrecio;
+            try{
+                filtroPrecio = Double.parseDouble(request.getParameter("filtroPrecio"));
+            }catch(NullPointerException ex){
+                filtroPrecio = null;
+            }
             
             if(filtroTitulo == null || filtroTitulo.isEmpty() || filtroTitulo.trim().length() <= 0 ){
                 filtroTitulo = "";
@@ -53,13 +62,26 @@ public abstract class CompradorServlet extends SwishBayServlet {
                 filtroCategoria = "";
             }
             
-            List<ProductoDTO> productos = this.getProductos(filtroTitulo, filtroCategoria, usuario);   
+            if(filtroPrecio == null){
+                filtroPrecio = Double.MAX_VALUE;
+            }
+            
+            List<ProductoDTO> productos = this.getProductos(filtroTitulo, filtroCategoria, filtroPrecio, usuario);         
             List<CategoriaDTO> categorias = categoriaService.listarCategorias();          
-            List<PujaDTO> mayoresPujas = pujaService.buscarMayoresPujas(productos) ;            
+            List<PujaDTO> mayoresPujas = pujaService.buscarMayoresPujas(productos); 
+            Double mayorPrecio;
+            
+            if(precioMaximo == null){
+                mayorPrecio = productoService.obtenerMayorPrecio(productos);
+            }else{
+                mayorPrecio = Double.parseDouble(precioMaximo);
+            }
             
             request.setAttribute("productos", productos);
+            request.setAttribute("mayorPrecio", mayorPrecio);
             request.setAttribute("categorias", categorias);
             request.setAttribute("mayoresPujas", mayoresPujas);
+            request.setAttribute("precio", filtroPrecio);
             request.setAttribute("selected", filtroCategoria);
             request.setAttribute("servlet", this.getServlet());
             request.getSession().setAttribute("servlet", this.getServlet());
@@ -68,7 +90,7 @@ public abstract class CompradorServlet extends SwishBayServlet {
         }
     }
     
-    abstract protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, UsuarioDTO usuario);
+    abstract protected List<ProductoDTO> getProductos(String filtroTitulo, String filtroCategoria, Double filtroPrecio, UsuarioDTO usuario);
     
     abstract protected String getServlet();
     

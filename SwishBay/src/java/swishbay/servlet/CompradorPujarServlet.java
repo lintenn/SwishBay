@@ -15,7 +15,7 @@ import swishbay.service.PujaService;
 import swishbay.service.UsuarioService;
 
 /**
- * Este servlet efectua las pujas por parte del comprador //REFACTOR UN COMPRADOR PUJAR DOS VECES
+ * Este servlet efectua las pujas por parte del comprador
  * 
  * @author Miguel Oña Guerrero
  */
@@ -42,31 +42,37 @@ public class CompradorPujarServlet extends SwishBayServlet {
             
             Double cantidad = Double.parseDouble(request.getParameter("cantidad"));
             UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
-            int productoid = Integer.parseInt(request.getParameter("productoid"));
+            int idProducto = Integer.parseInt(request.getParameter("productoid"));
             String error = "";
             
-            ProductoDTO producto = productoService.buscarProducto(productoid + "");
-            PujaDTO mayorPuja = pujaService.mayorPuja(productoid);
+            ProductoDTO producto = productoService.buscarProducto(idProducto + "");
+            PujaDTO mayorPuja = pujaService.buscarMayorPuja(idProducto);
             
             boolean saldoSuficiente = usuario.getSaldo() >= cantidad;
+            boolean actualMayorPuja = false;
             boolean cantidadSuficiente;
             if(mayorPuja == null){
                 cantidadSuficiente = cantidad >= producto.getPrecioSalida();
             }else{
                 cantidadSuficiente = mayorPuja.getPrecio() < cantidad;
+                actualMayorPuja = mayorPuja.getComprador().getId().equals(usuario.getId());
             }
             
-            if(saldoSuficiente && cantidadSuficiente){
+            if(saldoSuficiente && cantidadSuficiente && !actualMayorPuja){
                 usuario = usuarioService.sumarSaldo(-cantidad, usuario.getId());
-                productoService.realizarPuja(productoid, cantidad, usuario.getId());
+                productoService.realizarPuja(idProducto, cantidad, usuario.getId());
             }else{
                 if(!saldoSuficiente){
                     error = "¡No tienes suficiente saldo!";
                 }
                 if(!cantidadSuficiente){
                     error = "¡Cantidad insuficinete para realizar la puja!";
-                }        
-                List<PujaDTO> pujas = producto.getPujaList();
+                }
+                if(actualMayorPuja){
+                    error = "¡Ya has realizado la máxima puja!";
+                }
+                
+                List<PujaDTO> pujas = pujaService.buscarPujasOrdenadas(idProducto);
                 
                 request.setAttribute("pujas", pujas);
                 request.setAttribute("error", error);
@@ -74,10 +80,10 @@ public class CompradorPujarServlet extends SwishBayServlet {
                 
                 request.getRequestDispatcher("WEB-INF/jsp/verproducto.jsp").forward(request, response);
             }
-             
+
             request.getSession().setAttribute("usuario", usuario);
             
-            response.sendRedirect(request.getContextPath() + "/CompradorVerProductoServlet?id=" + productoid);
+            response.sendRedirect(request.getContextPath() + "/CompradorVerProductoServlet?id=" + idProducto);
         }
         
     }

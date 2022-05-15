@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package swishbay.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -290,26 +284,32 @@ public class UsuarioService {
         return userdto;
     }
     
-    public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){
+    public UsuarioDTO manejoFavoritos(int idProducto, int idUsuario){ //Miguel Oña Guerrero
         
-        Usuario usuario = this.buscarUsuarioById(idUsuario);
-        Producto producto = this.productoFacade.findByID(idProducto);
+        Usuario usuario = this.usuarioFacade.find(idUsuario);
+        Producto producto = this.productoFacade.find(idProducto);
+        
         
         if(usuario.getProductoList().contains(producto)){
             usuario.getProductoList().remove(producto);
-            this.eliminarUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario);
+            producto.getUsuarioList().remove(usuario);
+            
+            this.eliminarUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario); //Marketing
         }else{
             usuario.getProductoList().add(producto);
-            this.anadirUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario);
+            producto.getUsuarioList().add(usuario);
+            
+            this.anadirUsuarioAGrupoADarleFavoritoAProducto(idProducto, idUsuario); //Marketing
         }
         
         this.usuarioFacade.edit(usuario);
+        this.productoFacade.edit(producto);
         
         return usuario.toDTO();
     }
     
-    public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){ //Miguel
-        Usuario usuario = this.buscarUsuarioById(idUsuario);
+    public UsuarioDTO sumarSaldo(double cantidad, int idUsuario){ //Miguel Oña Guerrero
+        Usuario usuario = this.usuarioFacade.find(idUsuario);
         
         double saldo = usuario.getSaldo();
         saldo += cantidad;
@@ -362,5 +362,61 @@ public class UsuarioService {
         this.grupoService.eliminarUsuarioAListaUsuariosGrupo(idUsuario, idGrupo);
         this.eliminarGrupoAListaGruposUsuario(idUsuario, idGrupo);
             
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorCorreo(String correo){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByCorreo(correo);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorApellidos(String apellidos){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByApellidos(apellidos);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorCiudad(String ciudad){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByCiudad(ciudad);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorDomicilio(String domicilio){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorByDomicilio(domicilio);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSexo(String sexo){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySexo(sexo);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSaldoDesde(Integer desde, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySaldoDesde(desde, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
+    }
+    
+    public List<UsuarioDTO> buscarPorCompradorVendedorPorSaldoHasta(Integer desde, List<Integer> ids){// angel
+        
+        List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedorBySaldoHasta(desde, ids);
+        
+        return this.listaEntityADTO(usuarios);    
+        
     }
 }

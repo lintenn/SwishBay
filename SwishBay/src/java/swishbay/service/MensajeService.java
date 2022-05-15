@@ -129,4 +129,36 @@ public class MensajeService {
          return this.listaMensajesEntityADTO(mensajes);
                  
      }
+     
+     public List<MensajeDTO> listarMensajesDeUnGrupoPorAsuntoPorMensajes(String asunto, Integer idGrupo, List<Integer> ids){
+         
+         List<Mensaje> mensajes = this.mensajeFacade.findByAsuntoAndIdGrupoByMessages(idGrupo, asunto, ids);
+         
+         return this.listaMensajesEntityADTO(mensajes);
+                 
+     }
+     
+     public List<MensajeDTO> listarMensajesDeUnGrupoPorContenidoPorMensajes(String contenido, Integer idGrupo, List<Integer> ids){
+         
+         List<Mensaje> mensajes = this.mensajeFacade.findByContenidoAndIdGrupoByMessages(idGrupo, contenido, ids);
+         
+         return this.listaMensajesEntityADTO(mensajes);
+                 
+     }
+     
+     public List<MensajeDTO> listarMensajesDeUnUsuarioPorAsuntoPorMensajes(String asunto, Integer idUsuario, List<Integer> ids){
+         
+         List<Mensaje> mensajes = this.mensajeFacade.findByAsuntoAndIdUserByMessages(idUsuario, asunto, ids);
+         
+         return this.listaMensajesEntityADTO(mensajes);
+                 
+     }
+     
+     public List<MensajeDTO> listarMensajesDeUnUsuarioPorContenidoPorMensajes(String contenido, Integer idUsuario, List<Integer> ids){
+         
+         List<Mensaje> mensajes = this.mensajeFacade.findByContenidoAndIdUserByMessages(idUsuario, contenido, ids);
+         
+         return this.listaMensajesEntityADTO(mensajes);
+                 
+     }
 }

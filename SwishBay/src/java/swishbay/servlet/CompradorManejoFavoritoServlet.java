@@ -33,12 +33,12 @@ public class CompradorManejoFavoritoServlet extends SwishBayServlet {
         
         if(super.comprobarSession(request, response)){
             
-            String str = request.getParameter("id");
+            String idProducto = request.getParameter("id");
             
-            if(str != null){
+            if(idProducto != null){
                 UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("usuario");
                 
-                usuario = usuarioService.manejoFavoritos(Integer.parseInt(str), usuario.getId());    
+                usuario = usuarioService.manejoFavoritos(Integer.parseInt(idProducto), usuario.getId());    
                 
                 request.getSession().setAttribute("usuario", usuario);
                 

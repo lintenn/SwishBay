@@ -35,7 +35,24 @@
                     
                   </ul>
                   <form method="post" class="d-flex" action="GrupoServlet">
-                    <input class="form-control me-2" type="search" placeholder="Buscar" name="filtro" aria-label="Search">
+                    <div class="mt-2 me-2">
+                        Creador  
+                    </div>
+                    <div class="mt-2 mx-1">
+                        Nombre:  
+                    </div>
+                    <input class="form-control me-2" type="search" placeholder="Nombre creador" name="filtroNombreCreador" aria-label="Search">
+                    <div class="mt-2 mx-1">
+                        Apellido:  
+                    </div>
+                    <input class="form-control me-2" type="search" placeholder="Apellido creador" name="filtroApellidoCreador" aria-label="Search">
+                    <div class="mt-2 me-2">
+                        Grupo  
+                    </div>
+                    <div class="mt-2 mx-1">
+                        Nombre:  
+                    </div>
+                    <input class="form-control me-2" type="search" placeholder="Nombre grupo" name="filtroNombreGrupo" aria-label="Search">
                     <input class="btn btn-outline-success" type="submit" value="Buscar"></>
                   </form>
                 </div>

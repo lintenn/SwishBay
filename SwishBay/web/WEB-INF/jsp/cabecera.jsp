@@ -13,9 +13,6 @@
     if(usuario == null){
         response.sendRedirect(request.getContextPath());
     }
-    
-    Double saldo = (Double)usuario.getSaldo();
-
 %>
 <header class="mb-auto">
         <a href="CompradorProductosServlet" col-1>
@@ -28,7 +25,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <span class="navbar-text me-2">
-          Saldo: <%=saldo%> €
+          Saldo: <%=usuario.getSaldo()%> €
       </span>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">

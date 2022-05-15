@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package swishbay.service;
 
 import java.util.ArrayList;
@@ -15,29 +11,34 @@ import swishbay.entity.Puja;
 
 /**
  *
- * @author galop 33%, Miguel 66%
+ * @author galop 20%, Miguel Oña Guerrero 80%
  */
 
 @Stateless
 public class PujaService {
     
-    @EJB PujaFacade pf;
+    @EJB PujaFacade pujaFacade;
+    
+    private List<PujaDTO> listaEntityADTO (List<Puja> lista) { // Miguel Oña Guerrero
+        List<PujaDTO> listaDTO = null;
+        if (lista != null) {
+            listaDTO = new ArrayList<>();
+            for (Puja puja : lista) {
+                listaDTO.add(puja.toDTO());
+            }
+        }
+        return listaDTO;
+    }
     
     public PujaDTO buscarPuja(Integer id){ //Galo
         
-        Puja p = pf.find(id);
+        Puja p = pujaFacade.find(id);
         
         return p.toDTO();
     }
     
-    public PujaDTO mayorPuja(Integer id){ //Miguel
-        Puja puja = pf.findMax(id);
-        
-        return (puja == null) ? null : puja.toDTO();
-    }
-    
-    public PujaDTO buscarMayorPuja(Integer id){ //Miguel Oña Guerrero
-        Puja puja = pf.findMayor(id);
+    public PujaDTO buscarMayorPuja(Integer idProducto){ //Miguel Oña Guerrero
+        Puja puja = pujaFacade.findMayor(idProducto);
         
         return (puja == null) ? null : puja.toDTO();
     }
@@ -50,5 +51,11 @@ public class PujaService {
         }
         
         return pujas;
+    }
+    
+    public List<PujaDTO> buscarPujasOrdenadas(Integer idProducto){ //Miguel Oña Guerrero
+        List<Puja> pujas = pujaFacade.findOrdenado(idProducto);
+        
+        return this.listaEntityADTO(pujas);
     }
 }

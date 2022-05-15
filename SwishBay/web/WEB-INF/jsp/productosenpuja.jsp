@@ -1,9 +1,10 @@
 <%-- 
-    Document   : productos
+    Document   : productosenpuja
     Created on : Mar 28, 2022, 11:03:29 AM
     Author     : Miguel Oña Guerrero
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="swishbay.dto.PujaDTO"%>
 <%@page import="swishbay.dto.UsuarioDTO"%>
 <%@page import="swishbay.dto.ProductoDTO"%>
@@ -22,7 +23,19 @@
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <jsp:include page="cabecera.jsp" />
-            <jsp:include page="menucomprador.jsp" />
+            
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="SellerServlet">Vender</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <jsp:include page="menucomprador.jsp"/>
+                    <jsp:include page="productofiltro.jsp"/>
+                </div>
+              </div>
+            </nav>
 
             <main class="row d-flex justify-content-center mt-4">
                 
@@ -30,6 +43,7 @@
                 List<ProductoDTO> productos = (List)request.getAttribute("productos");
                 UsuarioDTO usuario = (UsuarioDTO)session.getAttribute("usuario");
                 List<PujaDTO> mayoresPujas = (List)request.getAttribute("mayoresPujas");
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 
                 if(productos.isEmpty()){
             %>
@@ -69,7 +83,7 @@
                                     <%
                                         }
                                     %>
-                                    <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= producto.getFinPuja().toGMTString().substring(0, 12) %> </p>
+                                    <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= formato.format(producto.getFinPuja()) %> </p>
                                 </div>
                                 <div class="row justify-content-center pb-2 px-0">
                                     <a href="CompradorVerProductoServlet?id=<%=producto.getId() %>" class="btn btn-primary col-8 mx-2">Ver producto y pujar</a>                                 

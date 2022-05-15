@@ -103,6 +103,64 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return q.getResultList();
     }
     
+    public List<Usuario> findByCompradorVendedorByCorreo(String correo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.correo like :correo");
+        q.setParameter("correo", '%' + correo +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByApellidos(String apellidos){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.apellidos like :apellidos");
+        q.setParameter("apellidos", '%' + apellidos +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByCiudad(String ciudad){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.ciudad like :ciudad");
+        q.setParameter("ciudad", '%' + ciudad +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByDomicilio(String domicilio){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.domicilio like :domicilio");
+        q.setParameter("domicilio", '%' + domicilio +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySexo(String sexo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.sexo like :sexo");
+        q.setParameter("sexo", '%' + sexo +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySaldoDesde(Integer saldoDesde, List<Integer> usuarios){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.saldo >= :saldoDesde and u.id IN :usuarios");
+        q.setParameter("saldoDesde", saldoDesde);
+        q.setParameter("usuarios", usuarios);
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySaldoHasta(Integer saldoDesde, List<Integer> usuarios){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.saldo <= :saldoDesde and u.id IN :usuarios");
+        q.setParameter("saldoDesde", saldoDesde);
+        q.setParameter("usuarios", usuarios);
+        
+        return q.getResultList();
+    }
+    
     public Usuario findByMarketing(){ // angel
         Query q;
         q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'marketing'");

@@ -69,4 +69,37 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         q.setParameter("nombre", '%' + nombre +'%');
         return q.getResultList();
     }
+    
+    public List<Grupo> findGrupoByGrupoNombreAndGroups (String nombre, List<Integer> ids) { // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select g from Grupo g where g.nombre like :nombre and g.id IN :ids");
+        q.setParameter("nombre", '%' + nombre +'%');
+        q.setParameter("ids", ids);
+        return q.getResultList();
+    }
+    
+    public List<Grupo> findGrupoByGrupoNombreCreadorAndApellidosCreadorAndGroups (String nombre, String apellidos, List<Integer> ids) { // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select g from Grupo g where g.marketing.nombre like :nombre and g.marketing.apellidos like :apellidos and g.id IN :ids");
+        q.setParameter("nombre", '%' + nombre +'%');
+        q.setParameter("apellidos", '%' + apellidos +'%');
+        q.setParameter("ids", ids);
+        return q.getResultList();
+    }
+    
+    public List<Grupo> findGrupoByGrupoNombreCreadorAndGroups (String nombre, List<Integer> ids) { // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select g from Grupo g where g.marketing.nombre like :nombre and g.id IN :ids");
+        q.setParameter("nombre", '%' + nombre +'%');
+        q.setParameter("ids", ids);
+        return q.getResultList();
+    }
+    
+    public List<Grupo> findGrupoByGrupoApellidosCreadorAndGroups (String apellidos, List<Integer> ids) { // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select g from Grupo g where g.marketing.apellidos like :apellidos and g.id IN :ids");
+        q.setParameter("apellidos", '%' + apellidos +'%');
+        q.setParameter("ids", ids);
+        return q.getResultList();
+    }
 }
