@@ -72,4 +72,22 @@ public class MensajeFacade extends AbstractFacade<Mensaje> {
         return q.getResultList();
     }
     
+    public List<Mensaje> findByAsuntoAndIdUserByMessages (Integer idUsuario, String asunto, List<Integer> mensajes) {
+        Query q;
+        q = this.getEntityManager().createQuery("select m from Usuario u Join u.mensajeList m where u.id = :idUsuario and m.asunto like :asunto and m.id IN :mensajes");
+        q.setParameter("asunto", '%' + asunto +'%');
+        q.setParameter("idUsuario", idUsuario);
+        q.setParameter("mensajes", mensajes);
+        return q.getResultList();
+    }
+    
+    public List<Mensaje> findByContenidoAndIdUserByMessages (Integer idUsuario, String contenido, List<Integer> mensajes) {
+        Query q;
+        q = this.getEntityManager().createQuery("select m from Usuario u Join u.mensajeList m where u.id = :idUsuario and m.contenido like :contenido and m.id IN :mensajes");
+        q.setParameter("contenido", '%' + contenido +'%');
+        q.setParameter("idUsuario", idUsuario);
+        q.setParameter("mensajes", mensajes);
+        return q.getResultList();
+    }
+    
 }
