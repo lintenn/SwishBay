@@ -32,6 +32,7 @@ public class GrupoService {
     @EJB UsuarioService usuarioService;
     @EJB MensajeService mensajeService;
     @EJB ProductoFacade productoFacade;
+    @EJB UsuarioCompradorService usuarioCompradorFacade;
     
     private Grupo buscarGrupo(Integer id){ // angel
         
@@ -215,7 +216,7 @@ public class GrupoService {
         
         if(grupos == null || grupos.isEmpty()){
             
-            this.crearGrupo(nombre, this.usuarioService.buscarUsuarioMarketing());
+            this.crearGrupo(nombre, this.usuarioCompradorFacade.buscarUsuarioMarketing());
             
         }
         

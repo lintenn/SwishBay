@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import swishbay.dto.UsuarioDTO;
 import swishbay.service.GrupoService;
+import swishbay.service.UsuarioCompradorService;
 import swishbay.service.UsuarioService;
  
 /**
@@ -26,7 +27,7 @@ import swishbay.service.UsuarioService;
 public class ParticipantesGrupoAnadirServlet extends SwishBayServlet {
 
     @EJB GrupoService grupoService;
-    @EJB UsuarioService usuarioService;
+    @EJB UsuarioCompradorService usuarioCompradorService;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,22 +56,22 @@ public class ParticipantesGrupoAnadirServlet extends SwishBayServlet {
             } else {
                 switch(tipoFiltro){
                     case "Nombre":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorNombreQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorNombreQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Correo":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCorreoQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorCorreoQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Apellidos":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorApellidosQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorApellidosQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Ciudad":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorCiudadQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorCiudadQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Domicilio":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorDomicilioQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorDomicilioQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                     case "Sexo":
-                        usuarios = this.usuarioService.buscarPorCompradorVendedorPorSexoQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
+                        usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSexoQueNoPertencenAUnGrupo(filtroNombre, idsUsuariosGrupo);
                         break;
                 }
             }
@@ -82,7 +83,7 @@ public class ParticipantesGrupoAnadirServlet extends SwishBayServlet {
                     ids.add(user.getId());
                 }
                 
-                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoDesdeQueNoPertencenAUnGrupo(Integer.parseInt(saldoDesde), ids, idsUsuariosGrupo);
+                usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSaldoDesdeQueNoPertencenAUnGrupo(Integer.parseInt(saldoDesde), ids, idsUsuariosGrupo);
                 
             }
             
@@ -93,7 +94,7 @@ public class ParticipantesGrupoAnadirServlet extends SwishBayServlet {
                     ids.add(user.getId());
                 }
                 
-                usuarios = this.usuarioService.buscarPorCompradorVendedorPorSaldoHastaQueNoPertencenAUnGrupo(Integer.parseInt(saldoHasta), ids, idsUsuariosGrupo);
+                usuarios = this.usuarioCompradorService.buscarPorCompradorVendedorPorSaldoHastaQueNoPertencenAUnGrupo(Integer.parseInt(saldoHasta), ids, idsUsuariosGrupo);
                 
             }
 
