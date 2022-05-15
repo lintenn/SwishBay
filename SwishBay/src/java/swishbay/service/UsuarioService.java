@@ -21,7 +21,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author Luis 60%, angel 30%, Miguel Oña Guerrero 83% 10%
+ * @author Luis 60%, angel 30%, Miguel Oña Guerrero 10%
  */
 @Stateless
 public class UsuarioService {
