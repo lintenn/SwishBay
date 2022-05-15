@@ -4,6 +4,7 @@
     Author     : Luis
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="swishbay.dto.CategoriaDTO"%>
 <%@page import="swishbay.dto.ProductoDTO"%>
 <%@page import="java.util.Collections"%>
@@ -124,7 +125,7 @@
                       <div class="row justify-content-center pb-2 px-0">
                         <% if(producto.getEnPuja()!=0){
                         %>
-                        <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= producto.getFinPuja().toGMTString().substring(0, 12) %> </p>
+                        <p class="card-text text-dark text-center mb-0" >Fin subasta: <%= new SimpleDateFormat("dd/MM/yyyy").format(producto.getFinPuja()) %> </p>
                         <% }
                         %>
                         <a href="ProductoAdminEditarServlet?id=<%=producto.getId() %>" class="btn btn-primary col-4 mx-2">Modificar</a>
