@@ -7,6 +7,7 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -43,16 +44,29 @@ public class NotificacionesVerServlet extends SwishBayServlet {
         if(super.comprobarCompradorVendedorSession(request, response)){
             
             String filtroNombre = request.getParameter("filtro");
+            String tipoFiltro = request.getParameter("filtroMensajes");
             HttpSession session = request.getSession();
             UsuarioDTO user = (UsuarioDTO)session.getAttribute("usuario");
-            List<MensajeDTO> mensajes = user.getMensajeList();
+            List<MensajeDTO> mensajes = user.getMensajeList();;
             
-            if (filtroNombre != null && !filtroNombre.isEmpty() && mensajes.size() != 0) {   
+            if (filtroNombre != null && !filtroNombre.isEmpty() && mensajes.size() > 0) {     
                 
-                mensajes = this.mensajeService.listarMensajesDeUnUsuarioPorAsunto(filtroNombre, user.getId());
+                List<Integer> ids = new ArrayList<>();
+                for(MensajeDTO mensaje : mensajes){
+                    ids.add(mensaje.getId());
+                }
                 
+                switch(tipoFiltro){
+                    case "Asunto":
+                        mensajes = this.mensajeService.listarMensajesDeUnUsuarioPorAsuntoPorMensajes(filtroNombre, user.getId(), ids);
+                        break;
+                    case "Cuerpo del mensaje":
+                        mensajes = this.mensajeService.listarMensajesDeUnUsuarioPorContenidoPorMensajes(filtroNombre, user.getId(), ids);
+                        break;
+                }
             }
 
+            request.setAttribute("tipoFiltro", tipoFiltro);
             request.setAttribute("mensajes", mensajes);
             request.getRequestDispatcher("WEB-INF/jsp/notificaciones.jsp").forward(request, response);  
             

@@ -46,9 +46,7 @@ public class EnPujaGuardarServlet extends SwishBayServlet {
         
         if (super.comprobarCompradorVendedorSession(request, response)) {
             UsuarioDTO user = (UsuarioDTO)request.getSession().getAttribute("usuario");
-
-        
-      
+     
             ProductoDTO p;
 
             String strId,str, status= null;
@@ -70,7 +68,7 @@ public class EnPujaGuardarServlet extends SwishBayServlet {
             if(actual.before(d)){
 
                 if(p.getEnPuja()==0){
-                    p.setEnPuja((short) 1);
+                   
                     str = request.getParameter("precio");
                     ps.modificarPuja(strId,str,d);
                 }else{

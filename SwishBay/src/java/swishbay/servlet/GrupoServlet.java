@@ -6,6 +6,7 @@ package swishbay.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -38,13 +39,38 @@ public class GrupoServlet extends SwishBayServlet {
         
         if(super.comprobarMarketingSession(request, response)){
             
-            String filtroNombre = request.getParameter("filtro");
-            List<GrupoDTO> grupos = null;
+            String filtroNombreGrupo = request.getParameter("filtroNombreGrupo");
+            String filtroNombreCreador = request.getParameter("filtroNombreCreador");
+            String filtroApellidosCreador = request.getParameter("filtroApellidoCreador");
+            List<GrupoDTO> grupos = this.grupoService.buscarTodosGrupos();
 
-            if (filtroNombre == null || filtroNombre.isEmpty()) {
-                grupos = this.grupoService.buscarTodosGrupos();        
-            } else {
-                grupos = this.grupoService.buscarGruposPorNombre(filtroNombre);
+            if(filtroNombreGrupo != null && !filtroNombreGrupo.isEmpty() && grupos.size() > 0){
+                
+                List<Integer> ids = new ArrayList<>();
+                for(GrupoDTO grupo : grupos){
+                    ids.add(grupo.getId());
+                }
+                
+                grupos = this.grupoService.buscarGruposPorNombreYGrupos(filtroNombreGrupo, ids);
+                
+            }
+            
+            if(((filtroApellidosCreador != null && !filtroApellidosCreador.isEmpty()) || (filtroNombreCreador != null && !filtroNombreCreador.isEmpty())) && grupos.size() > 0){
+                
+                List<Integer> ids = new ArrayList<>();
+                for(GrupoDTO grupo : grupos){
+                    ids.add(grupo.getId());
+                }
+                
+                if((filtroNombreCreador == null || filtroNombreCreador.isEmpty()) && (filtroApellidosCreador != null && !filtroApellidosCreador.isEmpty())){
+                    grupos = this.grupoService.buscarGruposPorApellidosCreador(filtroApellidosCreador, ids);
+                } else if((filtroApellidosCreador == null || filtroApellidosCreador.isEmpty()) && (filtroNombreCreador != null && !filtroNombreCreador.isEmpty())){
+                    grupos = this.grupoService.buscarGruposPorNombreCreador(filtroNombreCreador, ids);
+                } else {
+                    grupos = this.grupoService.buscarGruposPorNombreYApellidosCreador(filtroNombreCreador, filtroApellidosCreador, ids);
+                }
+                
+                
             }
 
             request.setAttribute("grupos", grupos);

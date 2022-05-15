@@ -15,7 +15,7 @@ import swishbay.service.PujaService;
 import swishbay.service.UsuarioService;
 
 /**
- * Este servlet efectua las pujas por parte del comprador //REFACTOR UN COMPRADOR PUJAR DOS VECES
+ * Este servlet efectua las pujas por parte del comprador
  * 
  * @author Miguel Oña Guerrero
  */
@@ -49,12 +49,13 @@ public class CompradorPujarServlet extends SwishBayServlet {
             PujaDTO mayorPuja = pujaService.buscarMayorPuja(idProducto);
             
             boolean saldoSuficiente = usuario.getSaldo() >= cantidad;
-            boolean actualMayorPuja = mayorPuja.getComprador().getId().equals(usuario.getId());
+            boolean actualMayorPuja = false;
             boolean cantidadSuficiente;
             if(mayorPuja == null){
                 cantidadSuficiente = cantidad >= producto.getPrecioSalida();
             }else{
                 cantidadSuficiente = mayorPuja.getPrecio() < cantidad;
+                actualMayorPuja = mayorPuja.getComprador().getId().equals(usuario.getId());
             }
             
             if(saldoSuficiente && cantidadSuficiente && !actualMayorPuja){
