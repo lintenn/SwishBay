@@ -37,9 +37,8 @@ public class ProductoAdminGuardarServlet extends SwishBayServlet {
         if (super.comprobarAdminSession(request, response)) {
             
             String strId, status=null;
-            strId= request.getParameter("id");
+            strId = request.getParameter("id");
             
-            //java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
             String titulo = request.getParameter("nombre");
             String desc = request.getParameter("descripcion");
             String foto = request.getParameter("foto");
