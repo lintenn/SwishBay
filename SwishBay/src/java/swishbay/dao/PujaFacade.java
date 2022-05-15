@@ -41,7 +41,7 @@ public class PujaFacade extends AbstractFacade<Puja> {
 
     public Puja findMax(Integer pId) { //Galo
         Query q;   
-        q= this.getEntityManager().createQuery("select pu from Producto p JOIN p.pujaList pu WHERE p.id = :producto ORDER BY pu.precio DESC ");
+        q= this.getEntityManager().createQuery("select pu from Producto p JOIN p.pujaList pu WHERE p.id = :producto ORDER BY pu.pujaPK.precio DESC ");
         q.setParameter("producto", pId );
         return (q.getResultList().isEmpty()) ? null : (Puja)q.getResultList().get(0);
 
@@ -49,15 +49,15 @@ public class PujaFacade extends AbstractFacade<Puja> {
     
     public Puja findMayor(Integer id){ //Miguel Oña Guerrero
         Query q; 
-        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id and p.precio = (select max(p.precio) from Puja p where p.producto1.id = :id)");
+        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id and p.pujaPK.precio = (select max(p.pujaPK.precio) from Puja p where p.producto1.id = :id)");
         q.setParameter("id", id );
         
         return (q.getResultList().isEmpty()) ? null : (Puja) q.getResultList().get(0);
     }   
     
-    public List<Puja> findOrdenado(Integer id){
+    public List<Puja> findOrdenado(Integer id){ //Miguel Oña Guerrero
         Query q;
-        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id order by p.precio desc");
+        q = this.getEntityManager().createQuery("select p from Puja p where p.producto1.id = :id order by p.pujaPK.precio desc");
         q.setParameter("id", id);
         
         return (List) q.getResultList();

@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package swishbay.service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -269,7 +265,7 @@ public class ProductoService {
 
         Producto p = productoFacade.findByID(Integer.parseInt(id));
         
-        this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
+        //this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
         
         Double d=p.getPrecioSalida();
         Puja puja=null;
@@ -290,8 +286,8 @@ public class ProductoService {
             this.productoFacade.edit(p);
             
             for(Puja pu : pujasPerdedoras){                 
-                sumarSaldo(pu.getPrecio(),pu.getUsuario());                
-             }       
+                sumarSaldo(pu.getPujaPK().getPrecio(),pu.getUsuario());                
+            }       
             
         }else{
              p.setEnPuja((short) 0);
@@ -316,23 +312,32 @@ public class ProductoService {
         
         Puja puja = new Puja();
         
-        java.util.Date date = new java.util.Date();
-        Date sqlDate = new Date(date.getTime());
-        
-        puja.setFecha(sqlDate);
-        puja.setPrecio(cantidad);
+        puja.setFecha(new Date());
         puja.setUsuario(usuario);
         puja.setProducto1(producto);
         
         PujaPK pujapk = new PujaPK();
         pujapk.setComprador(idusuario);
         pujapk.setProducto(idproducto);
+        pujapk.setPrecio(cantidad);
         
         puja.setPujaPK(pujapk);
         pujaFacade.create(puja);
         
         producto.getPujaList().add(puja);
-        
         productoFacade.edit(producto);
+        
+        usuario.getPujaList().add(puja);
+        usuarioFacade.edit(usuario);
+    }
+    
+    public Double obtenerMayorPrecio(List<ProductoDTO> productos){
+        List<Integer> idProductos = new ArrayList();
+        
+        for(ProductoDTO producto : productos){
+            idProductos.add(producto.getId());
+        }
+        
+        return (idProductos.isEmpty()) ? 0.0 : productoFacade.findPrecioMaximo(idProductos);
     }
 }
