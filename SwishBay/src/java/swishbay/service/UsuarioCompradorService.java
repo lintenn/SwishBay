@@ -8,6 +8,7 @@ package swishbay.service;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import swishbay.dao.UsuarioFacade;
 import swishbay.dto.UsuarioDTO;
 import swishbay.entity.Usuario;
@@ -16,6 +17,7 @@ import swishbay.entity.Usuario;
  *
  * @author angel 95%, Luis 5%
  */
+@Stateless
 public class UsuarioCompradorService {
     
     @EJB UsuarioFacade usuarioFacade;

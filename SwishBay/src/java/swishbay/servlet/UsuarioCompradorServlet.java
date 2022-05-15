@@ -44,7 +44,7 @@ public class UsuarioCompradorServlet extends SwishBayServlet {
             String tipoFiltro = request.getParameter("filtroUsuariosCompradores");
             String saldoDesde = request.getParameter("saldoDesde");
             String saldoHasta = request.getParameter("saldoHasta");
-            List<UsuarioDTO> usuarios = null;
+            List<UsuarioDTO> usuarios = new ArrayList<>();
             
             if (filtroNombre == null || filtroNombre.isEmpty()) {
                 usuarios = this.usuarioCompradorService.buscarPorCompradorVendedor();
