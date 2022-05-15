@@ -16,7 +16,11 @@ import swishbay.entity.PujaPK;
 
 /**
  *
+<<<<<<< HEAD
  * @author Galo 56%, Miguel Oña Guerrero 19%, Luis 22%, angel 3%
+=======
+ * @author Galo 56%, Luis 22%, Miguel Oña Guerrero 19%, Ángel 3%
+>>>>>>> main
  */
 @Stateless
 public class ProductoFacade extends AbstractFacade<Producto> {
