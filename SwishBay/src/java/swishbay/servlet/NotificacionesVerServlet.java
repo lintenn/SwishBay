@@ -66,6 +66,7 @@ public class NotificacionesVerServlet extends SwishBayServlet {
                 }
             }
 
+            request.setAttribute("filtro", filtroNombre);
             request.setAttribute("tipoFiltro", tipoFiltro);
             request.setAttribute("mensajes", mensajes);
             request.getRequestDispatcher("WEB-INF/jsp/notificaciones.jsp").forward(request, response);  

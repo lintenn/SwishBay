@@ -24,7 +24,7 @@ import swishbay.dto.PujaDTO;
 
 /**
  *
- * @author Luis
+ * @author Galo
  */
 @Entity
 @Table(name = "PUJA")

@@ -32,6 +32,7 @@ public class GrupoService {
     @EJB UsuarioService usuarioService;
     @EJB MensajeService mensajeService;
     @EJB ProductoFacade productoFacade;
+    @EJB UsuarioCompradorService usuarioCompradorFacade;
     
     private Grupo buscarGrupo(Integer id){ // angel
         
@@ -145,13 +146,12 @@ public class GrupoService {
         
     }
     
-    public List<UsuarioDTO> listarUsuariosQueNoPertenecenAUnGrupo(Integer idGrupo){ // angel
+    public List<UsuarioDTO> listarUsuariosQueNoPertenecenAUnGrupo(List<Integer> ids){ // angel
         
-        List<Integer> ids = this.listarIdsUsuariosDeUnGrupo(idGrupo);
                 
         List<Usuario> usuarios = this.usuarioFacade.findByCompradorVendedor();
         
-        if(ids.size() != 0){
+        if(!ids.isEmpty()){
             usuarios = this.grupoFacade.findUsuariosNotInGrupoId(ids);
         }
         
@@ -185,7 +185,7 @@ public class GrupoService {
         
     }
     
-    private List<Integer> listarIdsUsuariosDeUnGrupo(Integer idGrupo){ // angel
+    public List<Integer> listarIdsUsuariosDeUnGrupo(Integer idGrupo){ // angel
         
         List<UsuarioDTO> usuarios = this.listarUsuariosDeUnGrupo(idGrupo);
         
@@ -212,11 +212,11 @@ public class GrupoService {
     
     public void comprobarExistenciaGrupoPorNombre(String nombre){ // angel
         
-        List<GrupoDTO> grupos = this.buscarGruposPorNombre(nombre);
+        List<GrupoDTO> grupos = this.listaGruposEntityADTO(this.grupoFacade.findGrupoByGrupoNombreExtricto(nombre));
         
         if(grupos == null || grupos.isEmpty()){
             
-            this.crearGrupo(nombre, this.usuarioService.buscarUsuarioMarketing());
+            this.crearGrupo(nombre, this.usuarioCompradorFacade.buscarUsuarioMarketing());
             
         }
         

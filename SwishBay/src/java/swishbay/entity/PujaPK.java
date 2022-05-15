@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author migue
+ * @author Miguel Oña Guerrero
  */
 @Embeddable
 public class PujaPK implements Serializable {

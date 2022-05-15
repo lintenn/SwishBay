@@ -41,7 +41,6 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un administrador debe poder eliminar usuarios del sistema (menos a sí mismo). :heavy_check_mark:
 - Un administrador debe poder realizar **filtrados y búsquedas** sobre los usuarios. :heavy_check_mark:
 - Un administrador debe poder ver en un listado los productos del sistema. :heavy_check_mark:
-- ~~Un administrador debe poder añadir productos al sistema.~~
 - Un administrador debe poder modificar productos del sistema. :heavy_check_mark:
 - Un administrador debe poder eliminar productos del sistema. :heavy_check_mark:
 - Un administrador debe poder realizar **filtrados y búsquedas** sobre los productos. :heavy_check_mark:
@@ -61,6 +60,6 @@ Repository for the subject Web Application Technologies. SwishBay is a web appli
 - Un personal de marketing debe poder enviar mensajes a sus grupos de usuarios. :heavy_check_mark:
 - Un personal de marketing debe poder modificar mensajes de sus grupos de usuarios. :heavy_check_mark:
 - Un personal de marketing debe poder eliminar mensajes enviados a sus grupos de usuarios. :heavy_check_mark:
-- Un personal de marketing debe poder gestionar la recepción de los mensajes en la bandeja de entrada de mensajes de los usuarios compradores. ❓
-- Un personal de marketing debe poder notificar a los usuarios de que sus productos favoritos se han abierto para puja.
-- Un comprador debe poder ser notificado cuando se ha cerrado el proceso de puja y si si finalmente se queda con el producto.
+- Un personal de marketing debe poder gestionar la recepción de los mensajes en la bandeja de entrada de mensajes de los usuarios compradores. :heavy_check_mark:
+- Un personal de marketing debe poder notificar a los usuarios de que sus productos favoritos se han abierto para puja. :heavy_check_mark:
+- Un comprador debe poder ser notificado cuando se ha cerrado el proceso de puja y si si finalmente se queda con el producto. :heavy_check_mark:

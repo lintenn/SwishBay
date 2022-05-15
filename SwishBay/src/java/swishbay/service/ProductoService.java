@@ -18,7 +18,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author galop 68%, Luis 27%, Miguel 5%
+ * @author galop 65%, Luis 25%, Miguel 10%
  */
 
 @Stateless
@@ -265,7 +265,7 @@ public class ProductoService {
 
         Producto p = productoFacade.findByID(Integer.parseInt(id));
         
-        //this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
+        this.grupoService.notificarFinPuja("Grupo_"+p.getId(), p.toDTO());
         
         Double d=p.getPrecioSalida();
         Puja puja=null;
@@ -306,32 +306,50 @@ public class ProductoService {
         usuarioFacade.edit(user);
     }
     
-    public void realizarPuja(int idproducto, double cantidad, int idusuario){ //Miguel Oña Guerrero
-        Producto producto = productoFacade.find(idproducto);
-        Usuario usuario = usuarioFacade.find(idusuario);
+    public Double realizarPuja(int idProducto, int idUsuario, double cantidad){ //Miguel Oña Guerrero
+        Producto producto = productoFacade.find(idProducto);
+        Usuario usuario = usuarioFacade.find(idUsuario);
+        Double cantidadRestada;
         
-        Puja puja = new Puja();
+        Puja puja = pujaFacade.findPuja(idUsuario, idProducto);
         
-        puja.setFecha(new Date());
-        puja.setUsuario(usuario);
-        puja.setProducto1(producto);
+        if(puja == null){
+            cantidadRestada = cantidad;
+        }else{
+            cantidadRestada = cantidad - puja.getPujaPK().getPrecio();
+            pujaFacade.remove(puja);
+            
+            producto.getPujaList().remove(puja);
+            productoFacade.edit(producto);
+            
+            usuario.getPujaList().remove(puja);
+            usuarioFacade.edit(usuario);
+        }
+        
+        Puja pujaNueva = new Puja();
+            
+        pujaNueva.setFecha(new Date());
+        pujaNueva.setUsuario(usuario);
+        pujaNueva.setProducto1(producto);
         
         PujaPK pujapk = new PujaPK();
-        pujapk.setComprador(idusuario);
-        pujapk.setProducto(idproducto);
+        pujapk.setComprador(idUsuario);
+        pujapk.setProducto(idProducto);
         pujapk.setPrecio(cantidad);
         
-        puja.setPujaPK(pujapk);
-        pujaFacade.create(puja);
-        
-        producto.getPujaList().add(puja);
+        pujaNueva.setPujaPK(pujapk);
+        pujaFacade.create(pujaNueva);
+            
+        producto.getPujaList().add(pujaNueva);
         productoFacade.edit(producto);
         
-        usuario.getPujaList().add(puja);
+        usuario.getPujaList().add(pujaNueva);
         usuarioFacade.edit(usuario);
+        
+        return cantidadRestada;
     }
     
-    public Double obtenerMayorPrecio(List<ProductoDTO> productos){
+    public Double obtenerMayorPrecio(List<ProductoDTO> productos){ //Miguel Oña Guerrero
         List<Integer> idProductos = new ArrayList();
         
         for(ProductoDTO producto : productos){

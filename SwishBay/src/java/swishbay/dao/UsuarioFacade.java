@@ -14,7 +14,7 @@ import swishbay.entity.Usuario;
 
 /**
  *
- * @author Luis 56% , Galo 11%, Angel 33%
+ * @author Luis 16% , Galo 3%, Angel 81%
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
@@ -153,6 +153,152 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     }
     
     public List<Usuario> findByCompradorVendedorBySaldoHasta(Integer saldoDesde, List<Integer> usuarios){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.saldo <= :saldoDesde and u.id IN :usuarios");
+        q.setParameter("saldoDesde", saldoDesde);
+        q.setParameter("usuarios", usuarios);
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByNameQueNoPertencenAUnGrupo(String nombre, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.nombre like :nombre and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("nombre", '%' + nombre +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByCorreoQueNoPertencenAUnGrupo(String correo, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.correo like :correo and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("correo", '%' + correo +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByApellidosQueNoPertencenAUnGrupo(String apellidos, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.apellidos like :apellidos and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("apellidos", '%' + apellidos +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByCiudadQueNoPertencenAUnGrupo(String ciudad, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.ciudad like :ciudad and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("ciudad", '%' + ciudad +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByDomicilioQueNoPertencenAUnGrupo(String domicilio, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.domicilio like :domicilio and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("domicilio", '%' + domicilio +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySexoQueNoPertencenAUnGrupo(String sexo, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.sexo like :sexo and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("sexo", '%' + sexo +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySaldoDesdeQueNoPertencenAUnGrupo(Integer saldoDesde, List<Integer> usuarios, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.saldo >= :saldoDesde and u.id IN :usuarios and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("saldoDesde", saldoDesde);
+        q.setParameter("usuarios", usuarios);
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySaldoHastaQueNoPertencenAUnGrupo(Integer saldoDesde, List<Integer> usuarios, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.saldo <= :saldoDesde and u.id IN :usuarios and u.id NOT IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("saldoDesde", saldoDesde);
+        q.setParameter("usuarios", usuarios);
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByNameQuePertencenAUnGrupo(String nombre, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.nombre like :nombre and u.id IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("nombre", '%' + nombre +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByCorreoQuePertencenAUnGrupo(String correo, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.correo like :correo and u.id IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("correo", '%' + correo +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByApellidosQuePertencenAUnGrupo(String apellidos, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.apellidos like :apellidos and u.id IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("apellidos", '%' + apellidos +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByCiudadQuePertencenAUnGrupo(String ciudad, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.ciudad like :ciudad and u.id IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("ciudad", '%' + ciudad +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorByDomicilioQuePertencenAUnGrupo(String domicilio, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.domicilio like :domicilio and u.id IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("domicilio", '%' + domicilio +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySexoQuePertencenAUnGrupo(String sexo, List<Integer> idsGrupo){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.rol.nombre like 'compradorvendedor' and u.sexo like :sexo and u.id IN :idsGrupo");
+        q.setParameter("idsGrupo", idsGrupo);
+        q.setParameter("sexo", '%' + sexo +'%');
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySaldoDesdeQuePertencenAUnGrupo(Integer saldoDesde, List<Integer> usuarios){ // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select u from Usuario u where u.saldo >= :saldoDesde and u.id IN :usuarios");
+        q.setParameter("saldoDesde", saldoDesde);
+        q.setParameter("usuarios", usuarios);
+        
+        return q.getResultList();
+    }
+    
+    public List<Usuario> findByCompradorVendedorBySaldoHastaQuePertencenAUnGrupo(Integer saldoDesde, List<Integer> usuarios){ // angel
         Query q;
         q = this.getEntityManager().createQuery("select u from Usuario u where u.saldo <= :saldoDesde and u.id IN :usuarios");
         q.setParameter("saldoDesde", saldoDesde);

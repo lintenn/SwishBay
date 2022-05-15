@@ -40,6 +40,13 @@ public class GrupoFacade extends AbstractFacade<Grupo> {
         return q.getResultList();
     }
     
+    public List<Grupo> findGrupoByGrupoNombreExtricto (String nombre) { // angel
+        Query q;
+        q = this.getEntityManager().createQuery("select g from Grupo g where g.nombre like :nombre");
+        q.setParameter("nombre", nombre);
+        return q.getResultList();
+    }
+    
     public List<Usuario> findUsuariosByGrupoId (Integer id) { // angel
         Query q;
         q = this.getEntityManager().createQuery("select u from Grupo g JOIN g.usuarioList u where g.id = :id");
