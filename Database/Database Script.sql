@@ -123,3 +123,47 @@ CREATE TABLE `USUARIO` (
   KEY `ROL_USUARIO_FK` (`ROL`),
   CONSTRAINT `ROL_USUARIO_FK` FOREIGN KEY (`ROL`) REFERENCES `ROL_USUARIO` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `u325099778_SwishBay`.`CATEGORIA`
+(`NOMBRE`,
+`DESCRIPCION`)
+VALUES
+('Gaming Setup', 'Productos para mejorar tu experiencia de juego');
+INSERT INTO `u325099778_SwishBay`.`CATEGORIA`
+(`NOMBRE`,
+`DESCRIPCION`)
+VALUES
+('Comics', 'Productos de lectura relacionaados con super héroes, mangas...');
+INSERT INTO `u325099778_SwishBay`.`CATEGORIA`
+(`NOMBRE`,
+`DESCRIPCION`)
+VALUES
+('Deportes', 'Productos orientados a facilitarte practicar deportes como pesas, baloncesto, ciclismo, boxeo, pesca...');
+
+INSERT INTO `u325099778_SwishBay`.`ROL_USUARIO`
+(`NOMBRE`)
+VALUES
+('administrador');
+INSERT INTO `u325099778_SwishBay`.`ROL_USUARIO`
+(`NOMBRE`)
+VALUES
+('compradorvendedor');
+INSERT INTO `u325099778_SwishBay`.`ROL_USUARIO`
+(`NOMBRE`)
+VALUES
+('marketing');
+
+
+INSERT INTO `u325099778_SwishBay`.`USUARIO`
+(`CORREO`,
+`PASSWORD`,
+`NOMBRE`,
+`APELLIDOS`,
+`DOMICILIO`,
+`FECHA_NACIMIENTO`,
+`SEXO`,
+`CIUDAD`,
+`SALDO`,
+`ROL`)
+VALUES
+('linten42@gmail.com', '123456', 'Lui', 'Garcia', 'Mi casa', '2001-08-15', 'fem', 'Malaga', '100', '1');
