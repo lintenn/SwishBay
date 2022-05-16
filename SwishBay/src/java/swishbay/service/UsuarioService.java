@@ -204,7 +204,7 @@ public class UsuarioService {
         
         this.usuarioFacade.create(usuario);
         
-        usuario = this.usuarioFacade.findByCorreo(usuario.getCorreo()); // No deberia hacer falta hacer esto, pero por algun motivo, en nuestro proyecto al hacer create(usuario), el id (aun siendo autoincrementado y guardandose en la base de datos) no se establece en la entidad y se queda como null
+        this.usuarioFacade.flush();
         
         this.actualizarRolUsuario(usuario);
         
