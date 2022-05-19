@@ -4,6 +4,67 @@
 ***
 # SwishBay
 Repository for the subject Web Application Technologies. SwishBay is a web application for managing the sale (auctions) of products between users, similar to Ebay.
+There is another version of [this web application based on Spring Boot](https://github.com/lintenn/SwishBayBoot).
+
+## English:
+### Requirements:  
+#### Seller - Galo Pérez Gallego 
+- A seller must be able to register a product. _(does not imply putting it up for auction directly)_ :heavy_check_mark:
+- A seller must be able to put a product up for sale (indicating the starting price and duration of the auction). :heavy_check_mark:
+- A seller must be able to see the products they have for sale. :heavy_check_mark:
+- A seller must be able to **search and apply search filters** on the products they have for sale. :heavy_check_mark:
+- A seller must be able to see the products they have sold _(and to whom)_. :heavy_check_mark:
+- A seller must be able to withdraw their registered or auctioned products or that they have sold. :heavy_check_mark:
+- A seller must be able to edit their registered or auctioned products or that they have sold. :heavy_check_mark:
+- A seller must be able to assign the product sold to the corresponding buyer _(and notify them)_. :heavy_check_mark:
+
+#### Buyer - Miguel Oña Guerrero
+- A buyer must be able to see the products that are registered by sellers. :heavy_check_mark:
+- A buyer must be able to see the products that the sellers are auctioning. :heavy_check_mark:
+- A buyer must be able to bid on a product with the intention of buying it. :heavy_check_mark:
+- A buyer must be able to mark products (whether on auction or not) as favorites for **follow-ups**. :heavy_check_mark:
+- A buyer must be able to add funds to their account. :heavy_check_mark:
+- A buyer must be able to see in a list the products that they have bought _(and from whom)_. :heavy_check_mark:
+- A buyer must be able to **search and apply search filters** on the products they have purchased. :heavy_check_mark:
+- A buyer must be able to see the products they follow as favorites in a list. :heavy_check_mark:
+- A buyer must be able to **search and apply search filters** on the products they follow as favorites. :heavy_check_mark:
+- A buyer must be able to remove products from those they follow as favorites. :heavy_check_mark:
+
+#### Administrator and Login/Register - Luis Miguel García Marín
+- An administrator must be able to see the system categories in a list. :heavy_check_mark:
+- An administrator must be able to add categories to the system. :heavy_check_mark:
+- An administrator must be able to update system categories. :heavy_check_mark:
+- An administrator must be able to remove categories from the system. :heavy_check_mark:
+- An administrator must be able to **search and apply search filters** on the categories. :heavy_check_mark:
+- An administrator must be able to see the users of the system in a list. :heavy_check_mark:
+- An administrator must be able to add users to the system. :heavy_check_mark:
+- _An administrator must be able to modify the users of the system_. :heavy_check_mark:
+- An administrator must be able to remove users from the system (except himself). :heavy_check_mark:
+- An administrator must be able to **search and apply search filters** on users. :heavy_check_mark:
+- An administrator must be able to see the system's products in a list. :heavy_check_mark:
+- An administrator must be able to modify system products. :heavy_check_mark:
+- An administrator must be able to remove products from the system. :heavy_check_mark:
+- An administrator must be able to **search and apply search filters** on the products. :heavy_check_mark:
+- An administrator must be able to register (or assign the corresponding permissions) to marketing users. :heavy_check_mark: 
+- A USER must be able to register in the system as a Seller or Buyer (administrators are added to the database and these will add the marketing staff), indicating Name, Surname, Address, City of residence, _Age_, Sex (in Buyers also preferred categories will be indicated).:heavy_check_mark:
+- A USER must be able to log into the system. :heavy_check_mark:
+
+#### Marketing - Angel Joaquín Rodríguez Mercado
+- A marketing staff must be able to see the **buyer** users of the system in a list. :heavy_check_mark:
+- A marketing staff must be able to **search and apply search filters** on the purchasing users of the system. :heavy_check_mark:
+- A marketing staff must be able to create groups (also called *lists*) of users. :heavy_check_mark:
+- A marketing staff must be able to modify their created groups (such as their name). :heavy_check_mark:
+- A marketing staff must be able to add users to their created groups. :heavy_check_mark:
+- A marketing staff must be able to remove users from their created groups. :heavy_check_mark:
+- A marketing staff must be able to delete their created groups. :heavy_check_mark:
+- A marketing staff must be able to consult the messages of groups of users. :heavy_check_mark:
+- A marketing staff must be able to send messages to their user groups. :heavy_check_mark:
+- A marketing staff must be able to modify messages from their user groups. :heavy_check_mark:
+- A marketing staff must be able to delete messages sent to their user groups. :heavy_check_mark:
+- A marketing staff must be able to manage receiving messages in the message inbox of buyer users. :heavy_check_mark:
+- A marketing stuff must be able to notify users that their favorite products have been opened for auction. :heavy_check_mark:
+- A marketing stuff must be able to notify buyers when the auction process has closed and if they finally keep the product. :heavy_check_mark:
+
 
 ## Spanish:
 ### Requisitos: :heavy_check_mark:   :x: 
