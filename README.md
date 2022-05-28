@@ -62,8 +62,8 @@ There is another version of [this web application based on Spring Boot](https://
 - A marketing staff must be able to modify messages from their user groups. :heavy_check_mark:
 - A marketing staff must be able to delete messages sent to their user groups. :heavy_check_mark:
 - A marketing staff must be able to manage receiving messages in the message inbox of buyer users. :heavy_check_mark:
-- A marketing stuff must be able to notify users that their favorite products have been opened for auction. :heavy_check_mark:
-- A marketing stuff must be able to notify buyers when the auction process has closed and if they finally keep the product. :heavy_check_mark:
+- A marketing staff must be able to notify users that their favorite products have been opened for auction. :heavy_check_mark:
+- A marketing staff must be able to notify buyers when the auction process has closed and if they finally keep the product. :heavy_check_mark:
 
 
 ## Spanish:
